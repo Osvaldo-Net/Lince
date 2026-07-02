@@ -1,0 +1,18 @@
+<svg width="100%" viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg" role="img" style="">
+<title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Icono de app LINCE con dos lazos entrelazados</title>
+<desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Icono cuadrado redondeado blanco con dos lazos gruesos entrelazados, uno naranja y uno morado, sobre fondo blanco con sombra suave</desc>
+<defs>
+<linearGradient id="gradA" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#FF8A00"/>
+<stop offset="100%" stop-color="#FF5E7E"/>
+</linearGradient>
+<linearGradient id="gradB" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0%" stop-color="#7C3AED"/>
+<stop offset="100%" stop-color="#3B82F6"/>
+</linearGradient>
+</defs>
+<rect x="30" y="40" width="620" height="620" rx="150" fill="#000000" opacity="0.10" style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:0.1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<rect x="30" y="30" width="620" height="620" rx="150" fill="#FFFFFF" style="fill:rgb(255, 255, 255);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M200.4,353.6 A130,130 0 1,1 344.5,392.2" fill="none" stroke="url(#gradA)" stroke-width="62" stroke-linecap="round" opacity="0.92" style="fill:none;color:rgb(0, 0, 0);stroke-width:62px;stroke-linecap:round;stroke-linejoin:miter;opacity:0.92;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+<path d="M251.9,387.4 A130,130 0 1,1 315,522.6" fill="none" stroke="url(#gradB)" stroke-width="62" stroke-linecap="round" opacity="0.92" style="fill:none;color:rgb(0, 0, 0);stroke-width:62px;stroke-linecap:round;stroke-linejoin:miter;opacity:0.92;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+</svg>
