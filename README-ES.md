@@ -1,13 +1,13 @@
 <div align="center">
 
-<img src="https://github.com/user-attachments/assets/c3af8ab3-c0ed-4078-ab75-7afe2e7455dd" width="120" alt="LANGuard logo" />
+<img src="https://github.com/user-attachments/assets/c3af8ab3-c0ed-4078-ab75-7afe2e7455dd" width="120" alt="Lince logo" />
 
-# LANGuard
+# Lince
 
 **Monitoreo y seguridad de tu red LAN, desde tu propio servidor.**
 
-[![Docker](https://img.shields.io/badge/docker-netosvaltools%2Flanguard-0ea5e9?style=flat-square&logo=docker&logoColor=white&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/languard)
-[![Docker Pulls](https://img.shields.io/docker/pulls/netosvaltools/languard?style=flat-square&color=0ea5e9&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/languard)
+[![Docker](https://img.shields.io/badge/docker-netosvaltools%2FLince-0ea5e9?style=flat-square&logo=docker&logoColor=white&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
+[![Docker Pulls](https://img.shields.io/docker/pulls/netosvaltools/Lince?style=flat-square&color=0ea5e9&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
 [![Idiomas](https://img.shields.io/badge/idiomas-ES%20%7C%20EN-10b981?style=flat-square&labelColor=0f172a)](#)
 [![Versión](https://img.shields.io/badge/versión-3.1.4-6366f1?style=flat-square&labelColor=0f172a)](#)
 
@@ -15,11 +15,11 @@
 
 ---
 
-## ¿Qué es LANGuard?
+## ¿Qué es Lince?
 
-LANGuard es una aplicación web autohospedada para el **escaneo y monitoreo avanzado de tu red local**. Combina el poder de **Nmap** y **ARP** para identificar cada dispositivo conectado, clasificarlos como confiables o no confiables, y alertarte al instante vía **Telegram** si detecta algo sospechoso.
+Lince es una aplicación web autohospedada para el **escaneo y monitoreo avanzado de tu red local**. Combina el poder de **Nmap** y **ARP** para identificar cada dispositivo conectado, clasificarlos como confiables o no confiables, y alertarte al instante vía **Telegram** si detecta algo sospechoso.
 
-Sin configuración manual de interfaces de red: LANGuard **detecta automáticamente** el segmento donde se ejecuta. Toda la información se almacena localmente con **SQLite**, sin dependencias en la nube.
+Sin configuración manual de interfaces de red: Lince **detecta automáticamente** el segmento donde se ejecuta. Toda la información se almacena localmente con **SQLite**, sin dependencias en la nube.
 
 ---
 
@@ -72,10 +72,10 @@ openssl rand -hex 32
 ### 2. Despliega con Docker Compose
 ```yaml
 services:
-  languard:
-    container_name: LANGuard
-    image: netosvaltools/languard:latest
-    # image: netosvaltools/languard:v3.1.4
+  Lince:
+    container_name: Lince
+    image: netosvaltools/Lince:latest
+    # image: netosvaltools/Lince:v3.1.4
     environment:
       SECRET_KEY: ${SECRET_KEY}
     volumes:
@@ -115,7 +115,7 @@ http://<IP-del-servidor>:5555
 
 ## Paneles laterales
 
-LANGuard organiza la información en paneles deslizantes para mantener el dashboard limpio:
+Lince organiza la información en paneles deslizantes para mantener el dashboard limpio:
 
 - **Historial**: línea de tiempo de conexiones y desconexiones, filtrable por MAC y tipo de evento
 - **Dispositivos Confiables**: lista completa con edición de nombre en línea, agregar/eliminar sin recargar la página
