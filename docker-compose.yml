@@ -1,7 +1,7 @@
 services:
   languard:
-    container_name: LANGuard
-    image: netosvaltools/languard:latest
+    container_name: Lince
+    image: netosvaltools/lince:latest
     environment:
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
