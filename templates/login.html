@@ -107,10 +107,11 @@
   <div class="w-full max-w-[340px] fade-up relative z-10">
 
     <!-- Wordmark -->
-    <div class="mb-8">
-      <h1 class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:22px;letter-spacing:-.02em">Lince</h1>
-      <p class="text-slate-400 dark:text-slate-500 mt-1.5" style="font-size:12px">Inicia sesión para continuar</p>
-    </div>
+  <div class="mb-8 flex flex-col items-center text-center">
+    <img src="{{ url_for('static', filename='favicon.svg') }}" alt="Lince" class="w-12 h-12 mb-3">
+    <h1 class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:22px;letter-spacing:-.02em">Lince</h1>
+    <p class="text-slate-400 dark:text-slate-500 mt-1.5" style="font-size:12px">Inicia sesión para continuar</p>
+  </div>
 
     <!-- Alerts -->
     {% if error %}
