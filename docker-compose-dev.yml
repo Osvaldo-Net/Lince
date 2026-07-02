@@ -1,6 +1,6 @@
 services:
   LANGuard:
-    container_name: LANGuard
+    container_name: Lince
     build: .
     environment:
       #openssl rand -hex 32
