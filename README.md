@@ -76,8 +76,8 @@ openssl rand -hex 32
 services:
   Lince:
     container_name: Lince
-    image: netosvaltools/Lince:latest
-    # image: netosvaltools/Lince:v3.1.4
+    image: netosvaltools/lince:latest
+    # image: netosvaltools/lince:v3.1.4
     environment:
       SECRET_KEY: ${SECRET_KEY}
     volumes:
