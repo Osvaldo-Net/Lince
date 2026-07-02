@@ -627,7 +627,7 @@ def api_telegram_test():
     try:
         resp = requests.post(
             f"https://api.telegram.org/bot{token}/sendMessage",
-            data={"chat_id": chat, "text": "✅ LANGuard: conexión de prueba exitosa"},
+            data={"chat_id": chat, "text": "✅ Lince: conexión de prueba exitosa"},
             timeout=5
         )
         ok = resp.json().get("ok", False)
