@@ -1,13 +1,15 @@
 {# ── _stats.html ── Stat summary cards (total / trusted / untrusted) #}
 <div class="stats-grid stagger-1 fade-in">
-
   <!-- Total -->
   <div class="card px-5 py-4" style="position:relative;overflow:hidden">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#FF8A00,#FF5E7E)"></div>
     <div class="flex items-center justify-between mb-4">
       <span class="text-slate-400 dark:text-slate-500 font-medium uppercase tracking-widest" style="font-size:11px" data-i18n="statTotal">Total</span>
-      <i data-lucide="laptop" class="w-4 h-4 text-slate-300 dark:text-slate-600"></i>
+      <div class="flex items-center justify-center rounded-full" style="width:26px;height:26px;background:rgba(255,138,0,.10)">
+        <i data-lucide="laptop" class="w-3.5 h-3.5" style="color:#FF8A00"></i>
+      </div>
     </div>
-    <p id="stat-total" class="tabular-nums font-semibold text-slate-900 dark:text-white leading-none mb-1.5" style="font-size:36px">0</p>
+    <p id="stat-total" class="tabular-nums font-semibold text-slate-900 dark:text-white leading-none mb-1.5" style="font-size:36px;letter-spacing:-.02em">0</p>
     <p class="text-slate-400 dark:text-slate-500" style="font-size:12px" data-i18n="statTotalDesc">Dispositivos en red</p>
   </div>
 
@@ -16,9 +18,11 @@
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:rgba(34,197,94,.5)"></div>
     <div class="flex items-center justify-between mb-4">
       <span class="font-medium uppercase tracking-widest" style="font-size:11px;color:#16a34a" data-i18n="statTrusted">Confiables</span>
-      <i data-lucide="shield-check" class="w-4 h-4" style="color:#16a34a"></i>
+      <div class="flex items-center justify-center rounded-full" style="width:26px;height:26px;background:rgba(34,197,94,.10)">
+        <i data-lucide="shield-check" class="w-3.5 h-3.5" style="color:#16a34a"></i>
+      </div>
     </div>
-    <p id="stat-trusted" class="tabular-nums font-semibold leading-none mb-1.5" style="font-size:36px;color:#16a34a">0</p>
+    <p id="stat-trusted" class="tabular-nums font-semibold leading-none mb-1.5" style="font-size:36px;letter-spacing:-.02em;color:#16a34a">0</p>
     <p class="text-slate-400 dark:text-slate-500" style="font-size:12px" data-i18n="statTrustedDesc">Verificados por ti</p>
   </div>
 
@@ -27,10 +31,11 @@
     <div style="position:absolute;top:0;left:0;right:0;height:2px;background:rgba(239,68,68,.5)"></div>
     <div class="flex items-center justify-between mb-4">
       <span class="font-medium uppercase tracking-widest" style="font-size:11px;color:#dc2626" data-i18n="statUntrusted">Sin verificar</span>
-      <i data-lucide="shield-alert" class="w-4 h-4" style="color:#dc2626"></i>
+      <div class="flex items-center justify-center rounded-full" style="width:26px;height:26px;background:rgba(239,68,68,.10)">
+        <i data-lucide="shield-alert" class="w-3.5 h-3.5" style="color:#dc2626"></i>
+      </div>
     </div>
-    <p id="stat-untrusted" class="tabular-nums font-semibold leading-none mb-1.5" style="font-size:36px;color:#dc2626">0</p>
+    <p id="stat-untrusted" class="tabular-nums font-semibold leading-none mb-1.5" style="font-size:36px;letter-spacing:-.02em;color:#dc2626">0</p>
     <p class="text-slate-400 dark:text-slate-500" style="font-size:12px" data-i18n="statUntrustedDesc">Requieren revisión</p>
   </div>
-
 </div>
