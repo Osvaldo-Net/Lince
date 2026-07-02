@@ -1,27 +1,27 @@
 <div align="center">
 
-<img src="https://github.com/user-attachments/assets/c3af8ab3-c0ed-4078-ab75-7afe2e7455dd" width="120" alt="LANGuard logo" />
+<img src="https://github.com/user-attachments/assets/c3af8ab3-c0ed-4078-ab75-7afe2e7455dd" width="120" alt="Lince logo" />
 
-# LANGuard
+# Lince
 
 **Network monitoring and security self-hosted, from your own server.**
 
-[![Docker](https://img.shields.io/badge/docker-netosvaltools%2Flanguard-0ea5e9?style=flat-square&logo=docker&logoColor=white&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/languard)
-[![Docker Pulls](https://img.shields.io/docker/pulls/netosvaltools/languard?style=flat-square&color=0ea5e9&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/languard)
+[![Docker](https://img.shields.io/badge/docker-netosvaltools%2FLince-0ea5e9?style=flat-square&logo=docker&logoColor=white&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
+[![Docker Pulls](https://img.shields.io/docker/pulls/netosvaltools/Lince?style=flat-square&color=0ea5e9&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
 [![Languages](https://img.shields.io/badge/languages-ES%20%7C%20EN-10b981?style=flat-square&labelColor=0f172a)](#)
 [![Version](https://img.shields.io/badge/version-3.1.4-6366f1?style=flat-square&labelColor=0f172a)](#)
 
-**¿Hablas español?** Lee la documentación completa [aquí](https://github.com/Osvaldo-Net/LANGuard/blob/main/README-ES.md).
+**¿Hablas español?** Lee la documentación completa [aquí](https://github.com/Osvaldo-Net/Lince/blob/main/README-ES.md).
 
 </div>
 
 ---
 
-## What is LANGuard?
+## What is Lince?
 
-LANGuard is a self-hosted web application for **advanced scanning and monitoring of your local network**. It combines **Nmap** and **ARP** to identify every connected device, classify them as trusted or untrusted, and instantly alert you via **Telegram** if something suspicious shows up.
+Lince is a self-hosted web application for **advanced scanning and monitoring of your local network**. It combines **Nmap** and **ARP** to identify every connected device, classify them as trusted or untrusted, and instantly alert you via **Telegram** if something suspicious shows up.
 
-No manual network interface configuration required: LANGuard **auto-detects** the network segment it runs on. All data is stored locally with **SQLite**, no cloud dependencies.
+No manual network interface configuration required: Lince **auto-detects** the network segment it runs on. All data is stored locally with **SQLite**, no cloud dependencies.
 
 ---
 
@@ -74,10 +74,10 @@ openssl rand -hex 32
 ### 2. Deploy with Docker Compose
 ```yaml
 services:
-  languard:
-    container_name: LANGuard
-    image: netosvaltools/languard:latest
-    # image: netosvaltools/languard:v3.1.4
+  Lince:
+    container_name: Lince
+    image: netosvaltools/Lince:latest
+    # image: netosvaltools/Lince:v3.1.4
     environment:
       SECRET_KEY: ${SECRET_KEY}
     volumes:
@@ -117,7 +117,7 @@ http://<server-IP>:5555
 
 ## Side panels
 
-LANGuard uses slide-in panels instead of cluttering the main view:
+Lince uses slide-in panels instead of cluttering the main view:
 
 - **History**: connection/disconnection timeline, filterable by MAC and event type
 - **Trusted Devices**: full list with inline name editing, add/remove without reload
