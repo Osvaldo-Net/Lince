@@ -7,7 +7,17 @@
     darkMode: "class",
     theme: {
       extend: {
-        colors: { dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24" },
+        colors: {
+          dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
+          brand: {
+            50:  "#FFF4E5",
+            100: "#FFE0B8",
+            400: "#FF8A00",
+            500: "#FF5E7E",
+            600: "#7C3AED",
+            700: "#3B82F6"
+          }
+        },
         fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
       }
     }
@@ -42,10 +52,10 @@
   }
   .nav-item:hover               { background:#f1f5f9;color:#0f172a; }
   .dark .nav-item:hover         { background:#1a1a24;color:#e2e8f0; }
-  .nav-item.primary             { background:#0f172a;color:#f8fafc;font-weight:600;border:1px solid transparent;letter-spacing:.01em; }
-  .nav-item.primary:hover       { background:#1e293b; }
-  .dark .nav-item.primary       { background:#f1f5f9;color:#0f172a; }
-  .dark .nav-item.primary:hover { background:#e2e8f0; }
+  .nav-item.primary             { background:linear-gradient(135deg,#FF8A00,#FF5E7E);color:#fff;font-weight:600;border:1px solid transparent;letter-spacing:.01em; }
+  .nav-item.primary:hover       { opacity:.92; }
+  .dark .nav-item.primary       { background:linear-gradient(135deg,#FF8A00,#FF5E7E);color:#fff; }
+  .dark .nav-item.primary:hover { opacity:.92; }
 
   /* ── Card ── */
   .card { background:#fff;border:1px solid #e8edf2;border-radius:10px;transition:border-color .15s,box-shadow .15s; }
@@ -79,9 +89,9 @@
 
   /* ── Input ── */
   .input-base { padding:7px 10px;border-radius:7px;font-size:12px;border:1px solid #e2e8f0;background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;width:100%; }
-  .input-base:focus       { border-color:#1e293b;box-shadow:0 0 0 3px rgba(100,116,139,.08); }
+  .input-base:focus       { border-color:#FF8A00;box-shadow:0 0 0 3px rgba(255,138,0,.10); }
   .dark .input-base       { background:#111118;border-color:#1e1e2e;color:#e2e8f0; }
-  .dark .input-base:focus { border-color:#334155; }
+  .dark .input-base:focus { border-color:#FF8A00; }
 
   /* ── Dropdown ── */
   .dropdown-menu { position:absolute;z-index:50;margin-top:4px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,.07);overflow:hidden; }
