@@ -13,7 +13,17 @@
       darkMode: "class",
       theme: {
         extend: {
-          colors: { dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24" },
+          colors: {
+            dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
+            brand: {
+              50:  "#FFF4E5",
+              100: "#FFE0B8",
+              400: "#FF8A00",
+              500: "#FF5E7E",
+              600: "#7C3AED",
+              700: "#3B82F6"
+            }
+          },
           fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
         }
       }
@@ -73,10 +83,10 @@
       border:1px solid #e2e8f0; background:#fff; outline:none; box-sizing:border-box;
       transition:border-color .15s, box-shadow .15s; font-family:"Geist",sans-serif; color:#0f172a;
     }
-    .field:focus { border-color:#334155; box-shadow:0 0 0 3px rgba(51,65,85,.08); }
+    .field:focus { border-color:#FF8A00; box-shadow:0 0 0 3px rgba(255,138,0,.10); }
     .field::placeholder { color:#94a3b8; }
     .dark .field { background:#1a1a24; border-color:#2a2d40; color:#e2e8f0; }
-    .dark .field:focus { border-color:#475569; box-shadow:0 0 0 3px rgba(71,85,105,.12); }
+    .dark .field:focus { border-color:#FF8A00; box-shadow:0 0 0 3px rgba(255,138,0,.15); }
 
     .field-icon {
       position:absolute; left:10px; top:50%; transform:translateY(-50%);
@@ -85,13 +95,12 @@
 
     .btn-main {
       width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
-      background:#0f172a; color:#f8fafc; border:none; cursor:pointer;
-      font-family:"Geist",sans-serif; transition:background .15s, transform .1s;
+      background: linear-gradient(135deg, #FF8A00, #FF5E7E);
+      color:#fff; border:none; cursor:pointer;
+      font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
     }
-    .btn-main:hover  { background:#1e293b; }
+    .btn-main:hover  { opacity:.92; }
     .btn-main:active { transform:scale(.99); }
-    .dark .btn-main       { background:#f1f5f9; color:#0f172a; }
-    .dark .btn-main:hover { background:#e2e8f0; }
   </style>
 </head>
 
@@ -107,11 +116,11 @@
   <div class="w-full max-w-[340px] fade-up relative z-10">
 
     <!-- Wordmark -->
-  <div class="mb-8 flex flex-col items-center text-center">
-    <img src="{{ url_for('static', filename='favicon.svg') }}" alt="Lince" class="w-14 h-14 mb-3">
-    <h1 class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:22px;letter-spacing:-.02em">Lince</h1>
-    <p class="text-slate-400 dark:text-slate-500 mt-1.5" style="font-size:12px">Inicia sesión para continuar</p>
-  </div>
+    <div class="mb-8 flex flex-col items-center text-center">
+      <img src="{{ url_for('static', filename='favicon.svg') }}" alt="Lince" class="w-14 h-14 mb-3">
+      <h1 class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:22px;letter-spacing:-.02em">Lince</h1>
+      <p class="text-slate-400 dark:text-slate-500 mt-1.5" style="font-size:12px">Inicia sesión para continuar</p>
+    </div>
 
     <!-- Alerts -->
     {% if error %}
