@@ -301,6 +301,15 @@ def guardar_deteccion(mac, count, notificado, ultima):
     )
     db.commit(); db.close()
 
+def eliminar_deteccion(mac):
+    """Borra el historial de detección de un MAC. Se llama al marcarlo
+    como confiable, para que si en el futuro se le quita la confianza,
+    el conteo de detecciones empiece de cero y pueda volver a notificar
+    (en vez de quedar marcado 'notificado' para siempre)."""
+    db = get_db()
+    db.execute("DELETE FROM detecciones_mac WHERE mac=?", (mac,))
+    db.commit(); db.close()
+
 def obtener_confiables_con_nombre():
     db   = get_db()
     rows = db.execute(
@@ -492,6 +501,10 @@ def api_agregar():
     # escaneo en segundo plano ya se encarga de mantener todo lo demás
     # sincronizado en su próximo ciclo.
     actualizar_confiable_cache(mac, True)
+    # FIX: limpiar detección previa para que, si en el futuro se quita la
+    # confianza a este MAC, el conteo empiece de cero y sí pueda notificar
+    # de nuevo (antes quedaba con notificado=True para siempre).
+    eliminar_deteccion(mac)
     return jsonify({"success": True})
 
 @app.route('/api/eliminar', methods=['POST'])
