@@ -111,5 +111,19 @@
   "cfgCredError": "Error al actualizar credenciales",
 
   "sessionWarning": "⚠ Tu sesión expirará pronto.",
-  "sessionKeepAlive": "Mantener activa"
+  "sessionKeepAlive": "Mantener activa",
+
+  "loginSubtitle":         "Inicia sesión para continuar",
+  "loginUser":             "Usuario",
+  "loginPassword":         "Contraseña",
+  "loginPlaceholderEmail": "correo@ejemplo.com",
+  "loginButton":           "Ingresar",
+  "loginErrorCredentials": "Usuario o contraseña incorrectos",
+  "sessionExpiredMsg":     "Sesión expirada. Vuelve a iniciar sesión.",
+  "themeLight":            "Modo claro",
+
+  "cfgTelegramTestOk":     "Mensaje enviado correctamente",
+  "cfgTelegramTestFail":   "Error en Telegram",
+  "cfgTelegramNotSet":     "Token o Chat ID no configurados",
+  "cfgTelegramConnError":  "No se pudo conectar con Telegram"
 }
