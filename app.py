@@ -192,7 +192,10 @@ def login():
                 return redirect("/cambiar-credenciales")
             return redirect("/")
         registrar_log(f"Login fallido para: {usuario}")
-        return render_template("login.html", error="Usuario o contraseña incorrectos")
+        # FIX i18n: se pasa un flag, no el texto fijo en español — el
+        # mensaje real vive en login.html como data-i18n y lo traduce
+        # i18n.js en el navegador según el idioma guardado.
+        return render_template("login.html", error=True)
     return render_template("login.html", timeout=timeout)
 
 @app.route("/cambiar-credenciales", methods=["GET", "POST"])
@@ -664,7 +667,10 @@ def api_telegram_test():
         return jsonify({"error": "No autorizado"}), 401
     token, chat = get_telegram_config()
     if not token or not chat:
-        return jsonify({"success": False, "message": "Token o Chat ID no configurados"})
+        # FIX i18n: se devuelve una clave (message_key), no texto fijo en
+        # español, para que el frontend la traduzca con t() según el
+        # idioma activo del usuario.
+        return jsonify({"success": False, "message_key": "cfgTelegramNotSet"})
     idioma = get_idioma_alertas()
     try:
         resp = requests.post(
@@ -673,9 +679,12 @@ def api_telegram_test():
             timeout=5
         )
         ok = resp.json().get("ok", False)
-        return jsonify({"success": ok, "message": "Mensaje enviado correctamente" if ok else "Error en Telegram"})
+        return jsonify({
+            "success": ok,
+            "message_key": "cfgTelegramTestOk" if ok else "cfgTelegramTestFail"
+        })
     except Exception:
-        return jsonify({"success": False, "message": "No se pudo conectar con Telegram"})
+        return jsonify({"success": False, "message_key": "cfgTelegramConnError"})
 
 # ── Entry point ───────────────────────────────────────────────────────────────
 if __name__ == '__main__':
