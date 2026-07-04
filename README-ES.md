@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://github.com/user-attachments/assets/d94404e5-5fd7-4d56-a7c3-ea8e8141b90e" width="120" alt="Lince logo" />
+<img src="https://github.com/user-attachments/assets/4121a771-0f22-427a-85a9-787add9af8b3" width="120" alt="Lince logo" />
 
 # Lince
 
