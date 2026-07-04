@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn = document.createElement("button");
     btn.id = `btn-${sid}`;
     btn.className = "px-2 py-1 rounded-lg text-white text-xs font-medium";
-    btn.style.cssText = "background:#0f172a;font-size:11px";
+    btn.style.cssText = "background:linear-gradient(135deg,#FF8A00,#FF5E7E);font-size:11px";
     btn.textContent = t("guardar");
 
     wrapper.appendChild(inp);
@@ -396,6 +396,16 @@ document.addEventListener("DOMContentLoaded", () => {
       if (label) label.textContent = info.label;
     }
     $("langMenu")?.classList.add("hidden");
+
+    // NUEVO: persistir el idioma en el servidor para que las alertas
+    // de Telegram (enviadas desde el hilo en segundo plano, sin sesión
+    // ni request de por medio) usen el mismo idioma que la interfaz.
+    try {
+      await postJSON("/api/idioma", { idioma: lang });
+    } catch {
+      // Silencioso: si falla, las alertas simplemente se quedan en el
+      // último idioma guardado; no bloqueamos el cambio de idioma en la UI.
+    }
   };
 
   // ── Filtro confianza ─────────────────────────────────────────────────────
