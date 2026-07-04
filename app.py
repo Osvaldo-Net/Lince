@@ -435,6 +435,17 @@ def actualizar_cache():
     with _cache_lock:
         CACHE_RESULTADO = resultado
 
+def actualizar_confiable_cache(mac, confiable):
+    """Actualiza solo el flag 'confiable' de un dispositivo ya presente en
+    la caché en memoria, sin disparar un escaneo nmap completo de la red.
+    Se usa en /api/agregar y /api/eliminar para responder al instante;
+    el próximo ciclo del escaneo en segundo plano ya refresca todo lo demás."""
+    global CACHE_RESULTADO
+    with _cache_lock:
+        for d in CACHE_RESULTADO:
+            if d["mac"] == mac:
+                d["confiable"] = confiable
+
 def escaneo_background():
     while True:
         try:
@@ -476,7 +487,11 @@ def api_agregar():
     db = get_db()
     db.execute("INSERT OR IGNORE INTO mac_confiables(mac) VALUES(?)", (mac,))
     db.commit(); db.close()
-    actualizar_cache()
+    # FIX rendimiento: antes llamaba a actualizar_cache() (nmap completo,
+    # varios segundos). Ahora solo se actualiza el flag en memoria; el
+    # escaneo en segundo plano ya se encarga de mantener todo lo demás
+    # sincronizado en su próximo ciclo.
+    actualizar_confiable_cache(mac, True)
     return jsonify({"success": True})
 
 @app.route('/api/eliminar', methods=['POST'])
@@ -490,7 +505,8 @@ def api_eliminar():
     db = get_db()
     db.execute("DELETE FROM mac_confiables WHERE mac=?", (mac,))
     db.commit(); db.close()
-    actualizar_cache()
+    # FIX rendimiento: ver comentario equivalente en api_agregar.
+    actualizar_confiable_cache(mac, False)
     return jsonify({"success": True})
 
 @app.route('/api/nombrar', methods=['POST'])
