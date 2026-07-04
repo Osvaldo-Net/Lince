@@ -111,5 +111,18 @@
   "cfgCredError": "Erreur lors de la mise à jour des identifiants",
 
   "sessionWarning": "⚠ Votre session expirera bientôt.",
-  "sessionKeepAlive": "Rester connecté"
+  "sessionKeepAlive": "Rester connecté",
+
+  "loginSubtitle":         "Connectez-vous pour continuer",
+  "loginUser":             "Utilisateur",
+  "loginPassword":         "Mot de passe",
+  "loginPlaceholderEmail": "email@exemple.com",
+  "loginButton":           "Se connecter",
+  "loginErrorCredentials": "Utilisateur ou mot de passe incorrect",
+  "sessionExpiredMsg":     "Session expirée. Veuillez vous reconnecter.",
+  "themeLight":            "Mode clair",
+  "cfgTelegramTestOk":     "Message envoyé avec succès",
+  "cfgTelegramTestFail":   "Erreur Telegram",
+  "cfgTelegramNotSet":     "Token ou Chat ID non configuré",
+  "cfgTelegramConnError":  "Impossible de se connecter à Telegram"
 }
