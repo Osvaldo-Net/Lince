@@ -1,5 +1,5 @@
 services:
-  languard:
+  lince:
     container_name: Lince
     image: netosvaltools/lince:latest
     environment:
