@@ -1,8 +1,3 @@
-// ══════════════════════════════════════════
-// HTML SANITIZER — prevents DOM XSS
-// Always use esc() before interpolating
-// user-controlled data into innerHTML.
-// ══════════════════════════════════════════
 function esc(str) {
   return String(str ?? "")
     .replace(/&/g, "&amp;")
@@ -33,6 +28,15 @@ async function postJSON(url, body) {
 // ══════════════════════════════════════════
 let filtroConfianza    = "";
 let filtroConfianzaKey = "filterAll";
+
+// ══════════════════════════════════════════
+// EDICIÓN DE NOMBRE — pausa el refresco automático
+// Mientras el usuario edita un nombre en la tabla, un escaneo en
+// segundo plano no debe reconstruir la tabla (perdería el input abierto).
+// Se guarda el último dato recibido y se aplica apenas termine de editar.
+// ══════════════════════════════════════════
+let _editandoNombre = false;
+let _tablaPendiente = null;
 
 function actualizarLabelFiltro() {
   const label = document.getElementById("trustLabel");
@@ -200,6 +204,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const actual = celda.querySelector("span")?.innerText.trim() || "";
     const sid    = mac.replace(/:/g, "");
 
+    _editandoNombre = true;
+
     const wrapper = document.createElement("div");
     wrapper.className = "flex items-center gap-1.5";
 
@@ -248,6 +254,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (sp) sp.textContent = nombre;
       if (typeof lucide !== "undefined") lucide.createIcons();
 
+      _editandoNombre = false;
+      _aplicarTablaPendienteSiHay();
+
       try {
         const d = await postJSON("/api/nombrar", { mac, nombre });
         mostrarNotificacion(
@@ -264,6 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === "Enter")  { e.preventDefault(); inp.removeEventListener("blur", guardar); guardar(); }
       if (e.key === "Escape") {
         _saved = true;
+        _editandoNombre = false;
         const rw = document.createElement("div");
         rw.className = "flex items-center gap-1.5";
         const rs = document.createElement("span");
@@ -277,6 +287,7 @@ document.addEventListener("DOMContentLoaded", () => {
         rw.appendChild(rb);
         celda.replaceChildren(rw);
         if (typeof lucide !== "undefined") lucide.createIcons();
+        _aplicarTablaPendienteSiHay();
       }
     });
     inp.addEventListener("blur", guardar);
@@ -352,6 +363,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function actualizarTabla(devs) {
+    // Si el usuario está editando un nombre, no reconstruir la tabla ahora
+    // (perdería el <input> abierto). Se guarda para aplicarlo al terminar.
+    if (_editandoNombre) { _tablaPendiente = devs; return; }
     const tbody = $("tabla-dispositivos");
     if (!tbody) return;
     const frag = document.createDocumentFragment();
@@ -359,6 +373,14 @@ document.addEventListener("DOMContentLoaded", () => {
     tbody.replaceChildren(frag);
     if (typeof lucide !== "undefined") lucide.createIcons();
     aplicarFiltros();
+  }
+
+  function _aplicarTablaPendienteSiHay() {
+    if (_tablaPendiente) {
+      const data = _tablaPendiente;
+      _tablaPendiente = null;
+      actualizarTabla(data);
+    }
   }
 
   // ── Puertos ──────────────────────────────────────────────────────────────
