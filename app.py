@@ -24,6 +24,19 @@ MAC_REGEX = re.compile(r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
 def mac_valida(mac: str) -> bool:
     return bool(MAC_REGEX.match(mac.lower()))
 
+# ── Plantillas de alertas (multi-idioma) ──────────────────────────────────────
+ALERT_TEMPLATES = {
+    "es": "⚠️ NUEVO DISPOSITIVO\nIP: {ip}\nMAC: {mac}\nFAB: {fab}",
+    "en": "⚠️ NEW DEVICE\nIP: {ip}\nMAC: {mac}\nVENDOR: {fab}",
+    "fr": "⚠️ NOUVEL APPAREIL\nIP: {ip}\nMAC: {mac}\nFABRICANT: {fab}",
+}
+
+TEST_MESSAGES = {
+    "es": "✅ Lince: conexión de prueba exitosa",
+    "en": "✅ Lince: test connection successful",
+    "fr": "✅ Lince : connexion de test réussie",
+}
+
 # ── App ──────────────────────────────────────────────────────────────────────
 app = Flask(__name__)
 
@@ -129,6 +142,13 @@ def get_intervalo():
     except Exception:
         _intervalo_actual = CACHE_INTERVALO
     return _intervalo_actual
+
+def get_idioma_alertas():
+    """Idioma usado para las alertas de Telegram. Se guarda por separado
+    del idioma de la interfaz (que vive en localStorage del navegador),
+    porque el hilo de escaneo en segundo plano no tiene acceso a eso."""
+    idioma = obtener_config("idioma_alertas", "es")
+    return idioma if idioma in ALERT_TEMPLATES else "es"
 
 # ── Session timeout ──────────────────────────────────────────────────────────
 @app.before_request
@@ -394,7 +414,9 @@ def enviar_telegram(mac, ip, fab):
     token, chat = get_telegram_config()
     if not token or not chat:
         return
-    msg = f"⚠️ NUEVO DISPOSITIVO\nIP: {ip}\nMAC: {mac}\nFAB: {fab}"
+    idioma   = get_idioma_alertas()
+    template = ALERT_TEMPLATES[idioma]
+    msg      = template.format(ip=ip, mac=mac, fab=fab)
     try:
         requests.post(
             f"https://api.telegram.org/bot{token}/sendMessage",
@@ -578,6 +600,20 @@ def api_perfil_set():
     db.close()
     return jsonify({"success": True, "nombre_display": nombre})
 
+# ── Idioma de alertas ──────────────────────────────────────────────────────────
+@app.route('/api/idioma', methods=['POST'])
+def api_idioma_set():
+    """Guarda el idioma que debe usarse para las alertas de Telegram.
+    Se llama desde el frontend cada vez que el usuario cambia el idioma
+    de la interfaz, para mantenerlos sincronizados."""
+    if 'usuario' not in session:
+        return jsonify({"error": "No autorizado"}), 401
+    idioma = request.get_json().get("idioma", "es")
+    if idioma not in ALERT_TEMPLATES:
+        return jsonify({"success": False, "message": "Idioma no soportado"}), 400
+    guardar_config("idioma_alertas", idioma)
+    return jsonify({"success": True, "idioma": idioma})
+
 # ── Configuración ─────────────────────────────────────────────────────────────
 @app.route('/api/configuracion', methods=['GET'])
 def api_config_get():
@@ -588,7 +624,8 @@ def api_config_get():
         "telegram_token":      token,
         "telegram_chat_id":    chat,
         "intervalo_monitoreo": obtener_config("intervalo_monitoreo", str(CACHE_INTERVALO)),
-        "session_timeout":     obtener_config("session_timeout", str(DEFAULT_SESSION))
+        "session_timeout":     obtener_config("session_timeout", str(DEFAULT_SESSION)),
+        "idioma_alertas":      get_idioma_alertas()
     })
 
 @app.route('/api/configuracion', methods=['POST'])
@@ -615,6 +652,10 @@ def api_config_set():
             app.permanent_session_lifetime = timedelta(seconds=st)
         except Exception:
             return jsonify({"success": False, "message": "Tiempo de sesión inválido"})
+    if "idioma_alertas" in data:
+        idioma = data["idioma_alertas"]
+        if idioma in ALERT_TEMPLATES:
+            guardar_config("idioma_alertas", idioma)
     return jsonify({"success": True})
 
 @app.route('/api/telegram/test', methods=['POST'])
@@ -624,10 +665,11 @@ def api_telegram_test():
     token, chat = get_telegram_config()
     if not token or not chat:
         return jsonify({"success": False, "message": "Token o Chat ID no configurados"})
+    idioma = get_idioma_alertas()
     try:
         resp = requests.post(
             f"https://api.telegram.org/bot{token}/sendMessage",
-            data={"chat_id": chat, "text": "✅ Lince: conexión de prueba exitosa"},
+            data={"chat_id": chat, "text": TEST_MESSAGES.get(idioma, TEST_MESSAGES["es"])},
             timeout=5
         )
         ok = resp.json().get("ok", False)
