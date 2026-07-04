@@ -72,6 +72,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const $ = id => document.getElementById(id);
   const root = document.documentElement;
 
+  // ── Idioma: sincronizar bandera/label con el idioma guardado ─────────────
+  // SUPPORTED_LANGS ya existe de forma síncrona (i18n.js se carga antes que
+  // app.js), así que esto no necesita esperar a que baje el JSON de
+  // traducciones — solo corrige el ícono/texto que estaban hardcodeados
+  // en español en el HTML.
+  (() => {
+    const lang = localStorage.getItem("lang") || "es";
+    const info = SUPPORTED_LANGS[lang];
+    if (!info) return;
+    const flag  = $("langFlag");
+    const label = $("langLabel");
+    if (flag)  flag.className    = `fi fi-${info.country} w-3.5 h-2.5 rounded-sm flex-shrink-0`;
+    if (label) label.textContent = info.label;
+  })();
+
   // ── Modo oscuro ──────────────────────────────────────────────────────────
   const aplicarTema = () => {
     const dark = localStorage.getItem("modoOscuro") === "true";
