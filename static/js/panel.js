@@ -390,8 +390,12 @@ async function testTelegram() {
   }
   // FIX: postJSON incluye X-CSRFToken
   const res = await postJSON("/api/telegram/test", {}).catch(() => null);
+  // FIX i18n: el backend ahora devuelve una clave (message_key) en vez de
+  // texto fijo en español, así el mensaje se traduce según el idioma
+  // activo del usuario en vez de salir siempre en español.
+  const texto = res?.message_key ? t(res.message_key) : t("cfgError");
   mostrarNotificacion(
-    res?.success ? `✓ ${res.message}` : `✗ ${res?.message || t("cfgError")}`,
+    res?.success ? `✓ ${texto}` : `✗ ${texto}`,
     res?.success ? "success" : "error"
   );
 }
