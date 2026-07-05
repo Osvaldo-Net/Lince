@@ -11,6 +11,9 @@
   "profileAdmin": "Administrateur",
   "profileDisplayName": "Nom d'affichage",
   "profileNameSaved": "Nom mis à jour",
+  "profileSsoTitle":     "Compte géré par SSO",
+  "profileSsoNotice":    "Ce compte s'est connecté via SSO. Pour changer votre email ou mot de passe, faites-le depuis votre fournisseur d'identité.",
+  "profileSsoCredError": "Vous ne pouvez pas changer les identifiants locaux : ce compte est géré par votre fournisseur SSO.",
 
   "statTotal": "Total appareils",
   "statTrusted": "Approuvés",
