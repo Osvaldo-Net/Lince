@@ -1,14 +1,14 @@
-// ══════════════════════════════════════════
-// panel.js — Paneles laterales, historial,
+// ------------------------------------------
+// panel.js  Paneles laterales, historial,
 // estadísticas, perfil y configuración
-// ══════════════════════════════════════════
+// ------------------------------------------
 
 // SESSION_TOTAL is injected by Flask into a data attribute on <body>:
 // <body data-session="{{ session_timeout }}">
 const SESSION_TOTAL = (parseInt(document.body.dataset.session) || 28800) * 1000;
 let sessStart = Date.now(), warnShown = false;
 
-// ── CSRF helper (mismo patrón que app.js) ────────────────────────────────────
+// -- CSRF helper (mismo patrón que app.js) ----------------------------------
 function getCsrfToken() {
   return document.querySelector('meta[name="csrf-token"]')?.content || "";
 }
@@ -23,7 +23,7 @@ function postJSON(url, body) {
   }).then(r => r.json());
 }
 
-// ── Session timer ─────────────────────────────────────────────────────────────
+// -- Session timer -----------------------------------------------------------
 function keepAlive() {
   fetch("/api/scan").then(() => {
     sessStart = Date.now(); warnShown = false;
@@ -38,7 +38,7 @@ function tickSession() {
   const bar = document.getElementById("sess-bar");
   if (bar) {
     bar.style.width = pct + "%";
-    bar.style.background = pct < 10 ? "#ef4444" : pct < 25 ? "#f59e0b" : "";
+    bar.style.background = pct < 10 ? "#e11d48" : pct < 25 ? "#f59e0b" : "";
   }
   if (remaining < 600000 && !warnShown) {
     warnShown = true;
@@ -48,7 +48,7 @@ function tickSession() {
 setInterval(tickSession, 1000);
 tickSession();
 
-// ── Panel helpers ─────────────────────────────────────────────────────────────
+// -- Panel helpers ------------------------------------------------------------
 const panelOverlay = document.getElementById("panel-overlay");
 let _panelAbierto = null;
 
@@ -85,13 +85,13 @@ document.addEventListener("keydown", e => {
 
 document.getElementById("panel-overlay")?.addEventListener("click", cerrarTodosPaneles);
 
-// ── Stat cards ────────────────────────────────────────────────────────────────
+// -- Stat cards ---------------------------------------------------------------
 const _statCounters = {};
 
 function _setStatNum(id, target) {
   const el = document.getElementById(id);
   if (!el) return;
-  // Use null check so '—' (NaN) always triggers an update to 0
+  // Use null check so '?' (NaN) always triggers an update to 0
   const raw = parseInt(el.textContent);
   const current = isNaN(raw) ? null : raw;
   if (current === target) return;
@@ -130,7 +130,7 @@ function actualizarStats() {
   });
 })();
 
-// ── Nombre / perfil ───────────────────────────────────────────────────────────
+// -- Nombre / perfil ------------------------------------------------------------
 function _syncNombreUI(nombre) {
   const sn   = document.getElementById("sidebar-user-name");
   const disp = document.getElementById("perfil-nombre-display");
@@ -167,21 +167,21 @@ async function guardarNombrePerfil() {
   const msg    = document.getElementById("cfg-name-msg");
   try {
     const data = await postJSON("/api/perfil", { nombre_display: nombre });
-    msg.textContent = data.success ? `✓ ${t("profileNameSaved")}` : `✗ ${t("cfgError")}`;
-    msg.className   = `text-xs ${data.success ? "text-emerald-500" : "text-red-500"}`;
+    msg.textContent = data.success ? `? ${t("profileNameSaved")}` : `? ${t("cfgError")}`;
+    msg.className   = `text-xs ${data.success ? "text-emerald-500" : "text-rose-500"}`;
     msg.classList.remove("hidden");
     if (data.success) {
       _syncNombreUI(nombre || document.getElementById("sidebar-user-name").textContent);
       setTimeout(() => msg.classList.add("hidden"), 3000);
     }
   } catch {
-    msg.textContent = `✗ ${t("cfgError")}`;
-    msg.className = "text-xs text-red-500";
+    msg.textContent = `? ${t("cfgError")}`;
+    msg.className = "text-xs text-rose-500";
     msg.classList.remove("hidden");
   }
 }
 
-// ── Historial ─────────────────────────────────────────────────────────────────
+// -- Historial ------------------------------------------------------------------
 let _histEvento = "", _histAutoTimer = null;
 
 function setHistEvento(valor, labelKey, dotClass) {
@@ -250,7 +250,7 @@ async function cargarHistorial() {
       const chip     = r.confiable
         ? `<span class="badge badge-green" style="font-size:10px;padding:1px 6px">${t("historyTrusted")}</span>`
         : `<span class="badge badge-red"   style="font-size:10px;padding:1px 6px">${t("historyUntrusted")}</span>`;
-      const fechaParts = r.fecha ? esc(r.fecha).split(" ") : ["—", ""];
+      const fechaParts = r.fecha ? esc(r.fecha).split(" ") : ["?", ""];
 
       return `<div class="hist-card flex items-center gap-2.5 p-2.5 border border-slate-100 dark:border-slate-800/40 bg-white dark:bg-dark3/40">
         <div class="relative flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center ${iconBg}">
@@ -279,7 +279,7 @@ async function cargarHistorial() {
     }).join("");
     if (info) info.textContent = `${data.length} ${t("historyCount")}`;
   } catch {
-    cont.innerHTML = `<div class="text-center text-red-400 py-6 text-xs">${t("historyError")}</div>`;
+    cont.innerHTML = `<div class="text-center text-rose-400 py-6 text-xs">${t("historyError")}</div>`;
   }
 }
 
@@ -296,7 +296,7 @@ document.getElementById("hist-mac")?.addEventListener("input", () => {
   _histDebounce = setTimeout(() => { if (_panelAbierto === "panel-historial") cargarHistorial(); }, 400);
 });
 
-// ── Editar nombre en panel confiables ─────────────────────────────────────────
+// -- Editar nombre en panel confiables -------------------------------------------
 window.editarNombreConfiable = mac => {
   const li = document.querySelector(`#lista-macs li[data-mac="${esc(mac.toLowerCase())}"]`);
   if (!li) return;
@@ -341,11 +341,11 @@ window.editarNombreConfiable = mac => {
           const sp2 = tr.querySelector("td:nth-child(3) span");
           if (sp2) sp2.textContent = nombre;
         }
-        mostrarNotificacion(`✓ ${t("nombre_guardado")}`, "success");
+        mostrarNotificacion(`? ${t("nombre_guardado")}`, "success");
       } else {
-        mostrarNotificacion(`✗ ${t("error_guardar_nombre")}`, "error");
+        mostrarNotificacion(`? ${t("error_guardar_nombre")}`, "error");
       }
-    } catch { mostrarNotificacion(`✗ ${t("error_guardar_nombre")}`, "error"); }
+    } catch { mostrarNotificacion(`? ${t("error_guardar_nombre")}`, "error"); }
   };
 
   const cancelar = () => { if (_saved) return; _saved = true; restoreSpan(actual); };
@@ -357,7 +357,7 @@ window.editarNombreConfiable = mac => {
   });
 };
 
-// ── Configuración modal ───────────────────────────────────────────────────────
+// -- Configuración modal ----------------------------------------------------------
 async function abrirConfig() {
   document.getElementById("modal-config")?.classList.remove("hidden");
   try {
@@ -386,9 +386,9 @@ async function guardarConfig() {
       telegram_token: token, telegram_chat_id: chat,
       intervalo_monitoreo: intervalo, session_timeout: sessionS
     });
-    mostrarNotificacion(data.success ? `✓ ${t("cfgSaved")}` : `✗ ${t("cfgError")}`, data.success ? "success" : "error");
+    mostrarNotificacion(data.success ? `? ${t("cfgSaved")}` : `? ${t("cfgError")}`, data.success ? "success" : "error");
     if (data.success) cerrarConfig();
-  } catch { mostrarNotificacion(`✗ ${t("cfgError")}`, "error"); }
+  } catch { mostrarNotificacion(`? ${t("cfgError")}`, "error"); }
 }
 
 async function testTelegram() {
@@ -406,14 +406,14 @@ async function testTelegram() {
   // activo del usuario en vez de salir siempre en español.
   const texto = res?.message_key ? t(res.message_key) : t("cfgError");
   mostrarNotificacion(
-    res?.success ? `✓ ${texto}` : `✗ ${texto}`,
+    res?.success ? `? ${texto}` : `? ${texto}`,
     res?.success ? "success" : "error"
   );
 }
 
 function setIntervalo(val) { document.getElementById("cfg-intervalo").value = val; }
 
-// ── Credenciales ──────────────────────────────────────────────────────────────
+// -- Credenciales -----------------------------------------------------------------
 async function guardarCredenciales() {
   const actual  = document.getElementById("cfg-pass-actual").value;
   const email   = document.getElementById("cfg-new-email").value.trim();
@@ -422,7 +422,7 @@ async function guardarCredenciales() {
   const msg     = document.getElementById("cfg-cred-msg");
   if (!actual) {
     msg.textContent = t("cfgCurrentPass") + " requerida";
-    msg.className = "text-xs text-red-500";
+    msg.className = "text-xs text-rose-500";
     msg.classList.remove("hidden"); return;
   }
   try {
@@ -435,24 +435,24 @@ async function guardarCredenciales() {
     // traduce con t(); si no, se usa el texto plano existente (message)
     // como venía haciéndose para los demás casos de este endpoint.
     const texto = data.message_key ? t(data.message_key) : (data.message || t("cfgCredError"));
-    msg.textContent = data.success ? `✓ ${t("cfgCredSaved")}` : `✗ ${texto}`;
-    msg.className = `text-xs ${data.success ? "text-emerald-500" : "text-red-500"}`;
+    msg.textContent = data.success ? `? ${t("cfgCredSaved")}` : `? ${texto}`;
+    msg.className = `text-xs ${data.success ? "text-emerald-500" : "text-rose-500"}`;
     msg.classList.remove("hidden");
     if (data.success) setTimeout(() => msg.classList.add("hidden"), 3000);
   } catch {
-    msg.textContent = `✗ ${t("cfgCredError")}`;
-    msg.className = "text-xs text-red-500";
+    msg.textContent = `? ${t("cfgCredError")}`;
+    msg.className = "text-xs text-rose-500";
     msg.classList.remove("hidden");
   }
 }
 
-// ── Marcar confiable ──────────────────────────────────────────────────────────
+// -- Marcar confiable -------------------------------------------------------------
 window.marcarConfiable = async (mac, hacerConfiable, btn) => {
   const endpoint = hacerConfiable ? "/api/agregar" : "/api/eliminar";
   try {
     // FIX: postJSON incluye X-CSRFToken
     const data = await postJSON(endpoint, { mac });
-    if (!data.success) { mostrarNotificacion(`✗ ${t("connectionError")}`, "error"); return; }
+    if (!data.success) { mostrarNotificacion(`? ${t("connectionError")}`, "error"); return; }
 
     const tr = btn.closest("tr");
     if (!tr) return;
@@ -462,13 +462,13 @@ window.marcarConfiable = async (mac, hacerConfiable, btn) => {
     if (tdConf) {
       tdConf.innerHTML = hacerConfiable
         ? `<span class="badge badge-green"><span class="relative flex w-1.5 h-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-emerald-500"></span></span><span data-i18n="trusted">${t("trusted")}</span></span>`
-        : `<span class="badge badge-red"><span class="w-1.5 h-1.5 rounded-full bg-red-400"></span><span data-i18n="untrusted">${t("untrusted")}</span></span>`;
+        : `<span class="badge badge-red"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span><span data-i18n="untrusted">${t("untrusted")}</span></span>`;
     }
     btn.outerHTML = hacerConfiable
       ? `<button onclick="marcarConfiable('${esc(mac)}',false,this)" class="btn-action btn-untrust"><i data-lucide="shield-off" class="w-3 h-3"></i> <span data-i18n="untrust_btn">${t("untrust_btn")}</span></button>`
       : `<button onclick="marcarConfiable('${esc(mac)}',true,this)"  class="btn-action btn-trust"><i data-lucide="shield-check" class="w-3 h-3"></i> <span data-i18n="trust_btn">${t("trust_btn")}</span></button>`;
     if (typeof lucide !== "undefined") lucide.createIcons();
-    mostrarNotificacion(hacerConfiable ? `✓ ${t("success")}` : `✓ ${t("eliminado")}`, "success");
+    mostrarNotificacion(hacerConfiable ? `? ${t("success")}` : `? ${t("eliminado")}`, "success");
 
     const lista = document.getElementById("lista-macs");
     if (hacerConfiable && lista) {
@@ -489,7 +489,7 @@ window.marcarConfiable = async (mac, hacerConfiable, btn) => {
           </div>
           <p class="font-mono text-slate-400" style="font-size:10px">${esc(mac)}</p>
         </div>
-        <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-red-500 transition p-1 flex-shrink-0">
+        <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-rose-500 transition p-1 flex-shrink-0">
           <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
         </button>`;
       lista.appendChild(li);
@@ -497,5 +497,5 @@ window.marcarConfiable = async (mac, hacerConfiable, btn) => {
     } else if (!hacerConfiable && lista) {
       lista.querySelector(`li[data-mac="${esc(mac.toLowerCase())}"]`)?.remove();
     }
-  } catch { mostrarNotificacion(`✗ ${t("connectionError")}`, "error"); }
+  } catch { mostrarNotificacion(`? ${t("connectionError")}`, "error"); }
 };
