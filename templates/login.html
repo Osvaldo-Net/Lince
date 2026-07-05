@@ -101,6 +101,28 @@
     }
     .btn-main:hover  { opacity:.92; }
     .btn-main:active { transform:scale(.99); }
+
+    /* ── Botón SSO ── */
+    .btn-sso {
+      width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
+      background:#fff; color:#0f172a; border:1px solid #e2e8f0; cursor:pointer;
+      font-family:"Geist",sans-serif; transition:background .15s, border-color .15s, transform .1s;
+      display:flex; align-items:center; justify-content:center; gap:8px;
+      text-decoration:none;
+    }
+    .btn-sso:hover  { background:#f8fafc; border-color:#cbd5e1; }
+    .btn-sso:active { transform:scale(.99); }
+    .dark .btn-sso  { background:#1a1a24; color:#e2e8f0; border-color:#2a2d40; }
+    .dark .btn-sso:hover { background:#20202c; border-color:#3a3d52; }
+
+    .divider-or {
+      display:flex; align-items:center; gap:10px;
+      color:#94a3b8; font-size:11px; margin:14px 0;
+    }
+    .divider-or::before, .divider-or::after {
+      content:""; flex:1; height:1px; background:#e2e8f0;
+    }
+    .dark .divider-or::before, .dark .divider-or::after { background:#2a2d40; }
   </style>
 </head>
 
@@ -131,6 +153,14 @@
     </div>
     {% endif %}
 
+    {% if sso_error %}
+    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-red-700 dark:text-red-400 fade-up"
+      style="font-size:12px;background:#fff1f2;border:1px solid #fecaca">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span data-i18n="loginErrorSSO">No se pudo iniciar sesión con SSO. Intenta de nuevo.</span>
+    </div>
+    {% endif %}
+
     {% if timeout %}
     <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-amber-700 dark:text-amber-400 fade-up"
       style="font-size:12px;background:#fffbeb;border:1px solid #fde68a">
@@ -141,36 +171,52 @@
 
     <!-- Card -->
     <div class="bg-white dark:bg-dark2 rounded-xl border border-slate-200 dark:border-slate-800/60 p-6">
-      <form method="POST" class="space-y-4">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
-        <!-- Usuario -->
-        <div>
-          <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px" data-i18n="loginUser">Usuario</label>
-          <div class="relative">
-            <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <input type="text" name="usuario" data-i18n="loginPlaceholderEmail" placeholder="correo@ejemplo.com" required autofocus
-              autocomplete="username" class="field" />
+      {% if oidc_enabled %}
+      <a href="/login/sso" class="btn-sso">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 0 1 6 0v3Z"/>
+        </svg>
+        <span data-i18n="loginSsoButton">Iniciar sesión con SSO</span>
+      </a>
+      {% endif %}
+
+      {% if not disable_local_login %}
+        {% if oidc_enabled %}
+        <div class="divider-or"><span data-i18n="loginOrDivider">o con tu cuenta local</span></div>
+        {% endif %}
+
+        <form method="POST" class="space-y-4">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+          <!-- Usuario -->
+          <div>
+            <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px" data-i18n="loginUser">Usuario</label>
+            <div class="relative">
+              <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input type="text" name="usuario" data-i18n="loginPlaceholderEmail" placeholder="correo@ejemplo.com" required autofocus
+                autocomplete="username" class="field" />
+            </div>
           </div>
-        </div>
 
-        <!-- Contraseña -->
-        <div>
-          <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px" data-i18n="loginPassword">Contraseña</label>
-          <div class="relative">
-            <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <input id="pass" type="password" name="contrasena" placeholder="••••••••" required
-              style="padding-right:36px" autocomplete="current-password" class="field" />
-            <button type="button" onclick="togglePass()" aria-label="Mostrar contraseña"
-              class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition p-1">
-              <svg id="ico-eye"     xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <svg id="ico-eye-off" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            </button>
+          <!-- Contraseña -->
+          <div>
+            <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px" data-i18n="loginPassword">Contraseña</label>
+            <div class="relative">
+              <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <input id="pass" type="password" name="contrasena" placeholder="••••••••" required
+                style="padding-right:36px" autocomplete="current-password" class="field" />
+              <button type="button" onclick="togglePass()" aria-label="Mostrar contraseña"
+                class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition p-1">
+                <svg id="ico-eye"     xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg id="ico-eye-off" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <button type="submit" class="btn-main" data-i18n="loginButton">Ingresar</button>
-      </form>
+          <button type="submit" class="btn-main" data-i18n="loginButton">Ingresar</button>
+        </form>
+      {% endif %}
     </div>
 
     <!-- Footer -->
