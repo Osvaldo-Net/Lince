@@ -1,13 +1,12 @@
-{# ── _modal_puertos.html ── Port scan results modal #}
+{# ?? _modal_puertos.html ?? Port scan results modal #}
 <div id="modal-puertos" class="fixed inset-0 modal-overlay flex items-end sm:items-center justify-center z-[65] hidden">
-  <div class="card p-5 w-full sm:max-w-sm relative fade-in rounded-b-none sm:rounded-xl" style="position:relative;overflow:hidden">
-    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#FF8A00,#FF5E7E)"></div>
+  <div class="card p-5 w-full sm:max-w-sm relative fade-in rounded-b-none sm:rounded-xl">
     <button onclick="cerrarModal()"
       class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-dark3">
       <i data-lucide="x" class="w-4 h-4"></i>
     </button>
     <h2 class="text-sm font-semibold mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
-      <i data-lucide="server" class="w-4 h-4" style="color:#FF8A00"></i>
+      <i data-lucide="server" class="w-4 h-4" style="color:#0891B2"></i>
       <span data-i18n="openPorts">Puertos Abiertos</span>
     </h2>
     <div id="contenido-puertos" class="space-y-1.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
