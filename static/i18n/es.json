@@ -11,7 +11,10 @@
   "profileAdmin": "Administrador",
   "profileDisplayName": "Nombre para mostrar",
   "profileNameSaved": "Nombre actualizado",
-
+  "profileSsoTitle":     "Cuenta gestionada por SSO",
+  "profileSsoNotice":    "Esta cuenta inició sesión mediante SSO. Para cambiar tu correo o contraseña, hazlo desde tu proveedor de autenticación.",
+  "profileSsoCredError": "No puedes cambiar credenciales locales: esta cuenta se gestiona desde tu proveedor de autenticación (SSO).",
+  
   "statTotal": "Total dispositivos",
   "statTrusted": "Confiables",
   "statUntrusted": "No confiables",
