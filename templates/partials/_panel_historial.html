@@ -1,70 +1,52 @@
-{# ?? _panel_historial.html ?? Right slide-in panel: network history #}
-<div id="panel-historial" class="right-panel" aria-label="Historial">
-
+{# 🌊 _panel_confiables.html 🌊 Right panel: trusted MAC addresses list #}
+<div id="panel-confiables" class="right-panel narrow" aria-label="Confiables">
   <div class="panel-header">
     <div>
-      <h2 class="font-semibold text-slate-900 dark:text-white text-sm" data-i18n="historyTitle">Historial de red</h2>
-      <p class="text-slate-400 mt-0.5" style="font-size:11px" data-i18n="historySubtitle">Solo registra conexiones y desconexiones</p>
+      <h2 class="font-semibold text-slate-900 dark:text-white text-sm" data-i18n="trustedDevices">Dispositivos Confiables</h2>
+      <p class="text-slate-400 mt-0.5" style="font-size:11px" data-i18n="trustedSubtitle">MACs marcadas como de confianza</p>
     </div>
-    <button onclick="cerrarPanelHistorial()"
+    <button onclick="cerrarPanelConfiables()"
       class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-dark3 transition">
       <i data-lucide="x" class="w-4 h-4"></i>
     </button>
   </div>
-
-  <!-- Filters -->
-  <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800/60 space-y-2">
-    <div class="flex gap-2">
-      <input id="hist-mac" type="text" data-i18n="historyMac" placeholder="Filtrar por MAC"
-        class="input-base font-mono flex-1" style="font-size:11px;padding:6px 8px" />
-      <div class="relative flex-shrink-0" style="width:150px">
-        <button id="histEventoBtn" onclick="document.getElementById('histEventoMenu').classList.toggle('hidden')"
-          class="input-base flex items-center justify-between gap-1.5 cursor-pointer" style="font-size:11px;padding:6px 8px">
-          <div class="flex items-center gap-1.5">
-            <span id="hist-evento-dot" class="inline-block w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span>
-            <span id="histEventoLabel" data-i18n="historyAll" class="truncate">Todos</span>
-          </div>
-          <i data-lucide="chevrons-up-down" class="w-3 h-3 text-slate-400 flex-shrink-0"></i>
-        </button>
-        <div id="histEventoMenu" class="dropdown-menu hidden" style="width:150px">
-          <button onclick="setHistEvento('','historyAll','bg-slate-400')"             class="dropdown-item"><span class="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span><span data-i18n="historyAll">Todos</span></button>
-          <button onclick="setHistEvento('conectado','historyConn','bg-emerald-500')"  class="dropdown-item"><span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="historyConn">Conectado</span></button>
-          <button onclick="setHistEvento('desconectado','historyDisc','bg-slate-400')" class="dropdown-item"><span class="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span><span data-i18n="historyDisc">Desconectado</span></button>
+  <!-- Add MAC form -->
+  <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800/60">
+    <p class="text-slate-500 dark:text-slate-400 mb-2 font-medium" style="font-size:11px" data-i18n="addTrusted">Agregar MAC confiable</p>
+    <form id="form-agregar" class="flex gap-2">
+      <input type="text" id="input-mac" placeholder="00:1A:2B:3C:4D:5E" required
+        class="input-base font-mono flex-1" style="font-size:11px;padding:6px 8px"
+        autocomplete="off" autocapitalize="off" />
+      <button type="submit"
+        class="px-3 py-1.5 rounded-lg text-white font-semibold transition hover:opacity-90 flex-shrink-0"
+        style="background:#0891B2;font-size:11px" data-i18n="add">Agregar</button>
+    </form>
+  </div>
+  <!-- List -->
+  <ul id="lista-macs" class="flex-1 overflow-y-auto custom-scrollbar px-4 py-3 space-y-1.5">
+    {% for item in lista_confiables %}
+    <li data-mac="{{ item.mac|lower }}"
+      class="flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800/40 bg-white dark:bg-dark3/30 hover:border-slate-200 dark:hover:border-slate-700/60 transition group">
+      <span class="relative flex w-1.5 h-1.5 flex-shrink-0">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-emerald-500"></span>
+      </span>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-1.5">
+          <p class="nombre-confiable font-medium text-slate-700 dark:text-slate-200 text-xs truncate">
+            {{ item.nombre if item.nombre else 'Sin nombre' }}
+          </p>
+          <button onclick="editarNombreConfiable('{{ item.mac }}')"
+            class="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition flex-shrink-0">
+            <i data-lucide="pencil" class="w-3 h-3"></i>
+          </button>
         </div>
+        <p class="font-mono text-slate-400" style="font-size:10px">{{ item.mac }}</p>
       </div>
-    </div>
-    <div class="flex items-center gap-2">
-      <button onclick="cargarHistorial()"
-        class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white font-semibold transition hover:opacity-90 flex-shrink-0"
-        style="background:#0891B2;font-size:11px">
-        <i data-lucide="search" class="w-3 h-3"></i>
-        <span data-i18n="historySearch">Buscar</span>
+      <button onclick="eliminarMAC('{{ item.mac }}')" class="text-slate-300 hover:text-rose-500 transition p-1 flex-shrink-0">
+        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
       </button>
-      <label class="flex items-center gap-2 cursor-pointer select-none ml-auto">
-        <div class="toggle-track on" id="toggleTrack"
-          onclick="this.classList.toggle('on'); document.getElementById('hist-auto').checked=this.classList.contains('on'); toggleAutoRefresh(this.classList.contains('on'))">
-          <div class="toggle-thumb"></div>
-        </div>
-        <span class="text-slate-500 dark:text-slate-400" style="font-size:11px" data-i18n="historyAutoRefresh">Auto-actualizar</span>
-        <input type="checkbox" id="hist-auto" class="sr-only" checked onchange="toggleAutoRefresh(this.checked)" />
-      </label>
-    </div>
-  </div>
-
-  <!-- Cards -->
-  <div id="historial-cards" class="flex-1 overflow-y-auto custom-scrollbar px-4 py-3 space-y-1.5">
-    <div class="text-center text-slate-400 py-10 text-xs flex flex-col items-center gap-2">
-      <i data-lucide="clock" class="w-6 h-6 opacity-25"></i>
-      <span data-i18n="historyEmpty">Presiona Buscar para cargar el historial</span>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <div class="px-4 py-3 border-t border-slate-100 dark:border-slate-800/40 flex items-center justify-between flex-shrink-0">
-    <p id="hist-info" class="text-slate-400" style="font-size:11px"></p>
-    <button onclick="limpiarHistorial()" class="text-red-400 hover:text-red-600 flex items-center gap-1 transition" style="font-size:11px">
-      <i data-lucide="trash-2" class="w-3 h-3"></i>
-      <span data-i18n="historyClear">Limpiar historial</span>
-    </button>
-  </div>
+    </li>
+    {% endfor %}
+  </ul>
 </div>
