@@ -270,6 +270,12 @@ def login():
             session["usuario"]       = usuario
             session["ultimo_acceso"] = time.time()
             session.permanent        = True
+            # FIX: el bloqueo de "cambiar credenciales" ahora depende de
+            # CÓMO se inició esta sesión, no de cómo se creó la cuenta en
+            # la DB. Así, una cuenta que existía como local pero entró por
+            # SSO esta vez queda bloqueada solo en esta sesión, sin importar
+            # su historial (evita el caso de cuentas "heredadas").
+            session["auth_method"]   = "local"
             registrar_log(f"Login exitoso: {usuario}")
             if es_usuario_por_defecto(usuario) and es_contrasena_por_defecto(usuario):
                 return redirect("/cambiar-credenciales")
@@ -301,14 +307,24 @@ def obtener_usuario_por_email(email):
 def crear_usuario_sso(email, nombre_display=""):
     """Crea un usuario local para alguien que entra por primera vez vía SSO.
     La contraseña se guarda como un hash aleatorio inutilizable: este usuario
-    solo puede entrar por SSO, nunca con el formulario de usuario/contraseña."""
+    solo puede entrar por SSO, nunca con el formulario de usuario/contraseña.
+    auth_provider='sso' bloquea también el cambio de credenciales locales
+    (ver api_cambiar_credenciales)."""
     import bcrypt
     password_inutilizable = bcrypt.hashpw(secrets.token_hex(32).encode(), bcrypt.gensalt(12)).decode()
     db = get_db()
     db.execute(
-        "INSERT INTO usuarios(usuario, contrasena, rol, nombre_display) VALUES(?,?,?,?)",
-        (email, password_inutilizable, "admin", nombre_display)
+        "INSERT INTO usuarios(usuario, contrasena, rol, nombre_display, auth_provider) VALUES(?,?,?,?,?)",
+        (email, password_inutilizable, "admin", nombre_display, "sso")
     )
+    db.commit(); db.close()
+
+def guardar_nombre_display(email, nombre):
+    """Helper compartido: usado tanto por el guardado manual desde el panel
+    de perfil (cuenta local) como por la sincronización automática en cada
+    login SSO."""
+    db = get_db()
+    db.execute("UPDATE usuarios SET nombre_display=? WHERE usuario=?", (nombre, email))
     db.commit(); db.close()
 
 def _sso_redirect_uri():
@@ -355,13 +371,19 @@ def login_sso_callback():
 
     try:
         usuario_db = obtener_usuario_por_email(email)
+        nombre_sso = userinfo.get("name") or userinfo.get("given_name") or ""
         if not usuario_db:
             if not OIDC_AUTO_CREATE:
                 registrar_log(f"SSO: intento de login para {email} sin cuenta local (auto-create desactivado)")
                 return redirect("/login?error=1")
-            nombre = userinfo.get("name") or userinfo.get("given_name") or ""
-            crear_usuario_sso(email, nombre)
+            crear_usuario_sso(email, nombre_sso)
             registrar_log(f"SSO: usuario nuevo creado automáticamente: {email}")
+        elif nombre_sso:
+            # FIX: sincronizar el nombre en cada login SSO (no solo al crear
+            # la cuenta), así si lo cambias en Authelia/Authentik/Keycloak
+            # se refleja aquí automáticamente. Solo si el IdP mandó un
+            # nombre; si no manda nada, se conserva el que ya estaba.
+            guardar_nombre_display(email, nombre_sso)
     except Exception as e:
         logging.getLogger("accesos").error("SSO: error creando/consultando usuario %s: %s", email, str(e), exc_info=True)
         return redirect("/login?error=1")
@@ -370,6 +392,11 @@ def login_sso_callback():
     session["usuario"]       = email
     session["ultimo_acceso"] = time.time()
     session.permanent        = True
+    # FIX: bandera por sesión (no por cuenta) — ver comentario equivalente
+    # en el login local. Esto es lo que realmente bloquea el cambio de
+    # credenciales durante esta sesión, sin importar si el correo ya
+    # existía como cuenta local antes de configurar el SSO.
+    session["auth_method"]   = "sso"
     registrar_log(f"Login SSO exitoso: {email}")
     return redirect("/")
 
@@ -397,6 +424,14 @@ def cambiar_credenciales():
 def api_cambiar_credenciales():
     if 'usuario' not in session:
         return jsonify({"error": "No autorizado"}), 401
+
+    # FIX: el bloqueo depende de cómo se inició ESTA sesión (session["auth_method"]),
+    # no de una columna fija en la DB. Así, una cuenta que existía como local
+    # pero inició sesión por SSO esta vez queda bloqueada correctamente en esta
+    # sesión, sin importar si la cuenta "nació" local o sso.
+    if session.get("auth_method") == "sso":
+        return jsonify({"success": False, "message_key": "profileSsoCredError"}), 403
+
     data              = request.get_json()
     nuevo_usuario     = data.get("nuevo_usuario", "").strip().lower()
     nueva             = data.get("nueva_contrasena", "")
@@ -789,6 +824,9 @@ def api_perfil_get():
     db.close()
     return jsonify({
         "usuario":        session['usuario'],
+        # FIX: refleja cómo se inició ESTA sesión, no una columna fija de la
+        # cuenta en la DB (ver comentario en /api/cambiar-credenciales).
+        "auth_provider":  session.get("auth_method", "local"),
         "nombre_display": row["nombre_display"] if row and row["nombre_display"] else ""
     })
 
@@ -796,6 +834,10 @@ def api_perfil_get():
 def api_perfil_set():
     if 'usuario' not in session:
         return jsonify({"error": "No autorizado"}), 401
+    # FIX: el nombre para mostrar también lo gestiona el proveedor SSO
+    # (se sincroniza automáticamente en cada login, ver login_sso_callback).
+    if session.get("auth_method") == "sso":
+        return jsonify({"success": False, "message_key": "profileSsoCredError"}), 403
     data   = request.get_json()
     nombre = data.get("nombre_display", "").strip()[:64]
     db     = get_db()
