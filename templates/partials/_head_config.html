@@ -1,7 +1,10 @@
-{# ── _head_config.html ──────────────────────────────────────────────
+{# ?? _head_config.html ---------------------------------------------
    Tailwind config, CSS variables y todos los estilos globales.
    Se incluye dentro de <head> en index.html.
-────────────────────────────────────────────────────────────────── #}
+   Paleta: blanco + cian (sin multicolor). Verde/rojo se conservan
+   solo como indicadores de estado (confiable / no confiable),
+   en tonos suaves (emerald / rose) para no romper con el resto.
+----------------------------------------------------------------- #}
 <script>
   tailwind.config = {
     darkMode: "class",
@@ -10,12 +13,12 @@
         colors: {
           dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
           brand: {
-            50:  "#FFF4E5",
-            100: "#FFE0B8",
-            400: "#FF8A00",
-            500: "#FF5E7E",
-            600: "#7C3AED",
-            700: "#3B82F6"
+            50:  "#ECFEFF",
+            100: "#CFFAFE",
+            400: "#22D3EE",
+            500: "#06B6D4",
+            600: "#0891B2",
+            700: "#0E7490"
           }
         },
         fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
@@ -24,26 +27,26 @@
   };
 </script>
 <style>
-  /* ── Animations ── */
+  /* ?? Animations */
   @keyframes fade-up { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
   .fade-in   { animation:fade-up .4s cubic-bezier(.16,1,.3,1) forwards; }
   .stagger-1 { animation-delay:.05s;opacity:0; }
   .stagger-2 { animation-delay:.1s;opacity:0; }
 
-  /* ── Scrollbars ── */
+  /* ?? Scrollbars */
   .custom-scrollbar::-webkit-scrollbar       { width:3px; }
   .custom-scrollbar::-webkit-scrollbar-thumb { background:rgba(100,116,139,.25);border-radius:4px; }
   .custom-scrollbar::-webkit-scrollbar-track { background:transparent; }
   .no-scroll { -ms-overflow-style:none;scrollbar-width:none; }
   .no-scroll::-webkit-scrollbar { display:none; }
 
-  /* ── Session bar ── */
+  /* ?? Session bar */
   #sess-bar { transition:width 1s linear; }
 
-  /* ── Table rows ── */
+  /* ?? Table rows */
   .dev-row td { padding-top:.55rem;padding-bottom:.55rem; }
 
-  /* ── Sidebar nav item ── */
+  /* ?? Sidebar nav item */
   .nav-item {
     display:flex;align-items:center;gap:8px;
     padding:6px 10px;border-radius:6px;font-size:12px;font-weight:500;
@@ -52,69 +55,69 @@
   }
   .nav-item:hover               { background:#f1f5f9;color:#0f172a; }
   .dark .nav-item:hover         { background:#1a1a24;color:#e2e8f0; }
-  .nav-item.primary             { background:linear-gradient(135deg,#FF8A00,#FF5E7E);color:#fff;font-weight:600;border:1px solid transparent;letter-spacing:.01em; }
+  .nav-item.primary             { background:linear-gradient(135deg,#06B6D4,#0E7490);color:#fff;font-weight:600;border:1px solid transparent;letter-spacing:.01em; }
   .nav-item.primary:hover       { opacity:.92; }
-  .dark .nav-item.primary       { background:linear-gradient(135deg,#FF8A00,#FF5E7E);color:#fff; }
+  .dark .nav-item.primary       { background:linear-gradient(135deg,#22D3EE,#0891B2);color:#0c0c0f; }
   .dark .nav-item.primary:hover { opacity:.92; }
 
-  /* ── Card ── */
+  /* ?? Card */
   .card { background:#fff;border:1px solid #e8edf2;border-radius:10px;transition:border-color .15s,box-shadow .15s; }
   .dark .card       { background:#111118;border-color:#1e2030; }
-  .card:hover       { border-color:#c8d3dc;box-shadow:0 1px 6px rgba(0,0,0,.04); }
-  .dark .card:hover { border-color:#2a2d40; }
+  .card:hover       { border-color:#a5f3fc;box-shadow:0 1px 6px rgba(6,182,212,.06); }
+  .dark .card:hover { border-color:#164e63; }
 
-  /* ── Badge ── */
+  /* ?? Badge (estados: confiable / no confiable) */
   .badge         { display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500; }
-  .badge-green   { background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0; }
-  .badge-red     { background:#fff1f2;color:#dc2626;border:1px solid #fecaca; }
+  .badge-green   { background:#ecfdf5;color:#059669;border:1px solid #a7f3d0; }
+  .badge-red     { background:#fff1f2;color:#e11d48;border:1px solid #fecdd3; }
   .badge-neutral { background:#f8fafc;color:#475569;border:1px solid #e2e8f0; }
-  .dark .badge-green   { background:rgba(34,197,94,.08);color:#4ade80;border-color:rgba(34,197,94,.2); }
-  .dark .badge-red     { background:rgba(239,68,68,.08);color:#f87171;border-color:rgba(239,68,68,.2); }
+  .dark .badge-green   { background:rgba(52,211,153,.08);color:#34d399;border-color:rgba(52,211,153,.2); }
+  .dark .badge-red     { background:rgba(251,113,133,.08);color:#fb7185;border-color:rgba(251,113,133,.2); }
   .dark .badge-neutral { background:rgba(100,116,139,.08);color:#94a3b8;border-color:rgba(100,116,139,.2); }
 
-  /* ── Action buttons ── */
+  /* ?? Action buttons */
   .btn-action           { display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid transparent; }
-  .btn-trust            { background:#f0fdf4;color:#16a34a;border-color:#bbf7d0; }
-  .btn-trust:hover      { background:#dcfce7; }
+  .btn-trust            { background:#ecfeff;color:#0891b2;border-color:#a5f3fc; }
+  .btn-trust:hover      { background:#cffafe; }
   .btn-untrust          { background:#f8fafc;color:#64748b;border-color:#e2e8f0; }
   .btn-untrust:hover    { background:#fff1f2;color:#dc2626;border-color:#fecaca; }
   .btn-neutral          { background:#f8fafc;color:#475569;border-color:#e2e8f0; }
   .btn-neutral:hover    { background:#f1f5f9; }
-  .dark .btn-trust            { background:rgba(34,197,94,.08);color:#4ade80;border-color:rgba(34,197,94,.2); }
-  .dark .btn-trust:hover      { background:rgba(34,197,94,.15); }
+  .dark .btn-trust            { background:rgba(34,211,238,.08);color:#22d3ee;border-color:rgba(34,211,238,.2); }
+  .dark .btn-trust:hover      { background:rgba(34,211,238,.15); }
   .dark .btn-untrust          { background:#1a1a24;color:#64748b;border-color:#2d2d3d; }
   .dark .btn-untrust:hover    { background:rgba(239,68,68,.08);color:#f87171;border-color:rgba(239,68,68,.2); }
   .dark .btn-neutral          { background:rgba(100,116,139,.08);color:#94a3b8;border-color:rgba(100,116,139,.2); }
   .dark .btn-neutral:hover    { background:rgba(100,116,139,.15); }
 
-  /* ── Input ── */
+  /* ?? Input */
   .input-base { padding:7px 10px;border-radius:7px;font-size:12px;border:1px solid #e2e8f0;background:#fff;outline:none;transition:border-color .15s,box-shadow .15s;width:100%; }
-  .input-base:focus       { border-color:#FF8A00;box-shadow:0 0 0 3px rgba(255,138,0,.10); }
+  .input-base:focus       { border-color:#06B6D4;box-shadow:0 0 0 3px rgba(6,182,212,.10); }
   .dark .input-base       { background:#111118;border-color:#1e1e2e;color:#e2e8f0; }
-  .dark .input-base:focus { border-color:#FF8A00; }
+  .dark .input-base:focus { border-color:#22D3EE; }
 
-  /* ── Dropdown ── */
+  /* ?? Dropdown */
   .dropdown-menu { position:absolute;z-index:50;margin-top:4px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 4px 24px rgba(0,0,0,.07);overflow:hidden; }
   .dark .dropdown-menu  { background:#111118;border-color:#1e1e2e; }
   .dropdown-item        { display:flex;align-items:center;gap:8px;padding:7px 12px;font-size:12px;cursor:pointer;transition:background .1s;width:100%;border:none;background:transparent;text-align:left; }
-  .dropdown-item:hover  { background:#f8fafc; }
+  .dropdown-item:hover  { background:#ecfeff; }
   .dark .dropdown-item:hover { background:#1a1a24; }
 
-  /* ── Divider / section label ── */
+  /* ?? Divider / section label */
   .divider      { height:1px;background:#f1f5f9;margin:4px 0; }
   .dark .divider{ background:#1e1e2e; }
   .section-label{ font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:#94a3b8;padding:0 10px;margin-bottom:4px;display:block; }
 
-  /* ── Modal overlay ── */
+  /* ?? Modal overlay */
   .modal-overlay { background:rgba(0,0,0,.35);backdrop-filter:blur(4px); }
 
-  /* ── Toggle ── */
+  /* ?? Toggle */
   .toggle-track              { width:28px;height:16px;border-radius:8px;background:#e2e8f0;position:relative;transition:background .2s;cursor:pointer;flex-shrink:0; }
-  .toggle-track.on           { background:#334155; }
+  .toggle-track.on           { background:#0891B2; }
   .toggle-thumb              { position:absolute;top:2px;left:2px;width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s; }
   .toggle-track.on .toggle-thumb { transform:translateX(12px); }
 
-  /* ── Right panels ── */
+  /* ?? Right panels */
   .right-panel {
     position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;
     background:#fff;border-left:1px solid #e8edf2;z-index:60;
@@ -126,26 +129,26 @@
   .dark .right-panel       { background:#111118;border-color:#1e2030;box-shadow:-8px 0 32px rgba(0,0,0,.3); }
   .right-panel.open        { transform:translateX(0); }
 
-  /* ── Panel overlay ── */
+  /* ?? Panel overlay */
   .panel-overlay { position:fixed;inset:0;background:rgba(0,0,0,.15);backdrop-filter:blur(2px);z-index:59;opacity:0;pointer-events:none;transition:opacity .25s; }
   .panel-overlay.show { opacity:1;pointer-events:all; }
 
-  /* ── Panel header ── */
+  /* ?? Panel header */
   .panel-header { display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #f1f5f9;flex-shrink:0; }
   .dark .panel-header { border-color:#1e1e2e; }
 
-  /* ── History cards ── */
+  /* ?? History cards */
   .hist-card            { transition:background .1s;border-radius:8px; }
-  .hist-card:hover      { background:#f8fafc; }
+  .hist-card:hover      { background:#ecfeff; }
   .dark .hist-card:hover{ background:#1a1a24; }
 
-  /* ── Stats grid ── */
+  /* ?? Stats grid */
   .stats-grid { display:grid;gap:.75rem;grid-template-columns:repeat(3,minmax(0,1fr)); }
   @media (max-width:479px) {
     .stats-grid { grid-template-columns:1fr; }
   }
 
-  /* ── Mobile bottom nav ── */
+  /* ?? Mobile bottom nav */
   #mobile-nav { display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;background:#fff;border-top:1px solid #e8edf2;padding:6px 0 env(safe-area-inset-bottom,6px); }
   .dark #mobile-nav { background:#111118;border-color:#1e2030; }
   @media (max-width:639px) {
@@ -153,7 +156,7 @@
     main        { padding-bottom:68px!important; }
   }
 
-  /* ── Safe area ── */
+  /* ?? Safe area */
   @supports (padding-top:env(safe-area-inset-top)) {
     #sidebar { padding-top:env(safe-area-inset-top); }
   }
