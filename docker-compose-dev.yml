@@ -5,6 +5,12 @@ services:
     environment:
       #openssl rand -hex 32
       SECRET_KEY: "123456789123456789123456789"
+      OIDC_ISSUER: ${OIDC_ISSUER}
+      OIDC_CLIENT_ID: ${OIDC_CLIENT_ID}
+      OIDC_CLIENT_SECRET: ${OIDC_CLIENT_SECRET}
+      OIDC_AUTO_CREATE: ${OIDC_AUTO_CREATE}
+      PUBLIC_URL: ${PUBLIC_URL}
+      DISABLE_LOCAL_LOGIN: ${DISABLE_LOCAL_LOGIN}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./data:/app/data
