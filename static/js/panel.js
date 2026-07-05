@@ -148,6 +148,17 @@ function abrirPerfil() {
     const inp = document.getElementById("cfg-display-name");
     if (inp) inp.value = data.nombre_display || "";
     _syncNombreUI(data.nombre_display || data.usuario);
+
+    // FIX: si la cuenta es SSO, ocultar tanto el nombre como las
+    // credenciales locales y mostrar el aviso en su lugar (el backend
+    // también bloquea ambos endpoints, esto es solo la UI).
+    const esSso    = data.auth_provider === "sso";
+    const bqNombre = document.getElementById("perfil-nombre-local");
+    const bqCreds  = document.getElementById("perfil-credenciales-local");
+    const aviso    = document.getElementById("perfil-sso-notice");
+    if (bqNombre) bqNombre.classList.toggle("hidden", esSso);
+    if (bqCreds)  bqCreds.classList.toggle("hidden", esSso);
+    if (aviso)    aviso.classList.toggle("hidden", !esSso);
   }).catch(() => {});
 }
 
@@ -420,7 +431,11 @@ async function guardarCredenciales() {
       contrasena_actual: actual, nuevo_usuario: email,
       nueva_contrasena: newPass, confirmar_contrasena: confirm
     });
-    msg.textContent = data.success ? `✓ ${t("cfgCredSaved")}` : `✗ ${data.message || t("cfgCredError")}`;
+    // FIX i18n: si el backend manda message_key (ej. bloqueo por SSO), se
+    // traduce con t(); si no, se usa el texto plano existente (message)
+    // como venía haciéndose para los demás casos de este endpoint.
+    const texto = data.message_key ? t(data.message_key) : (data.message || t("cfgCredError"));
+    msg.textContent = data.success ? `✓ ${t("cfgCredSaved")}` : `✗ ${texto}`;
     msg.className = `text-xs ${data.success ? "text-emerald-500" : "text-red-500"}`;
     msg.classList.remove("hidden");
     if (data.success) setTimeout(() => msg.classList.add("hidden"), 3000);
