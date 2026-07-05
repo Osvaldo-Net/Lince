@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <!-- Display name -->
-    <div>
+    <!-- Display name (solo cuentas locales; en SSO se sincroniza del proveedor) -->
+    <div id="perfil-nombre-local">
       <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3" data-i18n="profileDisplayName">Nombre para mostrar</p>
       <div class="space-y-2">
         <input id="cfg-display-name" type="text" placeholder="Ej: Juan Perez" class="input-base" style="font-size:12px" />
@@ -40,8 +40,8 @@
       </div>
     </div>
 
-    <!-- Change credentials -->
-    <div>
+    <!-- Change credentials (solo cuentas locales) -->
+    <div id="perfil-credenciales-local">
       <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-3" data-i18n="cfgCredentials">Cambiar credenciales</p>
       <div class="space-y-2.5">
         <div>
@@ -67,6 +67,19 @@
           <span data-i18n="cfgSave">Guardar cambios</span>
         </button>
         <p id="cfg-cred-msg" class="text-xs hidden"></p>
+      </div>
+    </div>
+
+    <!-- Aviso para cuentas SSO (oculto por defecto, panel.js lo muestra si aplica) -->
+    <div id="perfil-sso-notice" class="hidden">
+      <div class="flex items-start gap-2.5 p-3 rounded-xl border border-slate-100 dark:border-slate-800/60 bg-slate-50 dark:bg-dark3/40">
+        <i data-lucide="shield-check" class="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5"></i>
+        <div class="min-w-0">
+          <p class="font-semibold text-slate-700 dark:text-slate-200 text-xs mb-1" data-i18n="profileSsoTitle">Cuenta gestionada por SSO</p>
+          <p class="text-slate-500 dark:text-slate-400" style="font-size:11px;line-height:1.5" data-i18n="profileSsoNotice">
+            Esta cuenta inició sesión mediante SSO. Tu nombre, correo y contraseña se gestionan desde tu proveedor de autenticación.
+          </p>
+        </div>
       </div>
     </div>
 
