@@ -101,4 +101,4 @@ if cur.fetchone()[0] == 0:
 
 conn.commit()
 conn.close()
-print("Base de datos LANGuard inicializada correctamente.")
+print("Base de datos Lince inicializada correctamente.")
