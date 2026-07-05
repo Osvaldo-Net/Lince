@@ -11,12 +11,10 @@
   <script src="https://cdn.tailwindcss.com"></script>
   {% include "partials/_head_config.html" %}
 </head>
-
 <body
   class="bg-slate-50 text-slate-800 font-sans antialiased dark:bg-dark1 dark:text-slate-200"
   data-session="{{ session_timeout }}"
   style="font-size:13px">
-
   <!-- Mobile menu button -->
   <button id="toggleMenu"
     class="fixed top-3 left-3 z-50 bg-white dark:bg-dark2 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 p-1.5 rounded-lg shadow-sm sm:hidden"
@@ -32,35 +30,34 @@
   <!-- Panel overlay (shared for all right panels) -->
   <div id="panel-overlay" class="panel-overlay" onclick="cerrarTodosPaneles()"></div>
 
-  <!-- ══ Sidebar ══ -->
+  <!-- ?? Sidebar ?? -->
   {% include "partials/_sidebar.html" %}
 
-  <!-- ══ Mobile bottom nav ══ -->
+  <!-- ?? Mobile bottom nav ?? -->
   {% include "partials/_mobile_nav.html" %}
 
-  <!-- ══ Main content ══ -->
+  <!-- ?? Main content ?? -->
   <main class="sm:ml-52 ml-0 min-h-screen bg-slate-50 dark:bg-dark1">
     {% include "partials/_topbar.html" %}
-
     <div class="px-4 py-4 space-y-4 fade-in">
       {% include "partials/_stats.html" %}
       {% include "partials/_device_table.html" %}
     </div>
   </main>
 
-  <!-- ══ Right panels ══ -->
+  <!-- ?? Right panels ?? -->
   {% include "partials/_panel_historial.html" %}
   {% include "partials/_panel_confiables.html" %}
   {% include "partials/_panel_perfil.html" %}
 
-  <!-- ══ Modals ══ -->
+  <!-- ?? Modals ?? -->
   {% include "partials/_modal_puertos.html" %}
   {% include "partials/_modal_config.html" %}
 
-  <!-- ══ Toast notification ══ -->
+  <!-- ?? Toast notification ?? -->
   <div id="notificacion" class="fixed bottom-20 sm:bottom-5 right-5 hidden px-4 py-3 rounded-xl shadow-xl border text-xs font-medium z-[70] max-w-xs w-full transition-all duration-300"></div>
 
-  <!-- ══ Scripts ══ -->
+  <!-- ?? Scripts ?? -->
   <!-- i18n debe ir primero: app.js y panel.js usan t() -->
   <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
