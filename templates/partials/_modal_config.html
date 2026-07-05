@@ -1,12 +1,11 @@
-{# ── _modal_config.html ── System configuration modal #}
+{# ?? _modal_config.html ?? System configuration modal #}
 <div id="modal-config" class="fixed inset-0 modal-overlay flex items-end sm:items-center justify-center z-[65] hidden">
-  <div class="card w-full sm:max-w-md relative fade-in max-h-[90vh] overflow-y-auto custom-scrollbar rounded-b-none sm:rounded-xl" style="position:relative;overflow-y:auto">
-    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#FF8A00,#FF5E7E)"></div>
+  <div class="card w-full sm:max-w-md relative fade-in max-h-[90vh] overflow-y-auto custom-scrollbar rounded-b-none sm:rounded-xl">
 
     <!-- Header -->
     <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-slate-800/40">
       <div class="flex items-center gap-2">
-        <i data-lucide="settings" class="w-4 h-4 text-slate-400"></i>
+        <i data-lucide="settings" class="w-4 h-4" style="color:#0891B2"></i>
         <span class="font-semibold text-slate-900 dark:text-white text-sm" data-i18n="cfgTitle">Configuración del sistema</span>
       </div>
       <button onclick="cerrarConfig()"
@@ -95,7 +94,7 @@
         data-i18n="cfgCancel">Cancelar</button>
       <button onclick="guardarConfig()"
         class="px-4 py-2 text-xs font-semibold text-white rounded-lg hover:opacity-90 transition"
-        style="background:linear-gradient(135deg,#FF8A00,#FF5E7E)" data-i18n="cfgSave">Guardar cambios</button>
+        style="background:#0891B2" data-i18n="cfgSave">Guardar cambios</button>
     </div>
 
   </div>
