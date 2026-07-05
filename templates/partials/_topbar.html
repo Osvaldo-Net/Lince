@@ -1,6 +1,5 @@
-{# ── _topbar.html ── Sticky top bar with search / filter controls #}
+{# ?? _topbar.html ?? Sticky top bar with search / filter controls #}
 <div class="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/60 bg-slate-50/90 dark:bg-dark1/90 backdrop-blur-sm px-4 py-3">
-
   <!-- Mobile: title row -->
   <div class="flex items-center justify-between mb-2 sm:hidden">
     <div class="flex items-center gap-2 pl-8">
@@ -11,13 +10,12 @@
       <i id="icono-sol-m"  data-lucide="sun"  class="w-4 h-4 hidden"></i>
     </button>
   </div>
-
   <!-- Filters -->
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
     <input id="filtro-nombre" type="text" data-i18n="filterName"
       placeholder="Filtrar por nombre" class="input-base" />
-<input id="filtro-mac" type="text" data-i18n="filterMac"
-  placeholder="Filtrar por MAC" class="input-base" />
+    <input id="filtro-mac" type="text" data-i18n="filterMac"
+      placeholder="Filtrar por MAC" class="input-base" />
     <div class="relative">
       <button id="trustBtn" class="input-base flex items-center justify-between cursor-pointer text-left">
         <div class="flex items-center gap-2">
@@ -29,7 +27,7 @@
       <div id="trustMenu" class="dropdown-menu hidden">
         <button onclick="setTrustFilter('all')"       class="dropdown-item"><span class="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span><span data-i18n="filterAll">Todos</span></button>
         <button onclick="setTrustFilter('trusted')"   class="dropdown-item"><span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="filterTrusted">Confiables</span></button>
-        <button onclick="setTrustFilter('untrusted')" class="dropdown-item"><span class="w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></span><span data-i18n="filterUntrusted">No confiables</span></button>
+        <button onclick="setTrustFilter('untrusted')" class="dropdown-item"><span class="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0"></span><span data-i18n="filterUntrusted">No confiables</span></button>
       </div>
     </div>
   </div>
