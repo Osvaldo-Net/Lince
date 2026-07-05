@@ -124,5 +124,9 @@
   "cfgTelegramTestOk":     "Message sent successfully",
   "cfgTelegramTestFail":   "Telegram error",
   "cfgTelegramNotSet":     "Token or Chat ID not configured",
-  "cfgTelegramConnError":  "Could not connect to Telegram"
+  "cfgTelegramConnError":  "Could not connect to Telegram",
+
+  "loginSsoButton": "Sign in with SSO",
+  "loginOrDivider": "or with your local account",
+  "loginErrorSSO": "Unable to sign in with SSO. Please try again."
 }
