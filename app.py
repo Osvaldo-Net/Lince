@@ -1,12 +1,13 @@
 from auth import *
-from flask import Flask, render_template, request, redirect, session, jsonify
+from flask import Flask, render_template, request, redirect, session, jsonify, url_for
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
+from werkzeug.middleware.proxy_fix import ProxyFix
 from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
-import subprocess, re, os, socket, threading, time, requests, logging
+import subprocess, re, os, socket, threading, time, requests, logging, secrets
 from db import get_db
 
 CACHE_INTERVALO   = 120
@@ -17,6 +18,40 @@ CACHE_RESULTADO   = []
 _cache_lock       = threading.Lock()
 _estado_anterior  = {}
 _intervalo_actual = CACHE_INTERVALO
+
+# ── SSO / OIDC (self-hosted: Authentik, Keycloak, Authelia, etc.) ────────────
+# Se activa solo si las 3 variables están presentes. Si faltan, el botón de
+# SSO no aparece y el login local sigue funcionando exactamente igual.
+_issuer_raw = os.environ.get("OIDC_ISSUER", "").rstrip("/")
+# FIX: normaliza el issuer por si el usuario ya incluyó el sufijo del
+# discovery endpoint (error común, causa 404 por URL duplicada).
+for _suf in ("/.well-known/openid-configuration",):
+    if _issuer_raw.endswith(_suf):
+        _issuer_raw = _issuer_raw[: -len(_suf)]
+OIDC_ISSUER        = _issuer_raw
+OIDC_CLIENT_ID     = os.environ.get("OIDC_CLIENT_ID", "")
+OIDC_CLIENT_SECRET = os.environ.get("OIDC_CLIENT_SECRET", "")
+OIDC_ENABLED       = bool(OIDC_ISSUER and OIDC_CLIENT_ID and OIDC_CLIENT_SECRET)
+# Si es True, un usuario que llega por SSO y no existe aún en la tabla
+# `usuarios` se crea automáticamente (típico en un homelab de un solo admin).
+# Si es False, debe existir previamente un usuario con ese correo.
+OIDC_AUTO_CREATE   = os.environ.get("OIDC_AUTO_CREATE", "true").lower() == "true"
+# FIX: dominio público explícito para armar el redirect_uri del callback.
+# Más confiable que depender de que el reverse proxy reenvíe X-Forwarded-*
+# correctamente. Ejemplo: https://lince.netosval.site (sin barra al final).
+PUBLIC_URL = os.environ.get("PUBLIC_URL", "").rstrip("/")
+# Si es True, oculta el formulario de usuario/contraseña y bloquea el POST
+# a /login — solo queda disponible el botón de SSO. Requiere OIDC_ENABLED.
+DISABLE_LOCAL_LOGIN = os.environ.get("DISABLE_LOCAL_LOGIN", "false").lower() == "true"
+# FIX de seguridad: si el SSO no quedó realmente activo (faltan variables,
+# error de config), IGNORAR el pedido de desactivar el login local. Evita
+# quedarte sin ninguna forma de entrar a la app por una mala configuración.
+if DISABLE_LOCAL_LOGIN and not OIDC_ENABLED:
+    logging.getLogger("accesos").warning(
+        "DISABLE_LOCAL_LOGIN=true pero OIDC no está activo (faltan variables OIDC_*). "
+        "Se ignora y se mantiene el login local para evitar quedarte sin acceso."
+    )
+    DISABLE_LOCAL_LOGIN = False
 
 # ── Validación de MAC ────────────────────────────────────────────────────────
 MAC_REGEX = re.compile(r"^([0-9a-f]{2}:){5}[0-9a-f]{2}$")
@@ -39,6 +74,12 @@ TEST_MESSAGES = {
 
 # ── App ──────────────────────────────────────────────────────────────────────
 app = Flask(__name__)
+
+# FIX: confiar en los headers X-Forwarded-* del reverse proxy (Zoraxy),
+# para que url_for(..., _external=True) arme URLs con el dominio/esquema
+# reales en vez de "localhost". Esto es un respaldo; si defines PUBLIC_URL
+# explícitamente, esa variable tiene prioridad y no depende de esto.
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # FIX #1: SECRET_KEY sin fallback débil — falla explícitamente si no está definida
 secret = os.environ.get("SECRET_KEY")
@@ -65,6 +106,14 @@ limiter = Limiter(
 #   - fonts.googleapis.com (hoja de estilos Geist)
 #   - fonts.gstatic.com    (archivos woff2)
 #   - unpkg.com            (lucide icons)
+_form_action = "'self'"
+if OIDC_ENABLED:
+    # El navegador hace un submit/redirect de nivel top-level hacia el IdP
+    # durante el flujo OIDC; form-action debe permitirlo explícitamente.
+    from urllib.parse import urlparse
+    _issuer_origin = f"{urlparse(OIDC_ISSUER).scheme}://{urlparse(OIDC_ISSUER).netloc}"
+    _form_action = f"'self' {_issuer_origin}"
+
 Talisman(
     app,
     force_https=False,
@@ -87,11 +136,32 @@ Talisman(
         ),
         "img-src": "'self' data: https://cdn.jsdelivr.net",
         "connect-src": "'self' https://unpkg.com",
+        "form-action": _form_action,
     },
     content_security_policy_nonce_in=[],
     frame_options="DENY",
     referrer_policy="strict-origin-when-cross-origin"
 )
+
+# ── Cliente OIDC (Authlib) ────────────────────────────────────────────────────
+oauth = None
+if OIDC_ENABLED:
+    from authlib.integrations.flask_client import OAuth
+    oauth = OAuth(app)
+    oauth.register(
+        name="oidc",
+        server_metadata_url=f"{OIDC_ISSUER}/.well-known/openid-configuration",
+        client_id=OIDC_CLIENT_ID,
+        client_secret=OIDC_CLIENT_SECRET,
+        client_kwargs={
+            "scope": "openid email profile",
+            # FIX: Authelia (y buenas prácticas OIDC en general) exige PKCE.
+            # Authlib genera y valida el code_verifier/code_challenge
+            # automáticamente una vez se declara este método.
+            "code_challenge_method": "S256",
+        },
+    )
+    logging.getLogger("accesos").info(f"SSO/OIDC habilitado. Issuer: {OIDC_ISSUER}")
 
 iniciar_archivo_usuarios()
 
@@ -104,6 +174,12 @@ handler = RotatingFileHandler(
     backupCount=3               # mantiene hasta 4 archivos (actual + 3 backups)
 )
 logger.addHandler(handler)
+
+# FIX: también mandar estos logs a stdout/stderr, para poder verlos con
+# `docker compose logs` sin tener que entrar al contenedor a leer el archivo.
+_console_handler = logging.StreamHandler()
+_console_handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s [%(name)s] %(message)s"))
+logger.addHandler(_console_handler)
 
 def registrar_log(m): logger.info(m)
 
@@ -179,8 +255,15 @@ def logout():
 @limiter.limit("10 per minute; 30 per hour")   # FIX #2: rate limit en login
 @csrf.exempt                                    # login no tiene sesión previa que proteger
 def login():
-    timeout = request.args.get("timeout")
+    timeout    = request.args.get("timeout")
+    sso_error  = request.args.get("error")
+
     if request.method == "POST":
+        # FIX: si el login local está desactivado, no procesar el POST
+        # aunque alguien lo mande directo (curl, formulario guardado, etc.).
+        if DISABLE_LOCAL_LOGIN:
+            registrar_log("Intento de login local bloqueado (DISABLE_LOCAL_LOGIN=true)")
+            return redirect("/login")
         usuario    = request.form["usuario"]
         contrasena = request.form["contrasena"]
         if verificar_login(usuario, contrasena):
@@ -195,8 +278,100 @@ def login():
         # FIX i18n: se pasa un flag, no el texto fijo en español — el
         # mensaje real vive en login.html como data-i18n y lo traduce
         # i18n.js en el navegador según el idioma guardado.
-        return render_template("login.html", error=True)
-    return render_template("login.html", timeout=timeout)
+        return render_template(
+            "login.html", error=True,
+            oidc_enabled=OIDC_ENABLED, disable_local_login=DISABLE_LOCAL_LOGIN
+        )
+
+    return render_template(
+        "login.html",
+        timeout=timeout,
+        sso_error=bool(sso_error),
+        oidc_enabled=OIDC_ENABLED,
+        disable_local_login=DISABLE_LOCAL_LOGIN
+    )
+
+# ── SSO / OIDC ─────────────────────────────────────────────────────────────────
+def obtener_usuario_por_email(email):
+    db  = get_db()
+    row = db.execute("SELECT * FROM usuarios WHERE usuario=?", (email,)).fetchone()
+    db.close()
+    return row
+
+def crear_usuario_sso(email, nombre_display=""):
+    """Crea un usuario local para alguien que entra por primera vez vía SSO.
+    La contraseña se guarda como un hash aleatorio inutilizable: este usuario
+    solo puede entrar por SSO, nunca con el formulario de usuario/contraseña."""
+    import bcrypt
+    password_inutilizable = bcrypt.hashpw(secrets.token_hex(32).encode(), bcrypt.gensalt(12)).decode()
+    db = get_db()
+    db.execute(
+        "INSERT INTO usuarios(usuario, contrasena, rol, nombre_display) VALUES(?,?,?,?)",
+        (email, password_inutilizable, "admin", nombre_display)
+    )
+    db.commit(); db.close()
+
+def _sso_redirect_uri():
+    """Arma el redirect_uri del callback. Prioriza PUBLIC_URL (explícito y
+    confiable) sobre url_for(_external=True) (depende de que el reverse
+    proxy reenvíe X-Forwarded-Host/Proto correctamente vía ProxyFix)."""
+    if PUBLIC_URL:
+        return f"{PUBLIC_URL}/login/sso/callback"
+    return url_for("login_sso_callback", _external=True)
+
+@app.route("/login/sso")
+@csrf.exempt
+def login_sso():
+    if not OIDC_ENABLED:
+        return redirect("/login")
+    try:
+        redirect_uri = _sso_redirect_uri()
+        return oauth.oidc.authorize_redirect(redirect_uri)
+    except Exception as e:
+        # FIX: nunca un 500 crudo al usuario — se loguea el detalle real
+        # (útil para diagnosticar issuer mal configurado, IdP caído, etc.)
+        # y se redirige al login con un mensaje traducible.
+        logging.getLogger("accesos").error("SSO: fallo al iniciar el flujo OIDC: %s", str(e), exc_info=True)
+        return redirect("/login?error=1")
+
+@app.route("/login/sso/callback")
+@csrf.exempt
+def login_sso_callback():
+    if not OIDC_ENABLED:
+        return redirect("/login")
+    try:
+        token    = oauth.oidc.authorize_access_token()
+        userinfo = token.get("userinfo") or oauth.oidc.userinfo(token=token)
+    except Exception as e:
+        logging.getLogger("accesos").error("SSO: fallo en callback (token/userinfo): %s", str(e), exc_info=True)
+        return redirect("/login?error=1")
+
+    email = (userinfo.get("email") or "").strip().lower()
+    if not email:
+        # FIX: loguear qué claims sí llegaron, para saber de un vistazo si es
+        # un tema de scopes/claims_policy en el IdP o de datos del usuario.
+        registrar_log(f"SSO: el proveedor no devolvió email. Claims recibidos: {list(userinfo.keys())}")
+        return redirect("/login?error=1")
+
+    try:
+        usuario_db = obtener_usuario_por_email(email)
+        if not usuario_db:
+            if not OIDC_AUTO_CREATE:
+                registrar_log(f"SSO: intento de login para {email} sin cuenta local (auto-create desactivado)")
+                return redirect("/login?error=1")
+            nombre = userinfo.get("name") or userinfo.get("given_name") or ""
+            crear_usuario_sso(email, nombre)
+            registrar_log(f"SSO: usuario nuevo creado automáticamente: {email}")
+    except Exception as e:
+        logging.getLogger("accesos").error("SSO: error creando/consultando usuario %s: %s", email, str(e), exc_info=True)
+        return redirect("/login?error=1")
+
+    # Misma inicialización de sesión que el login local
+    session["usuario"]       = email
+    session["ultimo_acceso"] = time.time()
+    session.permanent        = True
+    registrar_log(f"Login SSO exitoso: {email}")
+    return redirect("/")
 
 @app.route("/cambiar-credenciales", methods=["GET", "POST"])
 def cambiar_credenciales():
