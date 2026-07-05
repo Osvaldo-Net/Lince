@@ -11,6 +11,9 @@
   "profileAdmin": "Administrator",
   "profileDisplayName": "Display name",
   "profileNameSaved": "Name updated",
+  "profileSsoTitle":     "SSO-managed account",
+  "profileSsoNotice":    "This account signed in via SSO. To change your email or password, do it from your identity provider.",
+  "profileSsoCredError": "You can't change local credentials: this account is managed by your SSO identity provider.",
 
   "statTotal": "Total devices",
   "statTrusted": "Trusted",
