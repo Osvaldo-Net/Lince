@@ -170,26 +170,6 @@ DISABLE_LOCAL_LOGIN=false
 ```
 https://lince.example.com/login/sso/callback
 ```
-
-### Nginx reverse proxy example
-```nginx
-server {
-    listen 443 ssl;
-    server_name lince.example.com;
-
-    ssl_certificate     /etc/ssl/certs/lince.example.com.crt;
-    ssl_certificate_key /etc/ssl/private/lince.example.com.key;
-
-    location / {
-        proxy_pass http://192.168.1.50:5555;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
 ### Example client config (Authelia)
 ```yaml
       - client_id: 'lince'
@@ -224,6 +204,25 @@ server {
 ```
 
 ---
+
+### Nginx reverse proxy example
+```nginx
+server {
+    listen 443 ssl;
+    server_name lince.example.com;
+
+    ssl_certificate     /etc/ssl/certs/lince.example.com.crt;
+    ssl_certificate_key /etc/ssl/private/lince.example.com.key;
+
+    location / {
+        proxy_pass http://192.168.1.50:5555;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
 
 ## Access log
 
