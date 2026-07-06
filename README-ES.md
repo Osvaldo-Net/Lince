@@ -11,6 +11,8 @@
 [![Languages](https://img.shields.io/badge/languages-ES%20%7C%20EN%20%7C%20FR-10b981?style=flat-square&labelColor=0f172a)](#)
 [![Version](https://img.shields.io/badge/version-4.0-6366f1?style=flat-square&labelColor=0f172a)](#)
 
+</div>
+
 ---
 
 ## ¿Qué es Lince?
