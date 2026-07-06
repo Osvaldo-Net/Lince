@@ -78,7 +78,7 @@ services:
   Lince:
     container_name: Lince
     image: netosvaltools/lince:latest
-    # image: netosvaltools/lince:v3.1.4
+    # image: netosvaltools/lince:v4.0
     environment:
       SECRET_KEY: ${SECRET_KEY}
     volumes:
