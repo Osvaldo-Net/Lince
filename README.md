@@ -53,8 +53,8 @@ No manual network interface configuration required: Lince **auto-detects** the n
 | **Alerts** | Real-time Telegram notifications for untrusted devices, sent in the language selected in the UI |
 | **Authentication** | Local login or SSO via OIDC (see below) |
 | **Profile** | Display name, email and password change from the profile side panel |
-| **UI** | Dark mode, ES/EN language switch, responsive sidebar, slide-in panels |
-| **Storage** | Lightweight SQLite — no external database needed |
+| **UI** | Dark mode, ES/EN/FR language switch, responsive sidebar, slide-in panels |
+| **Storage** | Lightweight SQLite, no external database needed |
 
 ---
 
