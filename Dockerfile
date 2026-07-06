@@ -10,9 +10,9 @@ RUN apk update && \
         iproute2 \
         sqlite && \
     pip install --no-cache-dir --upgrade \
-        "pip>=25.4" \
+        "pip>=26.1.2" \
         "flask>=3.1.3" \
-        "werkzeug>=3.1.6" \
+        "werkzeug>=3.1.8" \
         requests \
         bcrypt \
         flask-wtf \
