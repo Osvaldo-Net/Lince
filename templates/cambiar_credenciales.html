@@ -13,7 +13,17 @@
       darkMode: "class",
       theme: {
         extend: {
-          colors: { dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24" },
+          colors: {
+            dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
+            brand: {
+              50:  "#ECFEFF",
+              100: "#CFFAFE",
+              400: "#22D3EE",
+              500: "#06B6D4",
+              600: "#0891B2",
+              700: "#0E7490"
+            }
+          },
           fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
         }
       }
@@ -62,10 +72,10 @@
       border:1px solid #e2e8f0; background:#fff; outline:none; box-sizing:border-box;
       transition:border-color .15s, box-shadow .15s; font-family:"Geist",sans-serif; color:#0f172a;
     }
-    .field:focus { border-color:#334155; box-shadow:0 0 0 3px rgba(51,65,85,.08); }
+    .field:focus { border-color:#06B6D4; box-shadow:0 0 0 3px rgba(6,182,212,.10); }
     .field::placeholder { color:#94a3b8; }
     .dark .field { background:#1a1a24; border-color:#2a2d40; color:#e2e8f0; }
-    .dark .field:focus { border-color:#475569; box-shadow:0 0 0 3px rgba(71,85,105,.12); }
+    .dark .field:focus { border-color:#22D3EE; box-shadow:0 0 0 3px rgba(34,211,238,.15); }
 
     .field-icon {
       position:absolute; left:10px; top:50%; transform:translateY(-50%);
@@ -74,13 +84,11 @@
 
     .btn-main {
       width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
-      background:#0f172a; color:#f8fafc; border:none; cursor:pointer;
-      font-family:"Geist",sans-serif; transition:background .15s, transform .1s;
+      background:#0891B2; color:#fff; border:none; cursor:pointer;
+      font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
     }
-    .btn-main:hover  { background:#1e293b; }
+    .btn-main:hover  { opacity:.92; }
     .btn-main:active { transform:scale(.99); }
-    .dark .btn-main       { background:#f1f5f9; color:#0f172a; }
-    .dark .btn-main:hover { background:#e2e8f0; }
 
     .req-item { transition:color .2s; display:flex; align-items:center; gap:6px; font-size:11px; }
   </style>
@@ -104,8 +112,8 @@
     </div>
 
     {% if error %}
-    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-red-700 dark:text-red-400 fade-up"
-      style="font-size:12px;background:#fff1f2;border:1px solid #fecaca">
+    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-rose-700 dark:text-rose-400 fade-up"
+      style="font-size:12px;background:#fff1f2;border:1px solid #fecdd3">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span>{{ error }}</span>
     </div>
@@ -229,12 +237,12 @@
       svg.setAttribute("stroke", "currentColor");
       svg.setAttribute("stroke-width", "2.5");
       if (type === "ok") {
-        svg.style.color = "#22c55e";
+        svg.style.color = "#059669";
         const p = document.createElementNS(ns, "polyline");
         p.setAttribute("points", "20 6 9 17 4 12");
         svg.appendChild(p);
       } else if (type === "fail") {
-        svg.style.color = "#f87171";
+        svg.style.color = "#fb7185";
         const l1 = document.createElementNS(ns, "line");
         l1.setAttribute("x1","18"); l1.setAttribute("y1","6");
         l1.setAttribute("x2","6");  l1.setAttribute("y2","18");
@@ -277,8 +285,8 @@
         const el = document.querySelector(`[data-req="${id}"]`);
         if (!el) return;
         if (v.length === 0) { setReqIcon(el, "idle"); el.style.color = ''; }
-        else if (fn(v))     { setReqIcon(el, "ok");   el.style.color = '#16a34a'; }
-        else                { setReqIcon(el, "fail");  el.style.color = '#dc2626'; }
+        else if (fn(v))     { setReqIcon(el, "ok");   el.style.color = '#059669'; }
+        else                { setReqIcon(el, "fail");  el.style.color = '#e11d48'; }
       });
       if (confInput.value.length > 0) checkMatch();
     });
@@ -287,11 +295,11 @@
 
     function checkMatch() {
       const ok = confInput.value === passInput.value && confInput.value.length > 0;
-      confInput.style.borderColor = ok ? '#86efac' : (confInput.value.length > 0 ? '#fca5a5' : '');
+      confInput.style.borderColor = ok ? '#6ee7b7' : (confInput.value.length > 0 ? '#fda4af' : '');
       if (confInput.value.length === 0) { matchMsg.classList.add('hidden'); return; }
       matchMsg.classList.remove('hidden');
       matchMsg.textContent = ok ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden';
-      matchMsg.style.color = ok ? '#16a34a' : '#dc2626';
+      matchMsg.style.color = ok ? '#059669' : '#e11d48';
     }
 
     function toggleTheme() {
