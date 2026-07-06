@@ -248,6 +248,6 @@ The access log is stored at:
 
 Lince is a hobby project, built in my free time out of a personal interest in networking, cybersecurity, and homelabs. It's developed with the help of AI tools, which speeds up the process and lets me experiment more, but every feature is tested and refined by hand before release.
 
-There's no commercial goal behind it — just the fun of building something useful for my own home network, and sharing it in case it's useful for yours too.
+There's no commercial goal behind it just the fun of building something useful for my own home network, and sharing it in case it's useful for yours too.
 
 ---
