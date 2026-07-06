@@ -16,12 +16,12 @@
           colors: {
             dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
             brand: {
-              50:  "#FFF4E5",
-              100: "#FFE0B8",
-              400: "#FF8A00",
-              500: "#FF5E7E",
-              600: "#7C3AED",
-              700: "#3B82F6"
+              50:  "#ECFEFF",
+              100: "#CFFAFE",
+              400: "#22D3EE",
+              500: "#06B6D4",
+              600: "#0891B2",
+              700: "#0E7490"
             }
           },
           fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
@@ -83,10 +83,10 @@
       border:1px solid #e2e8f0; background:#fff; outline:none; box-sizing:border-box;
       transition:border-color .15s, box-shadow .15s; font-family:"Geist",sans-serif; color:#0f172a;
     }
-    .field:focus { border-color:#FF8A00; box-shadow:0 0 0 3px rgba(255,138,0,.10); }
+    .field:focus { border-color:#06B6D4; box-shadow:0 0 0 3px rgba(6,182,212,.10); }
     .field::placeholder { color:#94a3b8; }
     .dark .field { background:#1a1a24; border-color:#2a2d40; color:#e2e8f0; }
-    .dark .field:focus { border-color:#FF8A00; box-shadow:0 0 0 3px rgba(255,138,0,.15); }
+    .dark .field:focus { border-color:#22D3EE; box-shadow:0 0 0 3px rgba(34,211,238,.15); }
 
     .field-icon {
       position:absolute; left:10px; top:50%; transform:translateY(-50%);
@@ -95,7 +95,7 @@
 
     .btn-main {
       width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
-      background: linear-gradient(135deg, #FF8A00, #FF5E7E);
+      background: #0891B2;
       color:#fff; border:none; cursor:pointer;
       font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
     }
@@ -105,15 +105,15 @@
     /* ── Botón SSO ── */
     .btn-sso {
       width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
-      background:#fff; color:#0f172a; border:1px solid #e2e8f0; cursor:pointer;
-      font-family:"Geist",sans-serif; transition:background .15s, border-color .15s, transform .1s;
+      background:#0891B2; color:#fff; border:none; cursor:pointer;
+      font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
       display:flex; align-items:center; justify-content:center; gap:8px;
       text-decoration:none;
     }
-    .btn-sso:hover  { background:#f8fafc; border-color:#cbd5e1; }
+    .btn-sso:hover  { opacity:.92; }
     .btn-sso:active { transform:scale(.99); }
-    .dark .btn-sso  { background:#1a1a24; color:#e2e8f0; border-color:#2a2d40; }
-    .dark .btn-sso:hover { background:#20202c; border-color:#3a3d52; }
+    .dark .btn-sso  { background:#0891B2; color:#fff; }
+    .dark .btn-sso:hover { opacity:.92; }
 
     .divider-or {
       display:flex; align-items:center; gap:10px;
@@ -146,16 +146,16 @@
 
     <!-- Alerts -->
     {% if error %}
-    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-red-700 dark:text-red-400 fade-up"
-      style="font-size:12px;background:#fff1f2;border:1px solid #fecaca">
+    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-rose-700 dark:text-rose-400 fade-up"
+      style="font-size:12px;background:#fff1f2;border:1px solid #fecdd3">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span data-i18n="loginErrorCredentials">Usuario o contraseña incorrectos</span>
     </div>
     {% endif %}
 
     {% if sso_error %}
-    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-red-700 dark:text-red-400 fade-up"
-      style="font-size:12px;background:#fff1f2;border:1px solid #fecaca">
+    <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-rose-700 dark:text-rose-400 fade-up"
+      style="font-size:12px;background:#fff1f2;border:1px solid #fecdd3">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span data-i18n="loginErrorSSO">No se pudo iniciar sesión con SSO. Intenta de nuevo.</span>
     </div>
