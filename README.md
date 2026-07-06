@@ -235,7 +235,7 @@ The access log is stored at:
 
 ## Security note
 
-**Lince must never be exposed directly to the internet, under any circumstances.** It is designed to run inside your local network only. If you need remote access, use a VPN such as WireGuard, OpenVPN, or Tailscale, or place it behind an authenticated reverse proxy on your own private network — never open its port directly to the public internet.
+**Lince must never be exposed directly to the internet, under any circumstances.** It is designed to run inside your local network only. If you need remote access, use a VPN such as WireGuard, OpenVPN, or Tailscale, or place it behind an authenticated reverse proxy on your own private network, never open its port directly to the public internet.
 
 ---
 
