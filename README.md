@@ -28,7 +28,9 @@ No manual network interface configuration required: Lince **auto-detects** the n
 ## Screenshots
 
 **Dashboard**
-![Dashboard](https://github.com/user-attachments/assets/ae92aeed-8306-4042-8dad-c4eddc5a9c77)
+
+![Dashboard](https://github.com/user-attachments/assets/1f93774e-f6aa-4d1b-b909-c894463a0891)
+
 
 **Scanning**
 ![Scanning](https://github.com/user-attachments/assets/6c80b50f-8801-430c-a926-f3215c7a44ef)
