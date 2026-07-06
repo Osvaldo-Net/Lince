@@ -1,3 +1,7 @@
+<div align="center">
+
+<img src="https://github.com/user-attachments/assets/3b5df5b6-2de6-4363-974f-f0ed2b23b499" width="120" alt="Lince logo" />
+
 # Lince
 
 **Monitorización de red y seguridad autoalojada, desde tu propio servidor.**
@@ -237,4 +241,4 @@ El registro de acceso se almacena en:
 
 Lince es un proyecto de hobby, construido en mi tiempo libre por interés personal en redes, ciberseguridad y homelabs. Se desarrolla con ayuda de herramientas de IA, lo que acelera el proceso y me permite experimentar más, pero cada función se prueba y se refina a mano antes de publicarse.
 
-No hay ningún objetivo comercial detrás de esto — simplemente la satisfacción de construir algo útil para mi propia red doméstica, y compartirlo por si también te sirve a ti.
+No hay ningún objetivo comercial detrás de esto, simplemente la satisfacción de construir algo útil para mi propia red doméstica, y compartirlo por si también te sirve a ti.
