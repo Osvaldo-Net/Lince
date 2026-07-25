@@ -1,169 +1,169 @@
-<div >
+<div align="center">
 
-<img src="https://github.com/user-attachments/assets/3b5df5b6-2de6-4363-974f-f0ed2b23b499" ancho="120" alt=„Logotipo de Lince" />
+<img src="https://github.com/user-attachments/assets/3b5df5b6-2de6-4363-974f-f0ed2b23b499" width="120" alt="Lince logo" />
 
 # Lince
 
-**Monitoreo de red y seguridad autohospedados, desde su propio servicio.**
+**Network monitoring and security self-hosted, from your own server.**
 
 [![Docker](https://img.shields.io/badge/docker-netosvaltools%2Flince-0ea5e9?style=flat-square&logo=docker&logoColor=white&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
-[![Docker tira](https://img.shields.io/docker/pulls/netosvaltools/lince?style=flat-square&color=0ea5e9&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
-[![Idiomas](https://img.shields.io/badge/languages-ES%20%7C%20EN%20%7C%20FR-10b981?style=flat-square&labelColor=0f172a)](#)
-[![Versión](https://img.shields.io/badge/version-4.0-6366f1?style=flat-square&labelColor=0f172a)](#)
+[![Docker Pulls](https://img.shields.io/docker/pulls/netosvaltools/lince?style=flat-square&color=0ea5e9&labelColor=0f172a)](https://hub.docker.com/r/netosvaltools/Lince)
+[![Languages](https://img.shields.io/badge/languages-ES%20%7C%20EN%20%7C%20FR-10b981?style=flat-square&labelColor=0f172a)](#)
+[![Version](https://img.shields.io/badge/version-4.0-6366f1?style=flat-square&labelColor=0f172a)](#)
 
-**¿Hablas español?** Lee la documentación completa [aqui](https://github.com/Osvaldo-Net/Lince/blob/main/README-ES.md).
+**¿Hablas español?** Lee la documentación completa [aquí](https://github.com/Osvaldo-Net/Lince/blob/main/README-ES.md).
 
 </div>
 
 ---
 
-## ¿Qué es Lince?
+## What is Lince?
 
-Lince es una aplicación web autohospedada para **Escaneo y monitoreo avanzados de su red local**. Combina **Mapa N** y **ARP** para identificar cada dispositivo conectado, clasificados como confiables o no confiables y alertarlo instantáneamente a viajes de **Telegrama** si aparece algo espercoso.
+Lince is a self-hosted web application for **advanced scanning and monitoring of your local network**. It combines **Nmap** and **ARP** to identify every connected device, classify them as trusted or untrusted, and instantly alert you via **Telegram** if something suspicious shows up.
 
-No se requiere configuración manual de la interfaz de red: Lince **autodetecta** el segmento de rojo en el que se ejecuta. Todos los datos se almacenan localmente con **SQLite**, Sin dependencias de la nube.
+No manual network interface configuration required: Lince **auto-detects** the network segment it runs on. All data is stored locally with **SQLite**, no cloud dependencies.
 
 ---
 
-## Capturas de pantalla
+## Screenshots
 
-**Panel de control**
+**Dashboard**
 
-![Panel de control](https://github.com/user-attachments/assets/f0f1f1b7-d4bc-4db7-bbdc-f561897b0b97)
-
-
-
-**Escaneo**
-![Escaneo](https://github.com/user-attachments/assets/9f428aaa-15d9-4dba-9be7-c3868939431d)
+![Dashboard](https://github.com/user-attachments/assets/f0f1f1b7-d4bc-4db7-bbdc-f561897b0b97)
 
 
-**Historia**
-![Historia](https://github.com/user-attachments/assets/84a003c6-6fa1-4970-bf50-5c4d308f6a59)
+
+**Scanning**
+![Scanning](https://github.com/user-attachments/assets/9f428aaa-15d9-4dba-9be7-c3868939431d)
 
 
-**Modo oscuro**
-![Modo oscuro](https://github.com/user-attachments/assets/2e23da99-06cb-4dbc-8093-8886b1e5d70f)
+**History**
+![History](https://github.com/user-attachments/assets/84a003c6-6fa1-4970-bf50-5c4d308f6a59)
 
-"centro"
 
-alinear Características
+**Dark mode**
+![Dark mode](https://github.com/user-attachments/assets/2e23da99-06cb-4dbc-8093-8886b1e5d70f)
 
-| Categoría | Detalles |
+---
+
+## Features
+
+| Category | Details |
 |---|---|
- ¿Qué es Lince?img **Escaneo "centro"alinear| Detecta automáticamente un segmento de rojo, Nmap + ARP, intervalo de escaneo configurable |
-| **Panel de control** | Tarjetas estadísticas (totales / confiables / no confiables) con contadores animados en vivo |
-| **Dispositivos** | Nombres personalizados, bolsa de fabricantes, escaneo de puertos por dispositivo |
-| **Gestión de confianza** | Marque/desmarque los dispositivos como confiables directamente desde la mesa o el panel lateral |
-| **Historia** | Registro completo de conexión/desconexión con actualización automática y filtro MAC |
-| **Alertas** | Notificaciones de Telegram en tiempo real para dispositivos no confiables, enviadas en el idioma seleccionado en la interfaz de usuario |
-| **Autenticación** | Inicio de sesión local o SSO a viajes de OIDC (ver más bajo) |
-| **Perfil** | Mostrar cambio de nombre, correo electrónico y contraste desde el panel lateral del perfil |
-| **UI** | Modo oscuro, interruptor de idioma ES/EN/FR, barra lateral responsiva, paneles deslizables |
-| **Almacenamiento** | SQLite liviano, no se necesita base de datos externa |
+| **Scanning** | Auto-detects network segment, Nmap + ARP, configurable scan interval |
+| **Dashboard** | Stat cards (total / trusted / untrusted) with live animated counters |
+| **Devices** | Custom names, manufacturer lookup, port scanning per device |
+| **Trust management** | Mark/unmark devices as trusted directly from the table or the side panel |
+| **History** | Full connection/disconnection log with auto-refresh and MAC filter |
+| **Alerts** | Real-time Telegram notifications for untrusted devices, sent in the language selected in the UI |
+| **Authentication** | Local login or SSO via OIDC (see below) |
+| **Profile** | Display name, email and password change from the profile side panel |
+| **UI** | Dark mode, ES/EN/FR language switch, responsive sidebar, slide-in panels |
+| **Storage** | Lightweight SQLite, no external database needed |
 
 ---
 
-## Instalación
+## Installation
 
-### 1. Variables de establecimiento del entorno
+### 1. Set environment variables
 
-Crea un `.env` archivo en el mismo director:
-**Panel de control
-, Sin dependencias de la nube.
-<img src="https://github.com/user-attachments/assets/3b5df5b6-2de6-4363-974f-f0ed2b23b499" ancho="120" alt=„Logotipo de Lince" />
+Create a `.env` file in the same directory:
+```env
+SECRET_KEY=your_secure_key_here
+```
 
-Género una clave segura con:
+Generate a secure key with:
 ```bash
 openssl rand -hex 32
 ```
 
-### 2. Implementar con Docker Compose
+### 2. Deploy with Docker Compose
 ```yaml
-Servicios:
+services:
   Lince:
-    nombre_contenedor: Lince
-    imagen: netosvaltools/lince:latest
-    # imagen: netosvaltools/lince:v4.0
-    medio ambiente:
-      CLAVE_SECRETA: ${CLAVE_SECRETA}
-    volúmenes:
+    container_name: Lince
+    image: netosvaltools/lince:latest
+    # image: netosvaltools/lince:v4.0
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+    volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./datos:/aplicación/datos
-    modo_rojo: "anfitrión"
+      - ./data:/app/data
+    network_mode: "host"
     cap_add:
       - NET_RAW
       - NET_ADMIN
-    reiniciar: a menos que se detenga
+    restart: unless-stopped
 ```
 ```bash
-docker compone -d
+docker compose up -d
 ```
 
-> ⚠️ `modo_red: host` es necesario para el escaneo LAN. Cambiar `CLAVE_SECRETA` antes de pasar una producción.
+> ⚠️ `network_mode: host` is required for LAN scanning. Change `SECRET_KEY` before going to production.
 
 ---
 
- Marque/desmarque los dispositivos como confiables directamente desde la mesa o el panel lateral 
+## First access
 
-Abra la interfaz web desde su navegador utilizando la IP del servidor en el puerto SQLite liviano, no se necesita base de datos externa 5555**:
+Open the web interface from your browser using the server's IP on port **5555**:
 ```
 http://<server-IP>:5555
 ```
 
-**Configuración por primera vez — contraste de administración aleatoria:**
+**First-time setup: random admin password:**
 
-En el primer inicio (solo si ahora no existen usuarios — no hay cuentas locales o SSO), Lince crea automáticamente una cuenta de administrador con una contraseña generada aleatoriamente y la imprime **una vez** a los registros del contador:
+On the very first startup (only if no users exist yet — no local or SSO accounts), Lince automatically creates an admin account with a randomly generated password and prints it **once** to the container logs:
 
 ```bash
-registros de composición de Docker -f
+docker compose logs -f
 ```
 
-Verás algo como esto:
+You'll see something like this:
 
 ```
 ════════════════════════════════════════════════════════════════
-  🦁 LINCE — 🇪🇸 Usuario admin creado / 🇬🇧 Administrador usuario creado / 🇫🇷 Administrador créé
+  🦁 LINCE — 🇪🇸 Usuario admin creado / 🇬🇧 Admin user created / 🇫🇷 Admin créé
 ════════════════════════════════════════════════════════════════
-   nombre de usuario / usuario / utilizador: lince@admin.com
-   contraseña / contraseña / mot de passe: <generado aleatoriamente>
+   username / usuario / utilisateur : lince@admin.com
+   password / contraseña / mot de passe : <randomly generated>
 ════════════════════════════════════════════════════════════════
 ```
 
-| Campo | Valor |
+| Field | Value |
 |---|---|
-| Nombre de usuario  file (this also wipes trusted devices and history), then restart — Lince will generate a new password and print it again in the logs.    cap_add:`lince@admin.com` |
-| Contraseña | *Se muestra solo una vez en los registros del primer inicio: full list with inline name editing, add/remove without reload |
+| Username | `lince@admin.com` |
+| Password | *shown only once in the logs on first startup* |
 
-> ⚠️ Copia esa contraseña de inmediato — nunca se vale a más y no se puede recuperar de la base de datos (se almacena como un hash bcrypt, no en texto sin formato). Se le pedirá que lo cambie en su primer inicio de sesión.
+> ⚠️ Copy that password right away it is never shown again and can't be recovered from the database (it's stored as a bcrypt hash, not in plain text). You'll be required to change it on your first login.
 
-
----
-
-## Paneles laterales
-
-Lince utiliza paneles deslizables en lugar de saturar la vista principal:
-
-- **Historia**: línea de tiempo de conexión/desconexión, filtrable por MAC y tipo de evento
-- **Dispositivos confiables**: lista completa con educación de nombres en línea, agregar/eliminar sin registrador
-- **Perfil**: más nombre, credenciales (correo electrónico + contraseña), información de la sesión
 
 ---
 
-## Actualización
+## Side panels
+
+Lince uses slide-in panels instead of cluttering the main view:
+
+- **History**: connection/disconnection timeline, filterable by MAC and event type
+- **Trusted Devices**: full list with inline name editing, add/remove without reload
+- **Profile**: display name, credentials (email + password), session info
+
+---
+
+## Updating
 ```bash
 docker compose pull
-docker compone -d
+docker compose up -d
 ```
 
 ---
 
-## Variables ambientales
+## Environment variables
 
-| Variable | Descripción | Requerido |
-|---|---|-----|
-| `CLAVE_SECRETA` | Clave secreta para el cifrado de sesiones | ✅ Sí |
-| `OIDC_ISSUER` | URL de su probador OIDC (emisor) | Sólo para SSO |
-| `ID_CLIENTE_OIDC` | ID de cliente registrado con probador OIDC | Sólo para SSO |
+| Variable | Description | Required |
+|---|---|---|
+| `SECRET_KEY` | Secret key for session encryption | ✅ Yes |
+| `OIDC_ISSUER` | URL of your OIDC provider (issuer) | Only for SSO |
+| `OIDC_CLIENT_ID` | Client ID registered with your OIDC provider | Only for SSO |
 | `OIDC_CLIENT_SECRET` | Client secret registered with your OIDC provider | Only for SSO |
 | `PUBLIC_URL` | Public URL of your Lince instance, required to build the correct redirect URL | ✅ Yes (if using SSO) |
 | `OIDC_AUTO_CREATE` | Automatically create a user on first SSO login (`true`/`false`) | No |
