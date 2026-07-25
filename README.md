@@ -110,14 +110,35 @@ Open the web interface from your browser using the server's IP on port **5555**:
 http://<server-IP>:5555
 ```
 
-**Default credentials:**
+**First-time setup — random admin password:**
+
+On the very first startup (only if no users exist yet — no local or SSO accounts), Lince automatically creates an admin account with a randomly generated password and prints it **once** to the container logs:
+
+```bash
+docker compose logs -f
+```
+
+You'll see something like this:
+
+```
+════════════════════════════════════════════════════════════════
+  🦁 LINCE — 🇪🇸 Usuario admin creado / 🇬🇧 Admin user created / 🇫🇷 Admin créé
+════════════════════════════════════════════════════════════════
+   username / usuario / utilisateur : lince@admin.com
+   password / contraseña / mot de passe : <randomly generated>
+════════════════════════════════════════════════════════════════
+```
 
 | Field | Value |
 |---|---|
-| Username | `admin@example.com` |
-| Password | `admin` |
+| Username | `lince@admin.com` |
+| Password | *shown only once in the logs on first startup* |
 
-> ⚠️ Change your password immediately after the first login.
+> ⚠️ Copy that password right away — it is never shown again and can't be recovered from the database (it's stored as a bcrypt hash, not in plain text). You'll be required to change it on your first login.
+
+**Upgrading from an older version?** If you already had Lince running with the previous static credentials (`admin@example.com` / `admin`), that account is left untouched — the random-password flow only applies to brand-new installs with an empty user table. Log in with your existing credentials and change them from the profile panel.
+
+**Lost the password before your first login?** Stop the container and either delete the `usuarios` table or the whole `data/lan_guard.db` file (this also wipes trusted devices and history), then restart — Lince will generate a new password and print it again in the logs.
 
 ---
 
