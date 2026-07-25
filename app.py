@@ -99,6 +99,15 @@ limiter = Limiter(
     storage_uri="memory://"
 )
 
+# FIX: respuesta consistente (JSON) cuando se excede cualquier límite de
+# tasa, en vez del 429 genérico que devuelve Flask-Limiter por defecto.
+@app.errorhandler(429)
+def rate_limit_handler(e):
+    return jsonify({
+        "success": False,
+        "message": "Demasiadas solicitudes. Esperá un momento e intentá de nuevo."
+    }), 429
+
 # FIX #6: Encabezados de seguridad HTTP
 # CSP ajustada a los recursos externos que realmente usa la app:
 #   - cdn.tailwindcss.com  (framework CSS/JS)
@@ -163,6 +172,10 @@ if OIDC_ENABLED:
     )
     logging.getLogger("accesos").info(f"SSO/OIDC habilitado. Issuer: {OIDC_ISSUER}")
 
+# FIX: crea el usuario admin por defecto con contraseña ALEATORIA (no una
+# fija en el código). La contraseña se imprime una sola vez en la salida
+# estándar (visible con `docker compose logs` o en consola) y se fuerza su
+# cambio en el primer login vía el flag debe_cambiar_credenciales.
 iniciar_archivo_usuarios()
 
 # FIX #5: Log con rotación para evitar disco lleno
@@ -277,7 +290,11 @@ def login():
             # su historial (evita el caso de cuentas "heredadas").
             session["auth_method"]   = "local"
             registrar_log(f"Login exitoso: {usuario}")
-            if es_usuario_por_defecto(usuario) and es_contrasena_por_defecto(usuario):
+            # FIX: ya no se compara contra una contraseña fija ("admin").
+            # Se usa el flag debe_cambiar_credenciales, que se marca al
+            # crear el usuario con contraseña aleatoria y se limpia en
+            # cuanto el usuario cambia sus credenciales.
+            if debe_cambiar_credenciales(usuario):
                 return redirect("/cambiar-credenciales")
             return redirect("/")
         registrar_log(f"Login fallido para: {usuario}")
@@ -416,6 +433,10 @@ def cambiar_credenciales():
             return render_template("cambiar_credenciales.html", error="La contraseña no cumple los requisitos")
         cambiar_usuario(session["usuario"], nuevo_usuario)
         cambiar_contrasena_usuario(nuevo_usuario, nueva)
+        # FIX: limpiar el flag que forzaba este cambio, ya con el usuario
+        # y contraseña definitivos (nuevo_usuario, que puede diferir del
+        # usuario original si también cambió el correo).
+        limpiar_flag_cambio_credenciales(nuevo_usuario)
         session["usuario"] = nuevo_usuario
         return redirect("/")
     return render_template("cambiar_credenciales.html")
@@ -455,6 +476,9 @@ def api_cambiar_credenciales():
         usuario_actual = nuevo_usuario
     if nueva:
         cambiar_contrasena_usuario(usuario_actual, nueva)
+    # FIX: si esta pantalla es la que estaba forzando el cambio inicial
+    # (usuario recién creado con contraseña aleatoria), limpiar el flag.
+    limpiar_flag_cambio_credenciales(usuario_actual)
 
     return jsonify({"success": True, "usuario": usuario_actual})
 
@@ -688,6 +712,7 @@ def index():
     )
 
 @app.route('/api/scan')
+@limiter.limit("60 per minute")   # FIX: límite generoso, solo lee la caché en memoria
 def api_scan():
     if 'usuario' not in session:
         return jsonify({"error": "No autorizado"}), 401
@@ -752,6 +777,7 @@ def api_nombrar():
     return jsonify({"success": True, "mac": mac, "nombre": nombre})
 
 @app.route('/api/puertos', methods=['POST'])
+@limiter.limit("6 per minute")   # FIX: el nmap de esta ruta tarda hasta 20s, evita saturación
 def api_puertos():
     if 'usuario' not in session:
         return jsonify({"error": "No autorizado"}), 401
