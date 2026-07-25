@@ -120,14 +120,8 @@ docker compose logs -f
 
 You'll see something like this:
 
-```
-════════════════════════════════════════════════════════════════
-  🦁 LINCE — 🇪🇸 Usuario admin creado / 🇬🇧 Admin user created / 🇫🇷 Admin créé
-════════════════════════════════════════════════════════════════
-   username / usuario / utilisateur : lince@admin.com
-   password / contraseña / mot de passe : <randomly generated>
-════════════════════════════════════════════════════════════════
-```
+<img width="767" height="220" alt="image" src="https://github.com/user-attachments/assets/a9ffa0d3-e5d7-4832-87f8-015707dc3fda" />
+
 
 | Field | Value |
 |---|---|
