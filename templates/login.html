@@ -6,7 +6,12 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Lince</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Inter: la misma familia sans-serif "moderna" que se ve en dashboards tipo NethSecurity/WireGuard -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -14,17 +19,20 @@
       theme: {
         extend: {
           colors: {
-            dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
+            dark1: "#0b0d12", dark2: "#11141b", dark3: "#1a1e28",
             brand: {
-              50:  "#ECFEFF",
-              100: "#CFFAFE",
-              400: "#22D3EE",
-              500: "#06B6D4",
-              600: "#0891B2",
-              700: "#0E7490"
+              50:  "#EFF6FF",
+              100: "#DBEAFE",
+              400: "#3B82F6",
+              500: "#2563EB",
+              600: "#1D4ED8",
+              700: "#1E40AF"
             }
           },
-          fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
+          fontFamily: {
+            sans: ["Inter", "system-ui", "sans-serif"],
+            display: ["Inter Tight", "Inter", "system-ui", "sans-serif"]
+          }
         }
       }
     };
@@ -32,6 +40,7 @@
       document.documentElement.classList.add("dark");
     }
   </script>
+
   <style>
     @keyframes fade-up {
       from { opacity:0; transform:translateY(8px); }
@@ -46,7 +55,6 @@
       pointer-events: none;
       z-index: 0;
     }
-    /* Light mode shapes */
     .shape-tl {
       width: 320px; height: 320px;
       top: -120px; left: -100px;
@@ -71,62 +79,76 @@
       background: #e2e8f0;
       border-radius: 30% 60% 40% 50%;
     }
-    /* Dark mode shapes */
-    .dark .shape-tl { background: #1a1a24; }
-    .dark .shape-br { background: #1a1a24; }
-    .dark .shape-tr { background: #111118; }
-    .dark .shape-bl { background: #111118; }
+    .dark .shape-tl { background: #161a24; }
+    .dark .shape-br { background: #161a24; }
+    .dark .shape-tr { background: #11141b; }
+    .dark .shape-bl { background: #11141b; }
+
+    /* ── Card ── */
+    .login-card {
+      box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px -8px rgba(15,23,42,.08);
+    }
+    .dark .login-card {
+      box-shadow: 0 1px 2px rgba(0,0,0,.2), 0 8px 24px -8px rgba(0,0,0,.4);
+    }
 
     /* ── Inputs ── */
     .field {
-      width:100%; padding:9px 10px 9px 34px; border-radius:8px; font-size:13px;
-      border:1px solid #e2e8f0; background:#fff; outline:none; box-sizing:border-box;
-      transition:border-color .15s, box-shadow .15s; font-family:"Geist",sans-serif; color:#0f172a;
+      width:100%; padding:10px 12px 10px 36px; border-radius:9px; font-size:13.5px;
+      border:1px solid #dde3ea; background:#fff; outline:none; box-sizing:border-box;
+      transition:border-color .15s, box-shadow .15s; font-family:"Inter",sans-serif;
+      color:#0a0e14; font-weight:500;
     }
-    .field:focus { border-color:#06B6D4; box-shadow:0 0 0 3px rgba(6,182,212,.10); }
-    .field::placeholder { color:#94a3b8; }
-    .dark .field { background:#1a1a24; border-color:#2a2d40; color:#e2e8f0; }
-    .dark .field:focus { border-color:#22D3EE; box-shadow:0 0 0 3px rgba(34,211,238,.15); }
+    .field:focus { border-color:#2563EB; box-shadow:0 0 0 3px rgba(37,99,235,.12); }
+    .field::placeholder { color:#94a3b8; font-weight:400; }
+    .dark .field { background:#161a24; border-color:#262b38; color:#f1f5f9; }
+    .dark .field:focus { border-color:#3B82F6; box-shadow:0 0 0 3px rgba(59,130,246,.18); }
 
     .field-icon {
-      position:absolute; left:10px; top:50%; transform:translateY(-50%);
-      width:14px; height:14px; color:#94a3b8; pointer-events:none;
+      position:absolute; left:11px; top:50%; transform:translateY(-50%);
+      width:15px; height:15px; color:#94a3b8; pointer-events:none;
     }
 
+    /* ── Botón principal ── */
     .btn-main {
-      width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
-      background: #0891B2;
-      color:#fff; border:none; cursor:pointer;
-      font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
+      width:100%; padding:10px 16px; border-radius:9px; font-size:13.5px; font-weight:600;
+      background:#2563EB; color:#fff; border:none; cursor:pointer;
+      font-family:"Inter",sans-serif; letter-spacing:-.01em;
+      transition:background-color .15s, transform .1s, box-shadow .15s;
+      box-shadow: 0 1px 2px rgba(37,99,235,.25);
     }
-    .btn-main:hover  { opacity:.92; }
+    .btn-main:hover  { background:#1D4ED8; }
     .btn-main:active { transform:scale(.99); }
 
     /* ── Botón SSO ── */
     .btn-sso {
-      width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
-      background:#0891B2; color:#fff; border:none; cursor:pointer;
-      font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
+      width:100%; padding:10px 16px; border-radius:9px; font-size:13.5px; font-weight:600;
+      background:#fff; color:#0f172a; border:1px solid #dde3ea; cursor:pointer;
+      font-family:"Inter",sans-serif; transition:background-color .15s, border-color .15s, transform .1s;
       display:flex; align-items:center; justify-content:center; gap:8px;
       text-decoration:none;
     }
-    .btn-sso:hover  { opacity:.92; }
+    .btn-sso:hover  { background:#f8fafc; border-color:#c7d0db; }
     .btn-sso:active { transform:scale(.99); }
-    .dark .btn-sso  { background:#0891B2; color:#fff; }
-    .dark .btn-sso:hover { opacity:.92; }
+    .dark .btn-sso  { background:#161a24; color:#f1f5f9; border-color:#262b38; }
+    .dark .btn-sso:hover { background:#1a1e28; border-color:#333949; }
 
     .divider-or {
       display:flex; align-items:center; gap:10px;
-      color:#94a3b8; font-size:11px; margin:14px 0;
+      color:#94a3b8; font-size:11px; margin:16px 0; font-weight:500;
     }
     .divider-or::before, .divider-or::after {
       content:""; flex:1; height:1px; background:#e2e8f0;
     }
-    .dark .divider-or::before, .dark .divider-or::after { background:#2a2d40; }
+    .dark .divider-or::before, .dark .divider-or::after { background:#262b38; }
+
+    /* ── Tipografía general: negros reales, no grises lavados ── */
+    .text-solid      { color:#0a0e14; }
+    .dark .text-solid { color:#f8fafc; }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-dark1 font-sans antialiased px-4 relative overflow-hidden" style="font-size:13px">
+<body class="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-dark1 font-sans antialiased px-4 relative overflow-hidden" style="font-size:13.5px">
 
   <!-- Background shapes -->
   <div class="bg-shape shape-tl"></div>
@@ -140,37 +162,37 @@
     <!-- Wordmark -->
     <div class="mb-8 flex flex-col items-center text-center">
       <img src="{{ url_for('static', filename='lince-no-fondo.png') }}" alt="Lince" class="w-14 h-14 mb-3">
-      <h1 class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:22px;letter-spacing:-.02em">Lince</h1>
-      <p class="text-slate-400 dark:text-slate-500 mt-1.5" style="font-size:12px" data-i18n="loginSubtitle">Inicia sesión para continuar</p>
+      <h1 class="font-display font-bold text-solid leading-none" style="font-size:23px;letter-spacing:-.03em">Lince</h1>
+      <p class="text-slate-500 dark:text-slate-400 mt-1.5 font-medium" style="font-size:12.5px" data-i18n="loginSubtitle">Inicia sesión para continuar</p>
     </div>
 
     <!-- Alerts -->
     {% if error %}
     <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-rose-700 dark:text-rose-400 fade-up"
-      style="font-size:12px;background:#fff1f2;border:1px solid #fecdd3">
+      style="font-size:12.5px;background:#fff1f2;border:1px solid #fecdd3">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span data-i18n="loginErrorCredentials">Usuario o contraseña incorrectos</span>
+      <span data-i18n="loginErrorCredentials" class="font-medium">Usuario o contraseña incorrectos</span>
     </div>
     {% endif %}
 
     {% if sso_error %}
     <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-rose-700 dark:text-rose-400 fade-up"
-      style="font-size:12px;background:#fff1f2;border:1px solid #fecdd3">
+      style="font-size:12.5px;background:#fff1f2;border:1px solid #fecdd3">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <span data-i18n="loginErrorSSO">No se pudo iniciar sesión con SSO. Intenta de nuevo.</span>
+      <span data-i18n="loginErrorSSO" class="font-medium">No se pudo iniciar sesión con SSO. Intenta de nuevo.</span>
     </div>
     {% endif %}
 
     {% if timeout %}
     <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-amber-700 dark:text-amber-400 fade-up"
-      style="font-size:12px;background:#fffbeb;border:1px solid #fde68a">
+      style="font-size:12.5px;background:#fffbeb;border:1px solid #fde68a">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span data-i18n="sessionExpiredMsg">Sesión expirada. Vuelve a iniciar sesión.</span>
+      <span data-i18n="sessionExpiredMsg" class="font-medium">Sesión expirada. Vuelve a iniciar sesión.</span>
     </div>
     {% endif %}
 
     <!-- Card -->
-    <div class="bg-white dark:bg-dark2 rounded-xl border border-slate-200 dark:border-slate-800/60 p-6">
+    <div class="login-card bg-white dark:bg-dark2 rounded-2xl border border-slate-200/80 dark:border-slate-800/60 p-6">
 
       {% if oidc_enabled %}
       <a href="/login/sso" class="btn-sso">
@@ -191,7 +213,7 @@
 
           <!-- Usuario -->
           <div>
-            <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px" data-i18n="loginUser">Usuario</label>
+            <label class="block text-solid mb-1.5 font-semibold" style="font-size:12.5px" data-i18n="loginUser">Usuario</label>
             <div class="relative">
               <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               <input type="text" name="usuario" data-i18n="loginPlaceholderEmail" placeholder="correo@ejemplo.com" required autofocus
@@ -201,7 +223,7 @@
 
           <!-- Contraseña -->
           <div>
-            <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px" data-i18n="loginPassword">Contraseña</label>
+            <label class="block text-solid mb-1.5 font-semibold" style="font-size:12.5px" data-i18n="loginPassword">Contraseña</label>
             <div class="relative">
               <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               <input id="pass" type="password" name="contrasena" placeholder="••••••••" required
@@ -222,13 +244,13 @@
     <!-- Footer -->
     <div class="flex items-center justify-between mt-5 px-0.5">
       <button onclick="toggleTheme()"
-        class="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition" style="font-size:11px">
+        class="flex items-center gap-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition font-medium" style="font-size:11.5px">
         <svg id="th-moon" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg id="th-sun"  xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <span id="th-label" data-i18n="changeTheme">Modo oscuro</span>
       </button>
       <a href="https://github.com/Osvaldo-Net/Lince" target="_blank" rel="noopener noreferrer"
-        class="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition" style="font-size:11px">
+        class="flex items-center gap-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition font-medium" style="font-size:11.5px">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         GitHub
       </a>
