@@ -3,7 +3,7 @@
   <!-- Mobile: title row -->
   <div class="flex items-center justify-between mb-2 sm:hidden">
     <div class="flex items-center gap-2 pl-8">
-      <span class="font-semibold text-slate-900 dark:text-white text-sm">LANGuard</span>
+      <span class="font-semibold dark:text-white text-sm" style="color:#0a0e14">LANGuard</span>
     </div>
     <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-dark3 transition">
       <i id="icono-luna-m" data-lucide="moon" class="w-4 h-4"></i>
@@ -26,8 +26,8 @@
       </button>
       <div id="trustMenu" class="dropdown-menu hidden">
         <button onclick="setTrustFilter('all')"       class="dropdown-item"><span class="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span><span data-i18n="filterAll">Todos</span></button>
-        <button onclick="setTrustFilter('trusted')"   class="dropdown-item"><span class="w-2 h-2 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="filterTrusted">Confiables</span></button>
-        <button onclick="setTrustFilter('untrusted')" class="dropdown-item"><span class="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0"></span><span data-i18n="filterUntrusted">No confiables</span></button>
+        <button onclick="setTrustFilter('trusted')"   class="dropdown-item"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#0f9d63"></span><span data-i18n="filterTrusted">Confiables</span></button>
+        <button onclick="setTrustFilter('untrusted')" class="dropdown-item"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#e0405a"></span><span data-i18n="filterUntrusted">No confiables</span></button>
       </div>
     </div>
   </div>
