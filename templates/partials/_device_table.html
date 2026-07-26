@@ -2,8 +2,8 @@
 <div class="card overflow-hidden stagger-1 fade-in">
   <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
     <div>
-      <h2 class="font-semibold text-slate-900 dark:text-white text-sm" data-i18n="devicesTitle">Dispositivos en red</h2>
-      <p class="text-slate-400 dark:text-slate-500 mt-0.5 hidden sm:block" style="font-size:11px" data-i18n="devicesDesc">
+      <h2 class="font-semibold dark:text-white text-sm" style="color:#0a0e14" data-i18n="devicesTitle">Dispositivos en red</h2>
+      <p class="text-slate-500 dark:text-slate-500 mt-0.5 hidden sm:block" style="font-size:11px" data-i18n="devicesDesc">
         Dispositivos detectados en el último escaneo. Marca como confiables los que reconoces.
       </p>
     </div>
@@ -13,13 +13,13 @@
     <table class="min-w-[640px] w-full table-auto">
       <thead>
         <tr class="border-b border-slate-100 dark:border-slate-800/60">
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="ip">IP</span></th>
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="mac">MAC</span></th>
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="name">Nombre</span></th>
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="manufacturer">Fabricante</span></th>
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="trust">Confianza</span></th>
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="action">Acción</span></th>
-          <th class="px-4 py-2.5 text-left font-medium text-slate-400 dark:text-slate-500" style="font-size:11px"><span data-i18n="ports">Puertos</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="ip">IP</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="mac">MAC</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="name">Nombre</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="manufacturer">Fabricante</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="trust">Confianza</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="action">Acción</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="ports">Puertos</span></th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100 dark:divide-slate-800/40" id="tabla-dispositivos">
@@ -32,7 +32,7 @@
           <td class="px-4 font-mono text-slate-400 dark:text-slate-500 text-xs">{{ d.mac }}</td>
           <td class="px-4">
             <div class="flex items-center gap-1.5">
-              <span class="text-slate-700 dark:text-slate-200 font-medium">{{ d.nombre or "?" }}</span>
+              <span class="font-medium" style="color:#0a0e14">{{ d.nombre or "?" }}</span>
               <button onclick="editarNombre('{{ d.mac }}')" class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition">
                 <i data-lucide="pencil" class="w-3 h-3"></i>
               </button>
