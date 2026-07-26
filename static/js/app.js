@@ -50,8 +50,8 @@ function actualizarLabelFiltro() {
 // ══════════════════════════════════════════
 const COLORES_NOTI = {
   info:    "bg-slate-100 text-slate-800 border border-slate-200 dark:bg-dark3 dark:text-slate-200 dark:border-slate-700",
-  success: "bg-emerald-50 text-emerald-800 border border-emerald-200 dark:bg-emerald-900/20 dark:text-emerald-300 dark:border-emerald-800/40",
-  error:   "bg-rose-50 text-rose-800 border border-rose-200 dark:bg-rose-900/20 dark:text-rose-300 dark:border-rose-800/40",
+  success: "bg-[rgba(15,157,99,0.08)] text-[#0f9d63] border border-[rgba(15,157,99,0.25)] dark:bg-[rgba(15,157,99,0.14)] dark:text-[#4ade80] dark:border-[rgba(15,157,99,0.3)]",
+  error:   "bg-[rgba(224,64,90,0.08)] text-[#e0405a] border border-[rgba(224,64,90,0.25)] dark:bg-[rgba(224,64,90,0.14)] dark:text-[#fda4af] dark:border-[rgba(224,64,90,0.3)]",
   warning: "bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/40"
 };
 let _notiTimer = null;
@@ -132,19 +132,19 @@ document.addEventListener("DOMContentLoaded", () => {
           li.className = "flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800/40 bg-white dark:bg-dark3/30 hover:border-slate-200 dark:hover:border-slate-700/60 transition group";
           li.innerHTML = `
             <span class="relative flex w-1.5 h-1.5 flex-shrink-0">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-emerald-500"></span>
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d63] opacity-75"></span>
+              <span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-[#0f9d63]"></span>
             </span>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-1.5">
-                <p class="nombre-confiable font-medium text-slate-700 dark:text-slate-200 text-xs truncate">${t("noName")}</p>
+                <p class="nombre-confiable text-solid font-medium text-xs truncate">${t("noName")}</p>
                 <button onclick="editarNombreConfiable('${esc(mac)}')" class="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition flex-shrink-0">
                   <i data-lucide="pencil" class="w-3 h-3"></i>
                 </button>
               </div>
               <p class="font-mono text-slate-400" style="font-size:10px">${esc(mac)}</p>
             </div>
-            <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-rose-500 transition p-1 flex-shrink-0">
+            <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-[#e0405a] transition p-1 flex-shrink-0">
               <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
             </button>`;
           lista.appendChild(li);
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btn = document.createElement("button");
     btn.id = `btn-${sid}`;
     btn.className = "px-2 py-1 rounded-lg text-white text-xs font-medium";
-    btn.style.cssText = "background:#0891B2;font-size:11px";
+    btn.style.cssText = "background:#2563EB;font-size:11px";
     btn.textContent = t("guardar");
 
     wrapper.appendChild(inp);
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const newWrapper = document.createElement("div");
       newWrapper.className = "flex items-center gap-1.5";
       const span = document.createElement("span");
-      span.className = "text-slate-700 dark:text-slate-200 font-medium";
+      span.className = "text-solid font-medium";
       span.textContent = nombre;
       const editBtn = document.createElement("button");
       editBtn.onclick = () => editarNombre(mac);
@@ -277,7 +277,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const rw = document.createElement("div");
         rw.className = "flex items-center gap-1.5";
         const rs = document.createElement("span");
-        rs.className = "text-slate-700 dark:text-slate-200 font-medium";
+        rs.className = "text-solid font-medium";
         rs.textContent = actual || "?";
         const rb = document.createElement("button");
         rb.onclick = () => editarNombre(mac);
@@ -345,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
       <td class="px-4 font-mono text-slate-400 dark:text-slate-500 text-xs">${esc(d.mac)}</td>
       <td class="px-4">
         <div class="flex items-center gap-1.5">
-          <span class="text-slate-700 dark:text-slate-200 font-medium">${esc(d.nombre || "?")}</span>
+          <span class="text-solid font-medium">${esc(d.nombre || "?")}</span>
           <button onclick="editarNombre('${esc(d.mac)}')" class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition">
             <i data-lucide="pencil" class="w-3 h-3"></i>
           </button>
@@ -398,14 +398,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         if (!data.success) throw new Error(data.message);
         cont.innerHTML = data.puertos.length === 0
-          ? `<div class="p-3 rounded-lg text-xs flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-900/30">
+          ? `<div class="p-3 rounded-lg text-xs flex items-center gap-2 bg-[rgba(15,157,99,0.08)] dark:bg-[rgba(15,157,99,0.14)] text-[#0f9d63] dark:text-[#4ade80] border border-[rgba(15,157,99,0.25)] dark:border-[rgba(15,157,99,0.3)]">
                <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0"></i> ${t("no_ports").replace("{{ip}}", esc(ip))}
              </div>`
           : `<p class="font-mono text-xs text-slate-400 mb-2">${esc(ip)}</p>
              <div class="space-y-1">
                ${data.puertos.map(p =>
                  `<div class="flex items-center justify-between p-2 border border-slate-100 dark:border-slate-800 rounded-lg bg-white dark:bg-dark3 text-xs">
-                   <span class="font-mono text-slate-700 dark:text-slate-300">${esc(p.puerto)}</span>
+                   <span class="font-mono text-solid">${esc(p.puerto)}</span>
                    <span class="text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">${esc(p.servicio)}</span>
                   </div>`
                ).join("")}
@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (typeof lucide !== "undefined") lucide.createIcons();
       })
       .catch(() => {
-        cont.innerHTML = `<div class="p-3 rounded-lg text-xs flex items-center gap-2 bg-rose-50 dark:bg-rose-900/20 text-rose-500 border border-rose-100 dark:border-rose-900/30">
+        cont.innerHTML = `<div class="p-3 rounded-lg text-xs flex items-center gap-2 bg-[rgba(224,64,90,0.08)] dark:bg-[rgba(224,64,90,0.14)] text-[#e0405a] border border-[rgba(224,64,90,0.25)] dark:border-[rgba(224,64,90,0.3)]">
           <i data-lucide="x-circle" class="w-4 h-4 flex-shrink-0"></i> ${t("error_ports").replace("{{ip}}", esc(ip))}
         </div>`;
         if (typeof lucide !== "undefined") lucide.createIcons();
@@ -451,8 +451,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.setTrustFilter = valor => {
     const map = {
       all:       { valor: "",             key: "filterAll",       dot: "bg-slate-400" },
-      trusted:   { valor: "confiable",    key: "filterTrusted",   dot: "bg-emerald-500" },
-      untrusted: { valor: "no-confiable", key: "filterUntrusted", dot: "bg-rose-500" }
+      trusted:   { valor: "confiable",    key: "filterTrusted",   dot: "bg-[#0f9d63]" },
+      untrusted: { valor: "no-confiable", key: "filterUntrusted", dot: "bg-[#e0405a]" }
     };
     const conf = map[valor];
     if (!conf) return;
