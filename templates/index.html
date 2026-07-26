@@ -7,8 +7,130 @@
   <title>Lince</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons/css/flag-icons.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Inter: misma familia que usa el dashboard de referencia (NethSecurity) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet" />
+
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            dark1: "#0b0d12", dark2: "#11141b", dark3: "#1a1e28",
+            brand: {
+              50:  "#EFF6FF",
+              100: "#DBEAFE",
+              400: "#3B82F6",
+              500: "#2563EB",
+              600: "#1D4ED8",
+              700: "#1E40AF"
+            }
+          },
+          fontFamily: {
+            sans: ["Inter", "system-ui", "sans-serif"],
+            display: ["Inter Tight", "Inter", "system-ui", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ── Negros reales en vez de grises lavados ── */
+    body, h1, h2, h3, h4, h5, h6 { color:#0a0e14; }
+    .dark body, .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 { color:#f8fafc; }
+    /* Si el markup ya usa text-slate-800 / text-slate-200, esto asegura negro real sin tener que
+       cambiar cada clase existente en los partials */
+    .text-slate-800 { color:#0a0e14 !important; }
+    .dark .text-slate-200 { color:#f1f5f9 !important; }
+
+    /* ── Tarjetas de estado / alerta más suaves (menos "chillonas") ──
+       Clases reutilizables: aplícalas en _stats.html / _device_table.html donde
+       antes se usaba rojo puro (bg-red-500, border-red-500, etc.) */
+    .card {
+      background:#fff;
+      border:1px solid #e7ebf1;
+      border-radius:14px;
+      box-shadow:0 1px 2px rgba(15,23,42,.03), 0 6px 16px -10px rgba(15,23,42,.06);
+    }
+    .dark .card {
+      background:#11141b;
+      border-color:#232838;
+      box-shadow:0 1px 2px rgba(0,0,0,.2);
+    }
+
+    .alert-box {
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px 14px;
+      border-radius:12px;
+      border-left:3px solid transparent;
+      font-size:12.5px;
+    }
+    .alert-error {
+      background:#fef2f4;
+      border-left-color:#f87171;
+      color:#9f1239;
+    }
+    .alert-error .alert-title { color:#be123c; font-weight:600; }
+    .alert-error .alert-icon  { color:#f43f5e; }
+    .dark .alert-error {
+      background:rgba(244,63,94,.08);
+      border-left-color:#f43f5e;
+      color:#fda4af;
+    }
+    .dark .alert-error .alert-title { color:#fda4af; }
+
+    .alert-warning {
+      background:#fffaf0;
+      border-left-color:#fbbf24;
+      color:#92650c;
+    }
+    .alert-warning .alert-title { color:#a16207; font-weight:600; }
+    .dark .alert-warning {
+      background:rgba(251,191,36,.08);
+      border-left-color:#fbbf24;
+      color:#fcd34d;
+    }
+
+    .alert-success {
+      background:#f0fdf6;
+      border-left-color:#4ade80;
+      color:#166534;
+    }
+    .alert-success .alert-title { color:#15803d; font-weight:600; }
+    .dark .alert-success {
+      background:rgba(74,222,128,.08);
+      border-left-color:#4ade80;
+      color:#86efac;
+    }
+
+    /* ── Toasts flotantes (ubus request failed, etc.) más pulidos ── */
+    .toast-panel {
+      background:#fff;
+      border:1px solid #e7ebf1;
+      border-radius:14px;
+      box-shadow:0 10px 30px -8px rgba(15,23,42,.15);
+    }
+    .dark .toast-panel {
+      background:#161a24;
+      border-color:#262b38;
+    }
+    .toast-btn-primary {
+      background:#0f766e;
+      color:#fff;
+      font-weight:600;
+      border-radius:8px;
+      padding:6px 14px;
+      font-size:12px;
+      transition:background-color .15s;
+    }
+    .toast-btn-primary:hover { background:#0d5f59; }
+  </style>
+
   {% include "partials/_head_config.html" %}
 </head>
 <body
@@ -23,19 +145,14 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
     </svg>
   </button>
-
   <!-- Mobile sidebar overlay -->
   <div id="overlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 hidden sm:hidden"></div>
-
   <!-- Panel overlay (shared for all right panels) -->
   <div id="panel-overlay" class="panel-overlay" onclick="cerrarTodosPaneles()"></div>
-
   <!-- 🌊 Sidebar 🌊 -->
   {% include "partials/_sidebar.html" %}
-
   <!-- 🌊 Mobile bottom nav 🌊 -->
   {% include "partials/_mobile_nav.html" %}
-
   <!-- 🌊 Main content 🌊 -->
   <main class="sm:ml-56 ml-0 min-h-screen bg-slate-50 dark:bg-dark1">
     {% include "partials/_topbar.html" %}
@@ -44,26 +161,21 @@
       {% include "partials/_device_table.html" %}
     </div>
   </main>
-
   <!-- 🌊 Right panels 🌊 -->
   {% include "partials/_panel_historial.html" %}
   {% include "partials/_panel_confiables.html" %}
   {% include "partials/_panel_perfil.html" %}
-
   <!-- 🌊 Modals 🌊 -->
   {% include "partials/_modal_puertos.html" %}
   {% include "partials/_modal_config.html" %}
-
   <!-- 🌊 Toast notification 🌊 -->
   <div id="notificacion" class="fixed bottom-20 sm:bottom-5 right-5 hidden px-4 py-3 rounded-xl shadow-xl border text-xs font-medium z-[70] max-w-xs w-full transition-all duration-300"></div>
-
   <!-- 🌊 Scripts 🌊 -->
   <!-- i18n debe ir primero: app.js y panel.js usan t() -->
   <script src="{{ url_for('static', filename='js/i18n.js') }}"></script>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   <script src="{{ url_for('static', filename='js/panel.js') }}"></script>
   <script src="https://unpkg.com/lucide@latest" defer></script>
-
   <!-- Sync mobile dark-mode icons -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
