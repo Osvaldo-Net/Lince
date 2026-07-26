@@ -38,7 +38,7 @@ function tickSession() {
   const bar = document.getElementById("sess-bar");
   if (bar) {
     bar.style.width = pct + "%";
-    bar.style.background = pct < 10 ? "#e11d48" : pct < 25 ? "#f59e0b" : "";
+    bar.style.background = pct < 10 ? "#e0405a" : pct < 25 ? "#f59e0b" : "";
   }
   if (remaining < 600000 && !warnShown) {
     warnShown = true;
@@ -168,7 +168,7 @@ async function guardarNombrePerfil() {
   try {
     const data = await postJSON("/api/perfil", { nombre_display: nombre });
     msg.textContent = data.success ? `✓ ${t("profileNameSaved")}` : `✕ ${t("cfgError")}`;
-    msg.className   = `text-xs ${data.success ? "text-emerald-500" : "text-rose-500"}`;
+    msg.className   = `text-xs ${data.success ? "text-[#0f9d63]" : "text-[#e0405a]"}`;
     msg.classList.remove("hidden");
     if (data.success) {
       _syncNombreUI(nombre || document.getElementById("sidebar-user-name").textContent);
@@ -176,7 +176,7 @@ async function guardarNombrePerfil() {
     }
   } catch {
     msg.textContent = `✕ ${t("cfgError")}`;
-    msg.className = "text-xs text-rose-500";
+    msg.className = "text-xs text-[#e0405a]";
     msg.classList.remove("hidden");
   }
 }
@@ -243,10 +243,10 @@ async function cargarHistorial() {
 
     cont.innerHTML = data.map(r => {
       const esConn   = r.evento === "conectado";
-      const iconBg   = esConn ? "bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600" : "bg-slate-100 dark:bg-slate-800 text-slate-400";
-      const dotClr   = esConn ? "bg-emerald-500" : "bg-slate-300 dark:bg-slate-600";
-      const pingSpan = esConn ? `<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>` : "";
-      const evLabel  = `<span class="font-semibold text-xs ${esConn ? "text-emerald-600 dark:text-emerald-400" : "text-slate-500"}">${t(esConn ? "historyConnected" : "historyDisconnected")}</span>`;
+      const iconBg   = esConn ? "bg-[rgba(15,157,99,0.10)] dark:bg-[rgba(15,157,99,0.16)] text-[#0f9d63]" : "bg-slate-100 dark:bg-slate-800 text-slate-400";
+      const dotClr   = esConn ? "bg-[#0f9d63]" : "bg-slate-300 dark:bg-slate-600";
+      const pingSpan = esConn ? `<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d63] opacity-75"></span>` : "";
+      const evLabel  = `<span class="font-semibold text-xs ${esConn ? "text-[#0f9d63]" : "text-slate-500"}">${t(esConn ? "historyConnected" : "historyDisconnected")}</span>`;
       const chip     = r.confiable
         ? `<span class="badge badge-green" style="font-size:10px;padding:1px 6px">${t("historyTrusted")}</span>`
         : `<span class="badge badge-red"   style="font-size:10px;padding:1px 6px">${t("historyUntrusted")}</span>`;
@@ -267,7 +267,7 @@ async function cargarHistorial() {
           <div class="flex items-center gap-1.5 flex-wrap">${evLabel} ${chip}</div>
           <div class="flex flex-wrap gap-x-2 text-slate-400 dark:text-slate-500 mt-0.5" style="font-size:10px">
             <span class="font-mono">${esc(r.mac)}</span><span>${esc(r.ip)}</span>
-            ${r.nombre     ? `<span class="text-slate-600 dark:text-slate-300 font-medium">${esc(r.nombre)}</span>` : ""}
+            ${r.nombre     ? `<span class="text-solid font-medium">${esc(r.nombre)}</span>` : ""}
             ${r.fabricante ? `<span>${esc(r.fabricante)}</span>` : ""}
           </div>
         </div>
@@ -279,7 +279,7 @@ async function cargarHistorial() {
     }).join("");
     if (info) info.textContent = `${data.length} ${t("historyCount")}`;
   } catch {
-    cont.innerHTML = `<div class="text-center text-rose-400 py-6 text-xs">${t("historyError")}</div>`;
+    cont.innerHTML = `<div class="text-center text-[#e0405a] py-6 text-xs">${t("historyError")}</div>`;
   }
 }
 
@@ -321,7 +321,7 @@ window.editarNombreConfiable = mac => {
 
   const restoreSpan = nombre => {
     const p = document.createElement("p");
-    p.className = "nombre-confiable font-medium text-slate-700 dark:text-slate-200 text-xs truncate";
+    p.className = "nombre-confiable text-solid font-medium text-xs truncate";
     p.textContent = nombre;
     inp.replaceWith(p);
   };
@@ -422,7 +422,7 @@ async function guardarCredenciales() {
   const msg     = document.getElementById("cfg-cred-msg");
   if (!actual) {
     msg.textContent = t("cfgCurrentPass") + " requerida";
-    msg.className = "text-xs text-rose-500";
+    msg.className = "text-xs text-[#e0405a]";
     msg.classList.remove("hidden"); return;
   }
   try {
@@ -436,12 +436,12 @@ async function guardarCredenciales() {
     // como venía haciéndose para los demás casos de este endpoint.
     const texto = data.message_key ? t(data.message_key) : (data.message || t("cfgCredError"));
     msg.textContent = data.success ? `✓ ${t("cfgCredSaved")}` : `✕ ${texto}`;
-    msg.className = `text-xs ${data.success ? "text-emerald-500" : "text-rose-500"}`;
+    msg.className = `text-xs ${data.success ? "text-[#0f9d63]" : "text-[#e0405a]"}`;
     msg.classList.remove("hidden");
     if (data.success) setTimeout(() => msg.classList.add("hidden"), 3000);
   } catch {
     msg.textContent = `✕ ${t("cfgCredError")}`;
-    msg.className = "text-xs text-rose-500";
+    msg.className = "text-xs text-[#e0405a]";
     msg.classList.remove("hidden");
   }
 }
@@ -461,8 +461,8 @@ window.marcarConfiable = async (mac, hacerConfiable, btn) => {
     const tdConf = tr.querySelector("td:nth-child(5)");
     if (tdConf) {
       tdConf.innerHTML = hacerConfiable
-        ? `<span class="badge badge-green"><span class="relative flex w-1.5 h-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-emerald-500"></span></span><span data-i18n="trusted">${t("trusted")}</span></span>`
-        : `<span class="badge badge-red"><span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span><span data-i18n="untrusted">${t("untrusted")}</span></span>`;
+        ? `<span class="badge badge-green"><span class="relative flex w-1.5 h-1.5"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d63] opacity-75"></span><span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-[#0f9d63]"></span></span><span data-i18n="trusted">${t("trusted")}</span></span>`
+        : `<span class="badge badge-red"><span class="w-1.5 h-1.5 rounded-full bg-[#e0405a]"></span><span data-i18n="untrusted">${t("untrusted")}</span></span>`;
     }
     btn.outerHTML = hacerConfiable
       ? `<button onclick="marcarConfiable('${esc(mac)}',false,this)" class="btn-action btn-untrust"><i data-lucide="shield-off" class="w-3 h-3"></i> <span data-i18n="untrust_btn">${t("untrust_btn")}</span></button>`
@@ -477,19 +477,19 @@ window.marcarConfiable = async (mac, hacerConfiable, btn) => {
       li.className = "flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800/40 bg-white dark:bg-dark3/30 hover:border-slate-200 dark:hover:border-slate-700/60 transition group";
       li.innerHTML = `
         <span class="relative flex w-1.5 h-1.5 flex-shrink-0">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-emerald-500"></span>
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d63] opacity-75"></span>
+          <span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-[#0f9d63]"></span>
         </span>
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-1.5">
-            <p class="nombre-confiable font-medium text-slate-700 dark:text-slate-200 text-xs truncate">${t("noName")}</p>
+            <p class="nombre-confiable text-solid font-medium text-xs truncate">${t("noName")}</p>
             <button onclick="editarNombreConfiable('${esc(mac)}')" class="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition flex-shrink-0">
               <i data-lucide="pencil" class="w-3 h-3"></i>
             </button>
           </div>
           <p class="font-mono text-slate-400" style="font-size:10px">${esc(mac)}</p>
         </div>
-        <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-rose-500 transition p-1 flex-shrink-0">
+        <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-[#e0405a] transition p-1 flex-shrink-0">
           <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
         </button>`;
       lista.appendChild(li);
