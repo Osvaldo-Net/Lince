@@ -1,34 +1,77 @@
-{# 🌊 _topbar.html 🌊 Sticky top bar with search / filter controls #}
-<div class="sticky top-0 z-30 border-b border-slate-200/80 dark:border-slate-800/60 bg-slate-50/90 dark:bg-dark1/90 backdrop-blur-sm px-4 py-3">
-  <!-- Mobile: title row -->
-  <div class="flex items-center justify-between mb-2 sm:hidden">
-    <div class="flex items-center gap-2 pl-8">
-      <span class="font-semibold dark:text-white text-sm" style="color:#0a0e14">LANGuard</span>
+{# 🌊 _device_table.html 🌊 Main device list table #}
+<div class="card overflow-hidden stagger-1 fade-in">
+  <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+    <div>
+      <h2 class="font-semibold text-solid text-sm" data-i18n="devicesTitle">Dispositivos en red</h2>
+      <p class="text-slate-500 dark:text-slate-500 mt-0.5 hidden sm:block" style="font-size:11px" data-i18n="devicesDesc">
+        Dispositivos detectados en el último escaneo. Marca como confiables los que reconoces.
+      </p>
     </div>
-    <button onclick="toggleDarkMode()" class="p-1.5 rounded-lg text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-dark3 transition">
-      <i id="icono-luna-m" data-lucide="moon" class="w-4 h-4"></i>
-      <i id="icono-sol-m"  data-lucide="sun"  class="w-4 h-4 hidden"></i>
-    </button>
   </div>
-  <!-- Filters -->
-  <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-    <input id="filtro-nombre" type="text" data-i18n="filterName"
-      placeholder="Filtrar por nombre" class="input-base" />
-    <input id="filtro-mac" type="text" data-i18n="filterMac"
-      placeholder="Filtrar por MAC" class="input-base" />
-    <div class="relative">
-      <button id="trustBtn" class="input-base flex items-center justify-between cursor-pointer text-left">
-        <div class="flex items-center gap-2">
-          <span id="trust-dot" class="inline-block w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span>
-          <span id="trustLabel" data-i18n="filterAll">Todos</span>
-        </div>
-        <i data-lucide="chevrons-up-down" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0"></i>
-      </button>
-      <div id="trustMenu" class="dropdown-menu hidden">
-        <button onclick="setTrustFilter('all')"       class="dropdown-item"><span class="w-2 h-2 rounded-full bg-slate-400 flex-shrink-0"></span><span data-i18n="filterAll">Todos</span></button>
-        <button onclick="setTrustFilter('trusted')"   class="dropdown-item"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#0f9d63"></span><span data-i18n="filterTrusted">Confiables</span></button>
-        <button onclick="setTrustFilter('untrusted')" class="dropdown-item"><span class="w-2 h-2 rounded-full flex-shrink-0" style="background:#e0405a"></span><span data-i18n="filterUntrusted">No confiables</span></button>
-      </div>
-    </div>
+
+  <div class="overflow-x-auto no-scroll">
+    <table class="min-w-[640px] w-full table-auto">
+      <thead>
+        <tr class="border-b border-slate-100 dark:border-slate-800/60">
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="ip">IP</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="mac">MAC</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="name">Nombre</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="manufacturer">Fabricante</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="trust">Confianza</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="action">Acción</span></th>
+          <th class="px-4 py-2.5 text-left font-semibold text-slate-500 dark:text-slate-400" style="font-size:11px"><span data-i18n="ports">Puertos</span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 dark:divide-slate-800/40" id="tabla-dispositivos">
+        {% for d in dispositivos %}
+        <tr class="dev-row hover:bg-slate-50/80 dark:hover:bg-dark3/40 dispositivo-row transition"
+            data-nombre="{{ (d.nombre or '') | lower }}"
+            data-mac="{{ d.mac | lower }}"
+            data-confianza="{{ 'confiable' if d.confiable else 'no-confiable' }}">
+          <td class="px-4 font-mono text-slate-500 dark:text-slate-400 text-xs">{{ d.ip }}</td>
+          <td class="px-4 font-mono text-slate-400 dark:text-slate-500 text-xs">{{ d.mac }}</td>
+          <td class="px-4">
+            <div class="flex items-center gap-1.5">
+              <span class="font-medium text-solid">{{ d.nombre or "?" }}</span>
+              <button onclick="editarNombre('{{ d.mac }}')" class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition">
+                <i data-lucide="pencil" class="w-3 h-3"></i>
+              </button>
+            </div>
+          </td>
+          <td class="px-4 text-slate-500 dark:text-slate-400 text-xs">{{ d.fabricante or "?" }}</td>
+          <td class="px-4">
+            {% if d.confiable %}
+            <span class="badge badge-green">
+              <span data-i18n="trusted">Confiable</span>
+            </span>
+            {% else %}
+            <span class="badge badge-red">
+              <span data-i18n="untrusted">No confiable</span>
+            </span>
+            {% endif %}
+          </td>
+          <td class="px-4">
+            {% if not d.confiable %}
+            <button onclick="marcarConfiable('{{ d.mac }}', true, this)" class="btn-action btn-trust">
+              <i data-lucide="shield-check" class="w-3 h-3"></i>
+              <span data-i18n="trust_btn">Confiar</span>
+            </button>
+            {% else %}
+            <button onclick="marcarConfiable('{{ d.mac }}', false, this)" class="btn-action btn-untrust">
+              <i data-lucide="shield-off" class="w-3 h-3"></i>
+              <span data-i18n="untrust_btn">Quitar</span>
+            </button>
+            {% endif %}
+          </td>
+          <td class="px-4">
+            <button onclick="verPuertos('{{ d.ip }}')" class="btn-action btn-neutral">
+              <i data-lucide="scan-search" class="w-3 h-3"></i>
+              <span data-i18n="view_ports">Puertos</span>
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
 </div>
