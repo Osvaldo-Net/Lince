@@ -6,7 +6,12 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Lince</title>
   <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.svg') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Inter: misma familia usada en el resto de Lince -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -14,7 +19,7 @@
       theme: {
         extend: {
           colors: {
-            dark1: "#0c0c0f", dark2: "#111118", dark3: "#1a1a24",
+            dark1: "#0b0d12", dark2: "#11141b", dark3: "#1a1e28",
             brand: {
               50:  "#ECFEFF",
               100: "#CFFAFE",
@@ -24,7 +29,10 @@
               700: "#0E7490"
             }
           },
-          fontFamily: { sans: ["Geist","sans-serif"], mono: ["Geist Mono","monospace"] }
+          fontFamily: {
+            sans: ["Inter", "system-ui", "sans-serif"],
+            display: ["Inter Tight", "Inter", "system-ui", "sans-serif"]
+          }
         }
       }
     };
@@ -61,21 +69,26 @@
       background:#e2e8f0;
       border-radius:30% 60% 40% 50%;
     }
-    .dark .shape-tl { background:#1a1a24; }
-    .dark .shape-br { background:#1a1a24; }
-    .dark .shape-tr { background:#111118; }
-    .dark .shape-bl { background:#111118; }
+    .dark .shape-tl { background:#161a24; }
+    .dark .shape-br { background:#161a24; }
+    .dark .shape-tr { background:#11141b; }
+    .dark .shape-bl { background:#11141b; }
+
+    /* ── Negro real en vez de gris lavado ── */
+    .text-solid      { color:#0a0e14; }
+    .dark .text-solid { color:#f8fafc; }
 
     /* ── Inputs ── */
     .field {
-      width:100%; padding:9px 10px 9px 34px; border-radius:8px; font-size:13px;
-      border:1px solid #e2e8f0; background:#fff; outline:none; box-sizing:border-box;
-      transition:border-color .15s, box-shadow .15s; font-family:"Geist",sans-serif; color:#0f172a;
+      width:100%; padding:10px 12px 10px 34px; border-radius:9px; font-size:13.5px;
+      border:1px solid #dde3ea; background:#fff; outline:none; box-sizing:border-box;
+      transition:border-color .15s, box-shadow .15s; font-family:"Inter",sans-serif;
+      color:#0a0e14; font-weight:500;
     }
-    .field:focus { border-color:#06B6D4; box-shadow:0 0 0 3px rgba(6,182,212,.10); }
-    .field::placeholder { color:#94a3b8; }
-    .dark .field { background:#1a1a24; border-color:#2a2d40; color:#e2e8f0; }
-    .dark .field:focus { border-color:#22D3EE; box-shadow:0 0 0 3px rgba(34,211,238,.15); }
+    .field:focus { border-color:#0891B2; box-shadow:0 0 0 3px rgba(8,145,178,.12); }
+    .field::placeholder { color:#94a3b8; font-weight:400; }
+    .dark .field { background:#161a24; border-color:#262b38; color:#f1f5f9; }
+    .dark .field:focus { border-color:#22D3EE; box-shadow:0 0 0 3px rgba(34,211,238,.18); }
 
     .field-icon {
       position:absolute; left:10px; top:50%; transform:translateY(-50%);
@@ -83,18 +96,28 @@
     }
 
     .btn-main {
-      width:100%; padding:9px 16px; border-radius:8px; font-size:13px; font-weight:500;
+      width:100%; padding:10px 16px; border-radius:9px; font-size:13.5px; font-weight:600;
       background:#0891B2; color:#fff; border:none; cursor:pointer;
-      font-family:"Geist",sans-serif; transition:opacity .15s, transform .1s;
+      font-family:"Inter",sans-serif; letter-spacing:-.01em;
+      transition:background-color .15s, transform .1s;
+      box-shadow:0 1px 2px rgba(8,145,178,.25);
     }
-    .btn-main:hover  { opacity:.92; }
+    .btn-main:hover  { background:#0E7490; }
     .btn-main:active { transform:scale(.99); }
 
     .req-item { transition:color .2s; display:flex; align-items:center; gap:6px; font-size:11px; }
+
+    /* ── Tarjeta con sombra suave, igual que el login ── */
+    .login-card {
+      box-shadow:0 1px 2px rgba(15,23,42,.04), 0 8px 24px -8px rgba(15,23,42,.08);
+    }
+    .dark .login-card {
+      box-shadow:0 1px 2px rgba(0,0,0,.2), 0 8px 24px -8px rgba(0,0,0,.4);
+    }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-dark1 font-sans antialiased px-4 relative overflow-hidden" style="font-size:13px">
+<body class="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-dark1 font-sans antialiased px-4 relative overflow-hidden" style="font-size:13.5px">
 
   <!-- Background shapes -->
   <div class="bg-shape shape-tl"></div>
@@ -107,26 +130,26 @@
 
     <!-- Wordmark -->
     <div class="mb-8">
-      <h1 class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:22px;letter-spacing:-.02em">Lince</h1>
-      <p class="text-slate-400 dark:text-slate-500 mt-1.5" style="font-size:12px">Actualiza tus credenciales de acceso</p>
+      <h1 class="font-display font-bold text-solid leading-none" style="font-size:23px;letter-spacing:-.03em">Lince</h1>
+      <p class="text-slate-500 dark:text-slate-400 mt-1.5 font-medium" style="font-size:12.5px">Actualiza tus credenciales de acceso</p>
     </div>
 
     {% if error %}
     <div class="mb-4 flex items-start gap-2 px-3 py-2.5 rounded-lg text-rose-700 dark:text-rose-400 fade-up"
-      style="font-size:12px;background:#fff1f2;border:1px solid #fecdd3">
+      style="font-size:12.5px;background:#fff1f2;border:1px solid #fecdd3">
       <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-px flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span>{{ error }}</span>
     </div>
     {% endif %}
 
     <!-- Card -->
-    <div class="bg-white dark:bg-dark2 rounded-xl border border-slate-200 dark:border-slate-800/60 p-6">
+    <div class="login-card bg-white dark:bg-dark2 rounded-2xl border border-slate-200/80 dark:border-slate-800/60 p-6">
       <form method="POST" action="{{ url_for('cambiar_credenciales') }}" class="space-y-4">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
         <!-- Correo -->
         <div>
-          <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px">Nuevo correo</label>
+          <label class="block text-solid mb-1.5 font-semibold" style="font-size:12.5px">Nuevo correo</label>
           <div class="relative">
             <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
             <input id="nuevo_usuario" type="email" name="nuevo_usuario"
@@ -137,7 +160,7 @@
 
         <!-- Nueva contraseña -->
         <div>
-          <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px">Nueva contraseña</label>
+          <label class="block text-solid mb-1.5 font-semibold" style="font-size:12.5px">Nueva contraseña</label>
           <div class="relative">
             <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             <input id="nueva" type="password" name="nueva_contrasena" placeholder="••••••••"
@@ -176,7 +199,7 @@
 
         <!-- Confirmar -->
         <div id="confirm-wrap" class="hidden">
-          <label class="block text-slate-500 dark:text-slate-400 mb-1.5 font-medium" style="font-size:12px">Confirmar contraseña</label>
+          <label class="block text-solid mb-1.5 font-semibold" style="font-size:12.5px">Confirmar contraseña</label>
           <div class="relative">
             <svg class="field-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             <input id="confirmar" type="password" name="confirmar_contrasena" placeholder="••••••••"
@@ -197,13 +220,13 @@
     <!-- Footer -->
     <div class="flex items-center justify-between mt-5 px-0.5">
       <button onclick="toggleTheme()"
-        class="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition" style="font-size:11px">
+        class="flex items-center gap-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition font-medium" style="font-size:11.5px">
         <svg id="th-moon" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         <svg id="th-sun"  xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
         <span id="th-label">Modo oscuro</span>
       </button>
       <a href="https://github.com/Osvaldo-Net/Lince" target="_blank" rel="noopener noreferrer"
-        class="flex items-center gap-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition" style="font-size:11px">
+        class="flex items-center gap-1.5 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition font-medium" style="font-size:11.5px">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
         GitHub
       </a>
@@ -237,12 +260,12 @@
       svg.setAttribute("stroke", "currentColor");
       svg.setAttribute("stroke-width", "2.5");
       if (type === "ok") {
-        svg.style.color = "#059669";
+        svg.style.color = "#0f9d63";
         const p = document.createElementNS(ns, "polyline");
         p.setAttribute("points", "20 6 9 17 4 12");
         svg.appendChild(p);
       } else if (type === "fail") {
-        svg.style.color = "#fb7185";
+        svg.style.color = "#e0405a";
         const l1 = document.createElementNS(ns, "line");
         l1.setAttribute("x1","18"); l1.setAttribute("y1","6");
         l1.setAttribute("x2","6");  l1.setAttribute("y2","18");
@@ -285,8 +308,8 @@
         const el = document.querySelector(`[data-req="${id}"]`);
         if (!el) return;
         if (v.length === 0) { setReqIcon(el, "idle"); el.style.color = ''; }
-        else if (fn(v))     { setReqIcon(el, "ok");   el.style.color = '#059669'; }
-        else                { setReqIcon(el, "fail");  el.style.color = '#e11d48'; }
+        else if (fn(v))     { setReqIcon(el, "ok");   el.style.color = '#0f9d63'; }
+        else                { setReqIcon(el, "fail");  el.style.color = '#e0405a'; }
       });
       if (confInput.value.length > 0) checkMatch();
     });
@@ -295,11 +318,11 @@
 
     function checkMatch() {
       const ok = confInput.value === passInput.value && confInput.value.length > 0;
-      confInput.style.borderColor = ok ? '#6ee7b7' : (confInput.value.length > 0 ? '#fda4af' : '');
+      confInput.style.borderColor = ok ? '#7dd3a8' : (confInput.value.length > 0 ? '#f0a9b3' : '');
       if (confInput.value.length === 0) { matchMsg.classList.add('hidden'); return; }
       matchMsg.classList.remove('hidden');
       matchMsg.textContent = ok ? '✓ Las contraseñas coinciden' : '✗ Las contraseñas no coinciden';
-      matchMsg.style.color = ok ? '#059669' : '#e11d48';
+      matchMsg.style.color = ok ? '#0f9d63' : '#e0405a';
     }
 
     function toggleTheme() {
