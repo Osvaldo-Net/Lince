@@ -24,6 +24,29 @@ async function postJSON(url, body) {
 }
 
 // ══════════════════════════════════════════
+// PLANTILLA: fila de MAC confiable (compartida con panel.js)
+// Debe coincidir con el <li> de partials/_panel_confiables.html
+// ══════════════════════════════════════════
+const CLASE_LI_CONFIABLE = "flex items-center gap-3 px-3.5 py-3 rounded-[10px] border border-slate-200/80 dark:border-slate-800/60 hover:bg-slate-50 dark:hover:bg-dark3/40 transition group";
+
+function htmlLiConfiable(mac) {
+  return `
+    <span class="w-2 h-2 rounded-full bg-brand-400 flex-shrink-0"></span>
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center gap-1.5">
+        <p class="nombre-confiable font-medium text-solid truncate" style="font-size:14px">${t("noName")}</p>
+        <button onclick="editarNombreConfiable('${esc(mac)}')" aria-label="Editar nombre" class="opacity-0 group-hover:opacity-100 focus:opacity-100 text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition flex-shrink-0">
+          <i data-lucide="pencil" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+      <p class="tabular-nums text-slate-400 mt-0.5" style="font-size:12px">${esc(mac)}</p>
+    </div>
+    <button onclick="eliminarMAC('${esc(mac)}')" aria-label="Eliminar" class="text-slate-300 hover:text-rose-500 transition p-1 flex-shrink-0">
+      <i data-lucide="trash-2" class="w-4 h-4"></i>
+    </button>`;
+}
+
+// ══════════════════════════════════════════
 // FILTRO CONFIANZA
 // ══════════════════════════════════════════
 let filtroConfianza    = "";
@@ -46,13 +69,13 @@ function actualizarLabelFiltro() {
 }
 
 // ══════════════════════════════════════════
-// NOTIFICACIONES
+// NOTIFICACIONES (tonos apagados)
 // ══════════════════════════════════════════
 const COLORES_NOTI = {
-  info:    "bg-slate-100 text-slate-800 border border-slate-200 dark:bg-dark3 dark:text-slate-200 dark:border-slate-700",
-  success: "bg-[rgba(15,157,99,0.08)] text-[#0f9d63] border border-[rgba(15,157,99,0.25)] dark:bg-[rgba(15,157,99,0.14)] dark:text-[#4ade80] dark:border-[rgba(15,157,99,0.3)]",
-  error:   "bg-[rgba(224,64,90,0.08)] text-[#e0405a] border border-[rgba(224,64,90,0.25)] dark:bg-[rgba(224,64,90,0.14)] dark:text-[#fda4af] dark:border-[rgba(224,64,90,0.3)]",
-  warning: "bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-900/20 dark:text-amber-300 dark:border-amber-800/40"
+  info:    "bg-white text-slate-700 border border-slate-200 dark:bg-dark3 dark:text-slate-200 dark:border-slate-700",
+  success: "bg-brand-50 text-brand-700 border border-brand-100 dark:bg-brand-500/10 dark:text-brand-400 dark:border-brand-500/20",
+  error:   "bg-[#fdf4f5] text-[#9f3a4a] border border-[#f3d9dd] dark:bg-rose-500/10 dark:text-rose-300 dark:border-rose-500/20",
+  warning: "bg-[#fcf9f2] text-[#8a6a1f] border border-[#efe3c6] dark:bg-amber-500/10 dark:text-amber-300 dark:border-amber-500/20"
 };
 let _notiTimer = null;
 
@@ -60,8 +83,8 @@ function mostrarNotificacion(html, tipo = "info") {
   const noti = document.getElementById("notificacion");
   if (!noti) return;
   noti.innerHTML = html;
-  noti.className = `fixed bottom-5 right-5 px-4 py-3 rounded-xl shadow-xl z-[70]
-    text-xs font-medium max-w-xs w-full transition-all duration-300 ${COLORES_NOTI[tipo]}`;
+  noti.className = `fixed bottom-5 right-5 px-4 py-3 rounded-xl shadow-lg z-[70]
+    text-[13px] font-medium max-w-xs w-full transition-all duration-300 ${COLORES_NOTI[tipo]}`;
   noti.classList.remove("hidden");
   if (typeof lucide !== "undefined") lucide.createIcons();
   clearTimeout(_notiTimer);
@@ -77,17 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const root = document.documentElement;
 
   // ── Idioma: sincronizar bandera/label con el idioma guardado ─────────────
-  // SUPPORTED_LANGS ya existe de forma síncrona (i18n.js se carga antes que
-  // app.js), así que esto no necesita esperar a que baje el JSON de
-  // traducciones — solo corrige el ícono/texto que estaban hardcodeados
-  // en español en el HTML.
   (() => {
     const lang = localStorage.getItem("lang") || "es";
     const info = SUPPORTED_LANGS[lang];
     if (!info) return;
     const flag  = $("langFlag");
     const label = $("langLabel");
-    if (flag)  flag.className    = `fi fi-${info.country} w-3.5 h-2.5 rounded-sm flex-shrink-0`;
+    if (flag)  flag.className    = `fi fi-${info.country} rounded-sm flex-shrink-0`;
     if (label) label.textContent = info.label;
   })();
 
@@ -129,24 +148,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (lista) {
           const li = document.createElement("li");
           li.dataset.mac = mac.toLowerCase();
-          li.className = "flex items-center gap-3 px-3 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800/40 bg-white dark:bg-dark3/30 hover:border-slate-200 dark:hover:border-slate-700/60 transition group";
-          li.innerHTML = `
-            <span class="relative flex w-1.5 h-1.5 flex-shrink-0">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0f9d63] opacity-75"></span>
-              <span class="relative inline-flex rounded-full w-1.5 h-1.5 bg-[#0f9d63]"></span>
-            </span>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-1.5">
-                <p class="nombre-confiable text-solid font-medium text-xs truncate">${t("noName")}</p>
-                <button onclick="editarNombreConfiable('${esc(mac)}')" class="opacity-0 group-hover:opacity-100 text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition flex-shrink-0">
-                  <i data-lucide="pencil" class="w-3 h-3"></i>
-                </button>
-              </div>
-              <p class="font-mono text-slate-400" style="font-size:10px">${esc(mac)}</p>
-            </div>
-            <button onclick="eliminarMAC('${esc(mac)}')" class="text-slate-300 hover:text-[#e0405a] transition p-1 flex-shrink-0">
-              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-            </button>`;
+          li.className = CLASE_LI_CONFIABLE;
+          li.innerHTML = htmlLiConfiable(mac);
           lista.appendChild(li);
           if (typeof lucide !== "undefined") lucide.createIcons();
         }
@@ -173,7 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const tdConf = tr.querySelector("td:nth-child(5)");
           if (tdConf) tdConf.innerHTML = `<span class="badge badge-red"><span data-i18n="untrusted">${t("untrusted")}</span></span>`;
           const tdAct = tr.querySelector("td:nth-child(6)");
-          if (tdAct) tdAct.innerHTML = `<button onclick="marcarConfiable('${esc(mac)}',true,this)" class="btn-action btn-trust"><i data-lucide="shield-check" class="w-3 h-3"></i> <span data-i18n="trust_btn">${t("trust_btn")}</span></button>`;
+          if (tdAct) tdAct.innerHTML = `<button onclick="marcarConfiable('${esc(mac)}',true,this)" class="btn-action btn-trust"><i data-lucide="shield-check"></i> <span data-i18n="trust_btn">${t("trust_btn")}</span></button>`;
           if (typeof lucide !== "undefined") lucide.createIcons();
         }
       }
@@ -197,6 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ── Editar nombre en tabla principal ──────────────────────────────────────
+  const htmlLapiz = `<i data-lucide="pencil" class="w-3.5 h-3.5"></i>`;
+  const CLASE_LAPIZ = "text-slate-300 hover:text-slate-600 dark:text-slate-600 dark:hover:text-slate-300 transition";
+
   window.editarNombre = mac => {
     const fila  = document.querySelector(`tr[data-mac="${esc(mac.toLowerCase())}"]`);
     const celda = fila?.querySelector("td:nth-child(3)");
@@ -207,20 +213,20 @@ document.addEventListener("DOMContentLoaded", () => {
     _editandoNombre = true;
 
     const wrapper = document.createElement("div");
-    wrapper.className = "flex items-center gap-1.5";
+    wrapper.className = "flex items-center gap-2";
 
     const inp = document.createElement("input");
     inp.id = `inp-${sid}`;
-    inp.className = "input-base w-28";
-    inp.style.cssText = "padding:4px 8px;font-size:12px";
+    inp.className = "pn-input";
+    inp.style.cssText = "width:150px;height:32px;font-size:13px";
     inp.value = (actual === "?" ? "" : actual);
     inp.placeholder = t("noName");
     inp.maxLength = 64;
 
     const btn = document.createElement("button");
     btn.id = `btn-${sid}`;
-    btn.className = "px-2 py-1 rounded-lg text-white text-xs font-medium";
-    btn.style.cssText = "background:#2563EB;font-size:11px";
+    btn.className = "pn-btn";
+    btn.style.cssText = "height:32px;padding:0 12px;font-size:13px";
     btn.textContent = t("guardar");
 
     wrapper.appendChild(inp);
@@ -229,30 +235,35 @@ document.addEventListener("DOMContentLoaded", () => {
     inp.focus();
     inp.select();
 
+    const volverANombre = texto => {
+      const w = document.createElement("div");
+      w.className = "flex items-center gap-2";
+      const span = document.createElement("span");
+      span.className = "text-solid font-medium";
+      span.textContent = texto;
+      const editBtn = document.createElement("button");
+      editBtn.onclick = () => editarNombre(mac);
+      editBtn.className = CLASE_LAPIZ;
+      editBtn.setAttribute("aria-label", "Editar nombre");
+      editBtn.innerHTML = htmlLapiz;
+      w.appendChild(span);
+      w.appendChild(editBtn);
+      celda.replaceChildren(w);
+      if (typeof lucide !== "undefined") lucide.createIcons();
+    };
+
     let _saved = false;
     const guardar = async () => {
       if (_saved) return;
       _saved = true;
       const nombre = inp.value.trim().slice(0, 64) || t("noName");
 
-      const newWrapper = document.createElement("div");
-      newWrapper.className = "flex items-center gap-1.5";
-      const span = document.createElement("span");
-      span.className = "text-solid font-medium";
-      span.textContent = nombre;
-      const editBtn = document.createElement("button");
-      editBtn.onclick = () => editarNombre(mac);
-      editBtn.className = "text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition";
-      editBtn.innerHTML = `<i data-lucide="pencil" class="w-3 h-3"></i>`;
-      newWrapper.appendChild(span);
-      newWrapper.appendChild(editBtn);
-      celda.replaceChildren(newWrapper);
+      volverANombre(nombre);
 
       if (fila) fila.dataset.nombre = nombre.toLowerCase();
       const li = $("lista-macs")?.querySelector(`li[data-mac="${esc(mac.toLowerCase())}"]`);
       const sp = li?.querySelector(".nombre-confiable");
       if (sp) sp.textContent = nombre;
-      if (typeof lucide !== "undefined") lucide.createIcons();
 
       _editandoNombre = false;
       _aplicarTablaPendienteSiHay();
@@ -274,19 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === "Escape") {
         _saved = true;
         _editandoNombre = false;
-        const rw = document.createElement("div");
-        rw.className = "flex items-center gap-1.5";
-        const rs = document.createElement("span");
-        rs.className = "text-solid font-medium";
-        rs.textContent = actual || "?";
-        const rb = document.createElement("button");
-        rb.onclick = () => editarNombre(mac);
-        rb.className = "text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition";
-        rb.innerHTML = `<i data-lucide="pencil" class="w-3 h-3"></i>`;
-        rw.appendChild(rs);
-        rw.appendChild(rb);
-        celda.replaceChildren(rw);
-        if (typeof lucide !== "undefined") lucide.createIcons();
+        volverANombre(actual || "?");
         _aplicarTablaPendienteSiHay();
       }
     });
@@ -324,10 +323,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // ── Tabla ─────────────────────────────────────────────────────────────────
+  // ── Tabla (debe coincidir con partials/_device_table.html) ───────────────
   function crearFila(d) {
     const tr = document.createElement("tr");
-    tr.className = "dev-row hover:bg-slate-50/80 dark:hover:bg-dark3/40 dispositivo-row transition";
+    tr.className = "dev-row dispositivo-row transition-colors";
     tr.dataset.nombre    = (d.nombre || "").toLowerCase();
     tr.dataset.mac       = d.mac.toLowerCase();
     tr.dataset.confianza = d.confiable ? "confiable" : "no-confiable";
@@ -337,26 +336,26 @@ document.addEventListener("DOMContentLoaded", () => {
       : `<span class="badge badge-red"><span data-i18n="untrusted">${t("untrusted")}</span></span>`;
 
     const btnAccion = d.confiable
-      ? `<button onclick="marcarConfiable('${esc(d.mac)}',false,this)" class="btn-action btn-untrust"><i data-lucide="shield-off" class="w-3 h-3"></i> <span data-i18n="untrust_btn">${t("untrust_btn")}</span></button>`
-      : `<button onclick="marcarConfiable('${esc(d.mac)}',true,this)"  class="btn-action btn-trust"><i data-lucide="shield-check" class="w-3 h-3"></i> <span data-i18n="trust_btn">${t("trust_btn")}</span></button>`;
+      ? `<button onclick="marcarConfiable('${esc(d.mac)}',false,this)" class="btn-action btn-untrust"><i data-lucide="shield-off"></i> <span data-i18n="untrust_btn">${t("untrust_btn")}</span></button>`
+      : `<button onclick="marcarConfiable('${esc(d.mac)}',true,this)"  class="btn-action btn-trust"><i data-lucide="shield-check"></i> <span data-i18n="trust_btn">${t("trust_btn")}</span></button>`;
 
     tr.innerHTML = `
-      <td class="px-4 font-mono text-slate-500 dark:text-slate-400 text-xs">${esc(d.ip)}</td>
-      <td class="px-4 font-mono text-slate-400 dark:text-slate-500 text-xs">${esc(d.mac)}</td>
-      <td class="px-4">
-        <div class="flex items-center gap-1.5">
-          <span class="text-solid font-medium">${esc(d.nombre || "?")}</span>
-          <button onclick="editarNombre('${esc(d.mac)}')" class="text-slate-300 hover:text-slate-600 dark:hover:text-slate-300 transition">
-            <i data-lucide="pencil" class="w-3 h-3"></i>
+      <td class="px-5 tabular-nums font-medium text-solid">${esc(d.ip)}</td>
+      <td class="px-5 tabular-nums text-slate-400 dark:text-slate-500" style="font-size:13px">${esc(d.mac)}</td>
+      <td class="px-5">
+        <div class="flex items-center gap-2">
+          <span class="font-medium text-solid">${esc(d.nombre || "?")}</span>
+          <button onclick="editarNombre('${esc(d.mac)}')" aria-label="Editar nombre" class="${CLASE_LAPIZ}">
+            ${htmlLapiz}
           </button>
         </div>
       </td>
-      <td class="px-4 text-slate-500 dark:text-slate-400 text-xs">${esc(d.fabricante || "?")}</td>
-      <td class="px-4">${badgeConf}</td>
-      <td class="px-4">${btnAccion}</td>
-      <td class="px-4">
+      <td class="px-5 text-slate-500 dark:text-slate-400" style="font-size:13px">${esc(d.fabricante || "?")}</td>
+      <td class="px-5">${badgeConf}</td>
+      <td class="px-5">${btnAccion}</td>
+      <td class="px-5">
         <button onclick="verPuertos('${esc(d.ip)}')" class="btn-action btn-neutral">
-          <i data-lucide="scan-search" class="w-3 h-3"></i> <span data-i18n="view_ports">${t("view_ports")}</span>
+          <i data-lucide="scan-search"></i> <span data-i18n="view_ports">${t("view_ports")}</span>
         </button>
       </td>`;
     return tr;
@@ -383,12 +382,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // ── Puertos ───────────────────────────────────────────────────────────────
+  // ── Puertos (filas .puerto-row definidas en _modal_puertos.html) ─────────
   window.verPuertos = ip => {
     const modal = $("modal-puertos");
     const cont  = $("contenido-puertos");
-    cont.innerHTML = `<div class="flex flex-col items-center gap-2 py-4 text-xs text-slate-400">
-      <i data-lucide="scan-search" class="animate-pulse w-6 h-6 text-slate-400"></i>
+    cont.innerHTML = `<div class="flex flex-col items-center gap-2 py-5 text-slate-400" style="font-size:13px">
+      <i data-lucide="scan-search" class="animate-pulse w-6 h-6"></i>
       ${t("scanning_ports").replace("{{ip}}", esc(ip))}
     </div>`;
     modal.classList.remove("hidden");
@@ -398,22 +397,20 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(data => {
         if (!data.success) throw new Error(data.message);
         cont.innerHTML = data.puertos.length === 0
-          ? `<div class="p-3 rounded-lg text-xs flex items-center gap-2 bg-[rgba(15,157,99,0.08)] dark:bg-[rgba(15,157,99,0.14)] text-[#0f9d63] dark:text-[#4ade80] border border-[rgba(15,157,99,0.25)] dark:border-[rgba(15,157,99,0.3)]">
-               <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0"></i> ${t("no_ports").replace("{{ip}}", esc(ip))}
+          ? `<div class="flex items-center gap-2.5 text-slate-600 dark:text-slate-300" style="font-size:14px">
+               <i data-lucide="check-circle" class="w-4 h-4 flex-shrink-0 text-brand-500"></i> ${t("no_ports").replace("{{ip}}", esc(ip))}
              </div>`
-          : `<p class="font-mono text-xs text-slate-400 mb-2">${esc(ip)}</p>
-             <div class="space-y-1">
-               ${data.puertos.map(p =>
-                 `<div class="flex items-center justify-between p-2 border border-slate-100 dark:border-slate-800 rounded-lg bg-white dark:bg-dark3 text-xs">
-                   <span class="font-mono text-solid">${esc(p.puerto)}</span>
-                   <span class="text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-xs">${esc(p.servicio)}</span>
-                  </div>`
-               ).join("")}
-             </div>`;
+          : `<p class="tabular-nums text-slate-400 mb-1" style="font-size:13px">${esc(ip)}</p>`
+            + data.puertos.map(p =>
+                `<div class="puerto-row">
+                   <span>${esc(p.puerto)}</span>
+                   <span class="svc">${esc(p.servicio)}</span>
+                 </div>`
+              ).join("");
         if (typeof lucide !== "undefined") lucide.createIcons();
       })
       .catch(() => {
-        cont.innerHTML = `<div class="p-3 rounded-lg text-xs flex items-center gap-2 bg-[rgba(224,64,90,0.08)] dark:bg-[rgba(224,64,90,0.14)] text-[#e0405a] border border-[rgba(224,64,90,0.25)] dark:border-[rgba(224,64,90,0.3)]">
+        cont.innerHTML = `<div class="flex items-center gap-2.5 text-rose-600 dark:text-rose-300" style="font-size:14px">
           <i data-lucide="x-circle" class="w-4 h-4 flex-shrink-0"></i> ${t("error_ports").replace("{{ip}}", esc(ip))}
         </div>`;
         if (typeof lucide !== "undefined") lucide.createIcons();
@@ -429,19 +426,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (info) {
       const flag  = $("langFlag");
       const label = $("langLabel");
-      if (flag)  flag.className    = `fi fi-${info.country} w-3.5 h-2.5 rounded-sm flex-shrink-0`;
+      if (flag)  flag.className    = `fi fi-${info.country} rounded-sm flex-shrink-0`;
       if (label) label.textContent = info.label;
     }
     $("langMenu")?.classList.add("hidden");
 
-    // NUEVO: persistir el idioma en el servidor para que las alertas
-    // de Telegram (enviadas desde el hilo en segundo plano, sin sesión
-    // ni request de por medio) usen el mismo idioma que la interfaz.
+    // Persistir el idioma en el servidor para que las alertas de Telegram
+    // (hilo en segundo plano, sin sesión) usen el mismo idioma que la UI.
     try {
       await postJSON("/api/idioma", { idioma: lang });
     } catch {
-      // Silencioso: si falla, las alertas simplemente se quedan en el
-      // último idioma guardado; no bloqueamos el cambio de idioma en la UI.
+      // Silencioso: no bloqueamos el cambio de idioma en la UI.
     }
   };
 
@@ -451,8 +446,8 @@ document.addEventListener("DOMContentLoaded", () => {
   window.setTrustFilter = valor => {
     const map = {
       all:       { valor: "",             key: "filterAll",       dot: "bg-slate-400" },
-      trusted:   { valor: "confiable",    key: "filterTrusted",   dot: "bg-[#0f9d63]" },
-      untrusted: { valor: "no-confiable", key: "filterUntrusted", dot: "bg-[#e0405a]" }
+      trusted:   { valor: "confiable",    key: "filterTrusted",   dot: "bg-brand-400" },
+      untrusted: { valor: "no-confiable", key: "filterUntrusted", dot: "bg-slate-300" }
     };
     const conf = map[valor];
     if (!conf) return;
