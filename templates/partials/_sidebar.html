@@ -1,138 +1,107 @@
-{# 🌊 _sidebar.html — Desktop sidebar navigation (estilo card) #}
+{# _sidebar.html — Sidebar desktop, plano y minimalista #}
+<style>
+  .nav-item {
+    width:100%; display:flex; align-items:center; gap:12px;
+    padding:9px 12px; border-radius:10px; font-size:14px; font-weight:500;
+    color:#475569; transition:background-color .15s, color .15s; text-align:left;
+  }
+  .nav-item:hover { background:rgba(15,23,42,.05); color:#0a0e14; }
+  .nav-item svg { width:18px; height:18px; flex-shrink:0; }
+  .dark .nav-item { color:#94a3b8; }
+  .dark .nav-item:hover { background:rgba(255,255,255,.05); color:#f1f5f9; }
+  .nav-item:focus-visible { outline:2px solid #3B82F6; outline-offset:-2px; }
+  .nav-danger:hover { background:rgba(225,29,72,.07); color:#be123c; }
+</style>
+
 <aside id="sidebar"
-  class="fixed top-0 left-0 h-full w-56 bg-white dark:bg-dark2 border-r border-slate-200/60 dark:border-slate-800/50 flex flex-col z-50 -translate-x-full sm:translate-x-0 transition-transform duration-300 overflow-hidden">
+  class="fixed top-0 left-0 h-full w-60 bg-[#fafbfc] dark:bg-dark2 border-r border-slate-200/60 dark:border-slate-800/50 flex flex-col z-50 -translate-x-full sm:translate-x-0 transition-transform duration-300 overflow-hidden">
 
   <!-- Logo -->
-  <div class="px-4 pt-4 pb-3.5 flex items-center gap-2.5">
+  <div class="px-5 pt-5 pb-4 flex items-center gap-3">
     <img src="/static/lince-no-fondo.png" alt="Lince" class="w-9 h-9 flex-shrink-0">
     <div>
-      <p class="font-semibold text-slate-900 dark:text-white leading-none" style="font-size:14px">Lince</p>
-      <p class="text-slate-300 dark:text-slate-600 leading-none mt-1" style="font-size:10px;letter-spacing:.05em">v4.0.4</p>
+      <p class="font-display font-bold text-slate-900 dark:text-white leading-none" style="font-size:17px;letter-spacing:-.02em">Lince</p>
+      <p class="text-slate-400 dark:text-slate-500 leading-none mt-1.5" style="font-size:11px">v4.0.5</p>
     </div>
   </div>
 
-  <div class="mx-4 h-px bg-slate-100 dark:bg-slate-800/60"></div>
-
   <!-- Nav -->
-  <nav class="flex-1 px-3 py-3 space-y-0.5 overflow-y-auto custom-scrollbar">
+  <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto custom-scrollbar">
 
-    <!-- Botón escanear: color sólido, sin degradado -->
     <button onclick="escanearAhora()"
-      class="w-full flex items-center gap-2.5 px-3 py-2.5 mb-4 rounded-xl
-             bg-cyan-600 hover:bg-cyan-700 active:bg-cyan-800
-             text-white font-medium shadow-sm shadow-cyan-600/20
-             transition-colors duration-150"
-      style="font-size:12.5px">
-      <i data-lucide="radar" class="w-3.5 h-3.5 flex-shrink-0"></i>
+      class="w-full flex items-center justify-center gap-2 px-3 py-2.5 mb-4 rounded-[10px] border border-brand-500 text-brand-500 dark:border-brand-400 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 font-semibold transition-colors"
+      style="font-size:14px">
+      <i data-lucide="radar" class="w-4 h-4 flex-shrink-0"></i>
       <span data-i18n="scan">Escanear</span>
     </button>
 
-    <p class="px-3 pb-1.5 text-slate-300 dark:text-slate-600 font-semibold uppercase tracking-wider" style="font-size:10px" data-i18n="sectionTools">Herramientas</p>
-
-    <button onclick="abrirPanelHistorial()"
-      class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl
-             text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-dark3/60
-             hover:text-slate-800 dark:hover:text-slate-100 transition"
-      style="font-size:12.5px">
-      <i data-lucide="activity" class="w-3.5 h-3.5 flex-shrink-0"></i>
+    <button onclick="abrirPanelHistorial()" class="nav-item">
+      <i data-lucide="activity"></i>
       <span data-i18n="history">Historial</span>
     </button>
 
-    <button onclick="abrirPanelConfiables()"
-      class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl
-             text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-dark3/60
-             hover:text-slate-800 dark:hover:text-slate-100 transition"
-      style="font-size:12.5px">
-      <i data-lucide="shield-check" class="w-3.5 h-3.5 flex-shrink-0"></i>
+    <button onclick="abrirPanelConfiables()" class="nav-item">
+      <i data-lucide="shield-check"></i>
       <span data-i18n="trustedDevices">Dispositivos Confiables</span>
     </button>
 
-    <button onclick="abrirConfig()"
-      class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl
-             text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-dark3/60
-             hover:text-slate-800 dark:hover:text-slate-100 transition"
-      style="font-size:12.5px">
-      <i data-lucide="settings" class="w-3.5 h-3.5 flex-shrink-0"></i>
+    <button onclick="abrirConfig()" class="nav-item">
+      <i data-lucide="settings"></i>
       <span data-i18n="settings">Configuración</span>
     </button>
 
-    <p class="px-3 pt-4 pb-1.5 text-slate-300 dark:text-slate-600 font-semibold uppercase tracking-wider" style="font-size:10px" data-i18n="sectionPrefs">Preferencias</p>
-
     <!-- Idioma -->
-    <div class="relative">
-      <button id="langBtn"
-        class="w-full flex items-center justify-between px-3 py-2 rounded-xl
-               text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-dark3/60
-               hover:text-slate-800 dark:hover:text-slate-100 transition"
-        style="font-size:12.5px">
-        <div class="flex items-center gap-2.5">
-          <span id="langFlag" class="fi fi-es w-3.5 h-2.5 rounded-sm flex-shrink-0"></span>
+    <div class="relative pt-3">
+      <button id="langBtn" class="nav-item justify-between">
+        <div class="flex items-center gap-3">
+          <span id="langFlag" class="fi fi-es rounded-sm flex-shrink-0" style="width:18px;height:13px"></span>
           <span id="langLabel">Español</span>
         </div>
-        <i data-lucide="chevron-down" class="w-3 h-3 text-slate-300 dark:text-slate-600 flex-shrink-0"></i>
+        <i data-lucide="chevron-down" style="width:16px;height:16px;opacity:.6"></i>
       </button>
       <div id="langMenu" class="dropdown-menu hidden">
-        <button onclick="setLang('es')" class="dropdown-item">
-          <span class="fi fi-es w-3.5 h-2.5 rounded-sm"></span> Español
-        </button>
-        <button onclick="setLang('en')" class="dropdown-item">
-          <span class="fi fi-us w-3.5 h-2.5 rounded-sm"></span> English
-        </button>
-        <button onclick="setLang('fr')" class="dropdown-item">
-          <span class="fi fi-fr w-3.5 h-2.5 rounded-sm"></span> Français
-        </button>
+        <button onclick="setLang('es')" class="dropdown-item"><span class="fi fi-es w-3.5 h-2.5 rounded-sm"></span> Español</button>
+        <button onclick="setLang('en')" class="dropdown-item"><span class="fi fi-us w-3.5 h-2.5 rounded-sm"></span> English</button>
+        <button onclick="setLang('fr')" class="dropdown-item"><span class="fi fi-fr w-3.5 h-2.5 rounded-sm"></span> Français</button>
       </div>
     </div>
 
-    <!-- Modo oscuro: fila con switch, como en la referencia -->
-    <div class="w-full flex items-center justify-between px-3 py-2 rounded-xl
-                text-slate-500 dark:text-slate-400" style="font-size:12.5px">
-      <div class="flex items-center gap-2.5">
-        <i id="icono-luna" data-lucide="moon" class="w-3.5 h-3.5 flex-shrink-0"></i>
-        <i id="icono-sol"  data-lucide="sun"  class="w-3.5 h-3.5 flex-shrink-0 hidden"></i>
+    <!-- Modo oscuro -->
+    <div class="nav-item justify-between" style="cursor:default">
+      <div class="flex items-center gap-3">
+        <i id="icono-luna" data-lucide="moon"></i>
+        <i id="icono-sol" data-lucide="sun" class="hidden"></i>
         <span data-i18n="changeTheme">Modo oscuro</span>
       </div>
-      <button onclick="toggleDarkMode()"
-        class="relative w-8 h-[18px] rounded-full bg-slate-200 dark:bg-cyan-600 transition-colors flex-shrink-0">
-        <span class="absolute top-[2px] left-[2px] w-[14px] h-[14px] rounded-full bg-white shadow
-                     transition-transform duration-200 dark:translate-x-[14px]"></span>
+      <button onclick="toggleDarkMode()" aria-label="Modo oscuro"
+        class="relative w-9 h-5 rounded-full bg-slate-300 dark:bg-brand-500 transition-colors flex-shrink-0">
+        <span class="absolute top-[3px] left-[3px] w-[14px] h-[14px] rounded-full bg-white transition-transform duration-200 dark:translate-x-4"></span>
       </button>
     </div>
 
   </nav>
 
   <!-- Bottom -->
-  <div class="mx-4 h-px bg-slate-100 dark:bg-slate-800/60"></div>
+  <div class="px-3 pb-4 space-y-1">
 
-  <div class="px-3 py-3 space-y-0.5">
-
-    <!-- Hora discreta -->
-    <div class="flex items-center justify-between px-3 py-1.5">
-      <p id="horaActual-time" class="font-mono text-slate-400 dark:text-slate-500 tabular-nums leading-none" style="font-size:11px"></p>
-      <p id="horaActual-date" class="text-slate-300 dark:text-slate-600 tabular-nums leading-none" style="font-size:10px"></p>
+    <div class="mb-1 px-3 py-1.5 flex items-center justify-between">
+      <p id="horaActual-time" class="text-slate-600 dark:text-slate-300 tabular-nums leading-none font-medium" style="font-size:13px"></p>
+      <p id="horaActual-date" class="text-slate-400 dark:text-slate-500 tabular-nums leading-none" style="font-size:11px"></p>
     </div>
 
-    <!-- Usuario -->
-    <button onclick="abrirPerfil()"
-      class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl hover:bg-slate-50 dark:hover:bg-dark3/60 transition text-left group">
-      <div class="w-7 h-7 rounded-full bg-slate-900 dark:bg-slate-100 flex items-center justify-center flex-shrink-0">
-        <i data-lucide="user" class="w-3.5 h-3.5 text-white dark:text-slate-900"></i>
+    <button onclick="abrirPerfil()" class="nav-item group">
+      <div class="w-7 h-7 rounded-full bg-slate-800 dark:bg-slate-200 flex items-center justify-center flex-shrink-0">
+        <i data-lucide="user" class="text-white dark:text-slate-900" style="width:14px;height:14px"></i>
       </div>
       <div class="flex-1 min-w-0">
-        <p id="sidebar-user-name" class="truncate text-slate-700 dark:text-slate-200 font-medium leading-none" style="font-size:11px">{{ usuario_actual }}</p>
-        <p class="text-slate-400 dark:text-slate-500 leading-none mt-1" style="font-size:10px" data-i18n="profileTitle">Perfil</p>
+        <p id="sidebar-user-name" class="truncate font-semibold leading-none" style="font-size:13px">{{ usuario_actual }}</p>
+        <p class="text-slate-400 dark:text-slate-500 leading-none mt-1 font-normal" style="font-size:11px" data-i18n="profileTitle">Perfil</p>
       </div>
-      <i data-lucide="chevron-right" class="w-3 h-3 text-slate-300 dark:text-slate-600 flex-shrink-0 opacity-0 group-hover:opacity-100 transition"></i>
     </button>
 
-    <!-- Logout -->
-    <a href="/logout"
-      class="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl
-             text-slate-400 dark:text-slate-500 hover:!text-red-500 hover:!bg-red-50 dark:hover:!bg-red-900/10 transition"
-      style="font-size:12.5px">
-      <i data-lucide="log-out" class="w-3.5 h-3.5 flex-shrink-0"></i>
+    <a href="/logout" class="nav-item nav-danger">
+      <i data-lucide="log-out"></i>
       <span data-i18n="logout">Cerrar sesión</span>
     </a>
-
   </div>
 </aside>
