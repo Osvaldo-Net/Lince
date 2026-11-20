@@ -1,14 +1,27 @@
-{# ?? _modal_puertos.html ?? Port scan results modal #}
+{# _modal_puertos.html — Resultados del escaneo de puertos #}
+<style>
+  /* Filas generadas por el JS: se estilan sin depender de su markup */
+  #contenido-puertos > * {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px;
+    background:transparent !important; font-size:14px; font-weight:500;
+    color:#1e293b; font-variant-numeric:tabular-nums;
+  }
+  .dark #contenido-puertos > * { border-color:#232838; color:#e2e8f0; }
+</style>
+
 <div id="modal-puertos" class="fixed inset-0 modal-overlay flex items-end sm:items-center justify-center z-[65] hidden">
-  <div class="card p-5 w-full sm:max-w-sm relative fade-in rounded-b-none sm:rounded-xl">
-    <button onclick="cerrarModal()"
-      class="absolute top-3 right-3 text-slate-400 hover:text-slate-600 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-dark3">
+  <div class="card p-6 w-full sm:max-w-sm relative fade-in rounded-b-none sm:rounded-[14px]">
+    <button onclick="cerrarModal()" aria-label="Cerrar"
+      class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-dark3">
       <i data-lucide="x" class="w-4 h-4"></i>
     </button>
-    <h2 class="text-sm font-semibold mb-4 flex items-center gap-2 text-slate-900 dark:text-white">
-      <i data-lucide="server" class="w-4 h-4" style="color:#0891B2"></i>
+
+    <h2 class="font-display font-bold text-solid flex items-center gap-2.5 mb-5" style="font-size:18px;letter-spacing:-.02em">
+      <i data-lucide="server" class="w-[18px] h-[18px]" style="color:#2563EB"></i>
       <span data-i18n="openPorts">Puertos Abiertos</span>
     </h2>
-    <div id="contenido-puertos" class="space-y-1.5 max-h-64 overflow-y-auto custom-scrollbar"></div>
+
+    <div id="contenido-puertos" class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar"></div>
   </div>
 </div>
