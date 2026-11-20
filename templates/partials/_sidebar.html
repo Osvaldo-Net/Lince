@@ -3,35 +3,38 @@
   .nav-item {
     width:100%; display:flex; align-items:center; gap:12px;
     padding:9px 12px; border-radius:10px; font-size:14px; font-weight:500;
-    color:#475569; transition:background-color .15s, color .15s; text-align:left;
+    color:#94a3b8; transition:background-color .15s, color .15s; text-align:left;
   }
-  .nav-item:hover { background:rgba(15,23,42,.05); color:#0a0e14; }
+  .nav-item:hover { background:rgba(255,255,255,.06); color:#f1f5f9; }
   .nav-item svg { width:18px; height:18px; flex-shrink:0; }
   .dark .nav-item { color:#94a3b8; }
   .dark .nav-item:hover { background:rgba(255,255,255,.05); color:#f1f5f9; }
   .nav-item:focus-visible { outline:2px solid #3B82F6; outline-offset:-2px; }
-  .nav-danger:hover { background:rgba(225,29,72,.07); color:#be123c; }
+  .nav-danger:hover { background:rgba(244,63,94,.1); color:#fda4af; }
+  .nav-scan { background:rgba(59,130,246,.12); color:#93C5FD; }
+  .nav-scan:hover { background:rgba(59,130,246,.2); color:#BFDBFE; }
+  #langMenu { background:#161a24; border-color:rgba(255,255,255,.08); }
+  #langMenu .dropdown-item { color:#e2e8f0; }
+  #langMenu .dropdown-item:hover { background:rgba(255,255,255,.06); }
 </style>
 
 <aside id="sidebar"
-  class="fixed top-0 left-0 h-full w-60 bg-[#fafbfc] dark:bg-dark2 border-r border-slate-200/60 dark:border-slate-800/50 flex flex-col z-50 -translate-x-full sm:translate-x-0 transition-transform duration-300 overflow-hidden">
+  class="fixed top-0 left-0 h-full w-60 bg-dark1 dark:bg-dark2 border-r border-white/5 flex flex-col z-50 -translate-x-full sm:translate-x-0 transition-transform duration-300 overflow-hidden">
 
   <!-- Logo -->
   <div class="px-5 pt-5 pb-4 flex items-center gap-3">
-    <img src="/static/lince-no-fondo.png" alt="Lince" class="w-10 h-10 flex-shrink-0">
+    <img src="/static/lince-no-fondo.png" alt="Lince" class="w-9 h-9 flex-shrink-0">
     <div>
-      <p class="font-display font-bold text-slate-900 dark:text-white leading-none" style="font-size:17px;letter-spacing:-.02em">Lince</p>
-      <p class="text-slate-400 dark:text-slate-500 leading-none mt-1.5" style="font-size:11px">v4.0.5</p>
+      <p class="font-display font-bold text-white leading-none" style="font-size:17px;letter-spacing:-.02em">Lince</p>
+      <p class="text-slate-500 leading-none mt-1.5" style="font-size:11px">v4.0.4</p>
     </div>
   </div>
 
   <!-- Nav -->
   <nav class="flex-1 px-3 py-2 space-y-1 overflow-y-auto custom-scrollbar">
 
-    <button onclick="escanearAhora()"
-      class="w-full flex items-center justify-center gap-2 px-3 py-2.5 mb-4 rounded-[10px] border border-brand-500 text-brand-500 dark:border-brand-400 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/10 font-semibold transition-colors"
-      style="font-size:14px">
-      <i data-lucide="radar" class="w-4 h-4 flex-shrink-0"></i>
+    <button onclick="escanearAhora()" class="nav-item nav-scan mb-3">
+      <i data-lucide="radar"></i>
       <span data-i18n="scan">Escanear</span>
     </button>
 
@@ -74,7 +77,7 @@
         <span data-i18n="changeTheme">Modo oscuro</span>
       </div>
       <button onclick="toggleDarkMode()" aria-label="Modo oscuro"
-        class="relative w-9 h-5 rounded-full bg-slate-300 dark:bg-brand-500 transition-colors flex-shrink-0">
+        class="relative w-9 h-5 rounded-full bg-slate-600 dark:bg-brand-500 transition-colors flex-shrink-0">
         <span class="absolute top-[3px] left-[3px] w-[14px] h-[14px] rounded-full bg-white transition-transform duration-200 dark:translate-x-4"></span>
       </button>
     </div>
@@ -85,17 +88,17 @@
   <div class="px-3 pb-4 space-y-1">
 
     <div class="mb-1 px-3 py-1.5 flex items-center justify-between">
-      <p id="horaActual-time" class="text-slate-600 dark:text-slate-300 tabular-nums leading-none font-medium" style="font-size:13px"></p>
-      <p id="horaActual-date" class="text-slate-400 dark:text-slate-500 tabular-nums leading-none" style="font-size:11px"></p>
+      <p id="horaActual-time" class="text-slate-300 tabular-nums leading-none font-medium" style="font-size:13px"></p>
+      <p id="horaActual-date" class="text-slate-500 tabular-nums leading-none" style="font-size:11px"></p>
     </div>
 
     <button onclick="abrirPerfil()" class="nav-item group">
-      <div class="w-7 h-7 rounded-full bg-slate-800 dark:bg-slate-200 flex items-center justify-center flex-shrink-0">
-        <i data-lucide="user" class="text-white dark:text-slate-900" style="width:14px;height:14px"></i>
+      <div class="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+        <i data-lucide="user" class="text-white" style="width:14px;height:14px"></i>
       </div>
       <div class="flex-1 min-w-0">
-        <p id="sidebar-user-name" class="truncate font-semibold leading-none" style="font-size:13px">{{ usuario_actual }}</p>
-        <p class="text-slate-400 dark:text-slate-500 leading-none mt-1 font-normal" style="font-size:11px" data-i18n="profileTitle">Perfil</p>
+        <p id="sidebar-user-name" class="truncate font-semibold leading-none text-slate-100" style="font-size:13px">{{ usuario_actual }}</p>
+        <p class="text-slate-500 leading-none mt-1 font-normal" style="font-size:11px" data-i18n="profileTitle">Perfil</p>
       </div>
     </button>
 
