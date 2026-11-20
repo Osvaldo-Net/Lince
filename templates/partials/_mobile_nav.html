@@ -1,28 +1,38 @@
-{# ?? _mobile_nav.html ?? Bottom navigation for mobile #}
+{# _mobile_nav.html — Navegación inferior para móvil #}
+<style>
+  .mn-item {
+    display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 12px;
+    color:#64748b; transition:color .15s; min-width:56px;
+  }
+  .mn-item svg { width:20px; height:20px; }
+  .mn-item span { font-size:11px; font-weight:500; }
+  .mn-item:active, .mn-item:hover { color:#0a0e14; }
+  .mn-primary { color:#2563EB; }
+  .mn-primary:active, .mn-primary:hover { color:#1D4ED8; }
+  .dark .mn-item { color:#94a3b8; }
+  .dark .mn-item:active, .dark .mn-item:hover { color:#f1f5f9; }
+  .dark .mn-primary { color:#60A5FA; }
+</style>
+
 <nav id="mobile-nav" class="justify-around items-center sm:hidden">
-  <button onclick="escanearAhora()"
-    class="flex flex-col items-center gap-0.5 px-3 py-2 text-slate-500 dark:text-slate-400 active:text-slate-900 dark:active:text-white transition">
-    <i data-lucide="radar" class="w-5 h-5"></i>
-    <span style="font-size:9px" data-i18n="scan">Escanear</span>
+  <button onclick="escanearAhora()" class="mn-item mn-primary">
+    <i data-lucide="radar"></i>
+    <span data-i18n="scan">Escanear</span>
   </button>
-  <button onclick="abrirPanelHistorial()"
-    class="flex flex-col items-center gap-0.5 px-3 py-2 text-slate-500 dark:text-slate-400 active:text-slate-900 dark:active:text-white transition">
-    <i data-lucide="activity" class="w-5 h-5"></i>
-    <span style="font-size:9px" data-i18n="history">Historial</span>
+  <button onclick="abrirPanelHistorial()" class="mn-item">
+    <i data-lucide="activity"></i>
+    <span data-i18n="history">Historial</span>
   </button>
-  <button onclick="abrirPanelConfiables()"
-    class="flex flex-col items-center gap-0.5 px-3 py-2 text-slate-500 dark:text-slate-400 active:text-slate-900 dark:active:text-white transition">
-    <i data-lucide="shield-check" class="w-5 h-5"></i>
-    <span style="font-size:9px" data-i18n="trustedDevices">Confiables</span>
+  <button onclick="abrirPanelConfiables()" class="mn-item">
+    <i data-lucide="shield-check"></i>
+    <span data-i18n="trustedDevices">Confiables</span>
   </button>
-  <button onclick="abrirConfig()"
-    class="flex flex-col items-center gap-0.5 px-3 py-2 text-slate-500 dark:text-slate-400 active:text-slate-900 dark:active:text-white transition">
-    <i data-lucide="settings" class="w-5 h-5"></i>
-    <span style="font-size:9px" data-i18n="settings">Config</span>
+  <button onclick="abrirConfig()" class="mn-item">
+    <i data-lucide="settings"></i>
+    <span data-i18n="settings">Config</span>
   </button>
-  <button onclick="abrirPerfil()"
-    class="flex flex-col items-center gap-0.5 px-3 py-2 text-slate-500 dark:text-slate-400 active:text-slate-900 dark:active:text-white transition">
-    <i data-lucide="user" class="w-5 h-5"></i>
-    <span style="font-size:9px" data-i18n="profileTitle">Perfil</span>
+  <button onclick="abrirPerfil()" class="mn-item">
+    <i data-lucide="user"></i>
+    <span data-i18n="profileTitle">Perfil</span>
   </button>
 </nav>
