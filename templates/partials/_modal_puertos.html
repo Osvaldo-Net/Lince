@@ -1,13 +1,13 @@
 {# _modal_puertos.html — Resultados del escaneo de puertos #}
 <style>
-  /* Filas generadas por el JS: se estilan sin depender de su markup */
-  #contenido-puertos > * {
+  /* Filas generadas por verPuertos() en app.js */
+  .puerto-row {
     display:flex; align-items:center; justify-content:space-between; gap:12px;
     padding:10px 12px; border:1px solid #e5e7eb; border-radius:10px;
-    background:transparent !important; font-size:14px; font-weight:500;
-    color:#1e293b; font-variant-numeric:tabular-nums;
+    font-size:14px; font-weight:500; color:#1e293b; font-variant-numeric:tabular-nums;
   }
-  .dark #contenido-puertos > * { border-color:#232838; color:#e2e8f0; }
+  .puerto-row .svc { font-size:13px; font-weight:400; color:#94a3b8; }
+  .dark .puerto-row { border-color:#232838; color:#e2e8f0; }
 </style>
 
 <div id="modal-puertos" class="fixed inset-0 modal-overlay flex items-end sm:items-center justify-center z-[65] hidden">
