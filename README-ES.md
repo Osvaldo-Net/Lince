@@ -29,7 +29,9 @@ No requiere configuración manual de interfaz de red: Lince **detecta automátic
 
 **Panel principal**
 
-![Dashboard](https://github.com/user-attachments/assets/f0f1f1b7-d4bc-4db7-bbdc-f561897b0b97)
+
+![Dashboard](https://github.com/user-attachments/assets/85237454-4a50-4026-b84b-4c7269b6a714)
+
 
 **Escaneo**
 
