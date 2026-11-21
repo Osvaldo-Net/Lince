@@ -31,17 +31,16 @@ No requiere configuración manual de interfaz de red: Lince **detecta automátic
 
 ![Dashboard](https://github.com/user-attachments/assets/f0f1f1b7-d4bc-4db7-bbdc-f561897b0b97)
 
-
-
 **Escaneo**
+
 ![Scanning](https://github.com/user-attachments/assets/9f428aaa-15d9-4dba-9be7-c3868939431d)
 
-
 **Historial**
+
 ![History](https://github.com/user-attachments/assets/84a003c6-6fa1-4970-bf50-5c4d308f6a59)
 
-
 **Modo oscuro**
+
 ![Dark mode](https://github.com/user-attachments/assets/2e23da99-06cb-4dbc-8093-8886b1e5d70f)
 
 ---
@@ -63,6 +62,13 @@ No requiere configuración manual de interfaz de red: Lince **detecta automátic
 
 ---
 
+## Requisitos
+
+- Docker y Docker Compose
+- Un **proxy inverso con HTTPS** (Nginx, Caddy, Traefik, Zoraxy, etc.). Consulta [Primer acceso](#primer-acceso) para ver por qué es necesario.
+
+---
+
 ## Instalación
 
 ### 1. Configurar variables de entorno
@@ -70,6 +76,7 @@ No requiere configuración manual de interfaz de red: Lince **detecta automátic
 Crea un archivo `.env` en el mismo directorio:
 ```env
 SECRET_KEY=your_secure_key_here
+PUBLIC_URL=https://lince.example.com
 ```
 
 Genera una clave segura con:
@@ -86,6 +93,7 @@ services:
     # image: netosvaltools/lince:v4.0.4
     environment:
       SECRET_KEY: ${SECRET_KEY}
+      PUBLIC_URL: ${PUBLIC_URL}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./data:/app/data
@@ -105,10 +113,15 @@ docker compose up -d
 
 ## Primer acceso
 
-Abre la interfaz web desde tu navegador usando la IP del servidor en el puerto **5555**:
+Lince escucha en el puerto **5555**, pero **debe accederse por HTTPS a través de un proxy inverso** (Nginx, Caddy, Traefik, Zoraxy, etc.):
+
 ```
-http://<IP-del-servidor>:5555
+https://lince.example.com
 ```
+
+> ⚠️ **Es obligatorio usar un proxy inverso con HTTPS.** Lince marca su cookie de sesión con el flag `Secure`, por lo que los navegadores se negarán a guardarla sobre HTTP plano (`http://<IP-del-servidor>:5555`). Si lo intentas, el inicio de sesión será exitoso pero volverás a la página de login en un bucle. La única excepción es `http://localhost:5555`, que los navegadores tratan como un contexto seguro.
+>
+> Tu proxy inverso debe reenviar los encabezados `X-Forwarded-Proto` y `X-Forwarded-Host` (consulta el [ejemplo de Nginx](#ejemplo-de-proxy-inverso-nginx) más abajo).
 
 **Configuración inicial: contraseña de administrador aleatoria:**
 
@@ -122,14 +135,12 @@ Verás algo como esto:
 
 <img width="767" height="220" alt="image" src="https://github.com/user-attachments/assets/2ca91146-ec8c-445a-8e90-1b204c8208b9" />
 
-
 | Campo | Valor |
 |---|---|
 | Usuario | `lince@admin.com` |
 | Contraseña | *se muestra solo una vez en los logs en el primer arranque* |
 
 > ⚠️ Copia esa contraseña de inmediato: no se vuelve a mostrar y no se puede recuperar desde la base de datos (se almacena como hash bcrypt, no en texto plano). Se te pedirá cambiarla en tu primer inicio de sesión.
-
 
 ---
 
@@ -156,10 +167,10 @@ docker compose up -d
 | Variable | Descripción | Obligatoria |
 |---|---|---|
 | `SECRET_KEY` | Clave secreta para el cifrado de sesión | ✅ Sí |
+| `PUBLIC_URL` | URL pública HTTPS de tu instancia de Lince (p. ej. `https://lince.example.com`), usada para construir la URL de redirección correcta | Recomendada (obligatoria para SSO) |
 | `OIDC_ISSUER` | URL de tu proveedor OIDC (issuer) | Solo para SSO |
 | `OIDC_CLIENT_ID` | ID de cliente registrado con tu proveedor OIDC | Solo para SSO |
 | `OIDC_CLIENT_SECRET` | Secreto de cliente registrado con tu proveedor OIDC | Solo para SSO |
-| `PUBLIC_URL` | URL pública de tu instancia de Lince, necesaria para construir la URL de redirección correcta | ✅ Sí (si usas SSO) |
 | `OIDC_AUTO_CREATE` | Crea automáticamente un usuario en el primer inicio de sesión SSO (`true`/`false`) | No |
 | `DISABLE_LOCAL_LOGIN` | Deshabilita el inicio de sesión local (correo/contraseña), permite solo SSO (`true`/`false`) | No |
 
@@ -176,17 +187,18 @@ Por defecto, el inicio de sesión local permanece habilitado junto con OIDC, par
 OIDC_ISSUER=https://auth.domain.com
 OIDC_CLIENT_ID=lince
 OIDC_CLIENT_SECRET=xxxxxxxxxxxx
-PUBLIC_URL=https://your-lince-instance.com
+PUBLIC_URL=https://lince.example.com
 OIDC_AUTO_CREATE=true
 DISABLE_LOCAL_LOGIN=false
 ```
 
-> ⚠️ `PUBLIC_URL` es obligatoria: Lince la usa para construir correctamente la URL de redirección de OIDC.
+> ⚠️ `PUBLIC_URL` es obligatoria para SSO: Lince la usa para construir correctamente la URL de redirección de OIDC.
 
 ### URL de redirección a registrar con tu proveedor
 ```
 https://lince.example.com/login/sso/callback
 ```
+
 ### Ejemplo de configuración de cliente (Authelia)
 ```yaml
       - client_id: 'lince'
@@ -222,7 +234,7 @@ https://lince.example.com/login/sso/callback
 
 ---
 
-### Ejemplo de proxy inverso Nginx
+## Ejemplo de proxy inverso Nginx
 ```nginx
 server {
     listen 443 ssl;
@@ -237,9 +249,22 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
     }
 }
 ```
+
+---
+
+## Solución de problemas
+
+**Inicio sesión correctamente pero me devuelve a la página de login.**
+Lo más probable es que estés accediendo a Lince por HTTP plano (`http://<IP-del-servidor>:5555`). La cookie de sesión está marcada como `Secure`, así que el navegador la descarta y cada petición parece no autenticada. Accede a Lince por HTTPS a través de un proxy inverso (consulta [Primer acceso](#primer-acceso)).
+
+**La redirección de SSO va a una URL incorrecta o a `localhost`.**
+Define `PUBLIC_URL` con la dirección HTTPS pública de tu instancia y asegúrate de que tu proxy inverso reenvíe los encabezados `X-Forwarded-Proto` y `X-Forwarded-Host`.
+
+---
 
 ## Registro de accesos
 
