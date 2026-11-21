@@ -30,20 +30,28 @@ No requiere configuración manual de interfaz de red: Lince **detecta automátic
 **Panel principal**
 
 
-![Dashboard](https://github.com/user-attachments/assets/85237454-4a50-4026-b84b-4c7269b6a714)
+
+![Dashboard](https://github.com/user-attachments/assets/4388d251-2c0a-45cc-9ece-6279a19578ba)
+
 
 
 **Escaneo**
 
-![Scanning](https://github.com/user-attachments/assets/9f428aaa-15d9-4dba-9be7-c3868939431d)
+![Scanning](https://github.com/user-attachments/assets/cbcbe910-30a1-4273-8280-1140c4f64914)
+
+
 
 **Historial**
 
-![History](https://github.com/user-attachments/assets/84a003c6-6fa1-4970-bf50-5c4d308f6a59)
+
+![History](https://github.com/user-attachments/assets/3fae366d-82a3-4815-800b-e6d9724ea5af)
+
 
 **Modo oscuro**
 
-![Dark mode](https://github.com/user-attachments/assets/2e23da99-06cb-4dbc-8093-8886b1e5d70f)
+
+![Dark mode](https://github.com/user-attachments/assets/9f894cf2-5b3d-42c3-b944-36d12d3ec783)
+
 
 ---
 
