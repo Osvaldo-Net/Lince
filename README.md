@@ -31,17 +31,16 @@ No manual network interface configuration required: Lince **auto-detects** the n
 
 ![Dashboard](https://github.com/user-attachments/assets/f0f1f1b7-d4bc-4db7-bbdc-f561897b0b97)
 
-
-
 **Scanning**
+
 ![Scanning](https://github.com/user-attachments/assets/9f428aaa-15d9-4dba-9be7-c3868939431d)
 
-
 **History**
+
 ![History](https://github.com/user-attachments/assets/84a003c6-6fa1-4970-bf50-5c4d308f6a59)
 
-
 **Dark mode**
+
 ![Dark mode](https://github.com/user-attachments/assets/2e23da99-06cb-4dbc-8093-8886b1e5d70f)
 
 ---
@@ -63,6 +62,13 @@ No manual network interface configuration required: Lince **auto-detects** the n
 
 ---
 
+## Requirements
+
+- Docker and Docker Compose
+- A **reverse proxy with HTTPS** (Nginx, Caddy, Traefik, Zoraxy, etc.). See [First access](#first-access) for why this is required.
+
+---
+
 ## Installation
 
 ### 1. Set environment variables
@@ -70,6 +76,7 @@ No manual network interface configuration required: Lince **auto-detects** the n
 Create a `.env` file in the same directory:
 ```env
 SECRET_KEY=your_secure_key_here
+PUBLIC_URL=https://lince.example.com
 ```
 
 Generate a secure key with:
@@ -86,6 +93,7 @@ services:
     # image: netosvaltools/lince:v4.0.4
     environment:
       SECRET_KEY: ${SECRET_KEY}
+      PUBLIC_URL: ${PUBLIC_URL}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./data:/app/data
@@ -105,10 +113,15 @@ docker compose up -d
 
 ## First access
 
-Open the web interface from your browser using the server's IP on port **5555**:
+Lince listens on port **5555**, but **it must be accessed over HTTPS through a reverse proxy** (Nginx, Caddy, Traefik, Zoraxy, etc.):
+
 ```
-http://<server-IP>:5555
+https://lince.example.com
 ```
+
+> ⚠️ **A reverse proxy with HTTPS is required.** Lince sets its session cookie with the `Secure` flag, so browsers will refuse to store it over plain HTTP (`http://<server-IP>:5555`). If you try, login will succeed but you'll be sent back to the login page in a loop. The only exception is `http://localhost:5555`, which browsers treat as a secure context.
+>
+> Your reverse proxy must forward the `X-Forwarded-Proto` and `X-Forwarded-Host` headers (see the [Nginx example](#nginx-reverse-proxy-example) below).
 
 **First-time setup: random admin password:**
 
@@ -122,14 +135,12 @@ You'll see something like this:
 
 <img width="767" height="220" alt="image" src="https://github.com/user-attachments/assets/a9ffa0d3-e5d7-4832-87f8-015707dc3fda" />
 
-
 | Field | Value |
 |---|---|
 | Username | `lince@admin.com` |
 | Password | *shown only once in the logs on first startup* |
 
-> ⚠️ Copy that password right away it is never shown again and can't be recovered from the database (it's stored as a bcrypt hash, not in plain text). You'll be required to change it on your first login.
-
+> ⚠️ Copy that password right away: it is never shown again and can't be recovered from the database (it's stored as a bcrypt hash, not in plain text). You'll be required to change it on your first login.
 
 ---
 
@@ -156,10 +167,10 @@ docker compose up -d
 | Variable | Description | Required |
 |---|---|---|
 | `SECRET_KEY` | Secret key for session encryption | ✅ Yes |
+| `PUBLIC_URL` | Public HTTPS URL of your Lince instance (e.g. `https://lince.example.com`), used to build the correct redirect URL | Recommended (required for SSO) |
 | `OIDC_ISSUER` | URL of your OIDC provider (issuer) | Only for SSO |
 | `OIDC_CLIENT_ID` | Client ID registered with your OIDC provider | Only for SSO |
 | `OIDC_CLIENT_SECRET` | Client secret registered with your OIDC provider | Only for SSO |
-| `PUBLIC_URL` | Public URL of your Lince instance, required to build the correct redirect URL | ✅ Yes (if using SSO) |
 | `OIDC_AUTO_CREATE` | Automatically create a user on first SSO login (`true`/`false`) | No |
 | `DISABLE_LOCAL_LOGIN` | Disable local (email/password) login, only allow SSO (`true`/`false`) | No |
 
@@ -176,17 +187,18 @@ By default, local login stays enabled alongside OIDC, so you can use both method
 OIDC_ISSUER=https://auth.domain.com
 OIDC_CLIENT_ID=lince
 OIDC_CLIENT_SECRET=xxxxxxxxxxxx
-PUBLIC_URL=https://your-lince-instance.com
+PUBLIC_URL=https://lince.example.com
 OIDC_AUTO_CREATE=true
 DISABLE_LOCAL_LOGIN=false
 ```
 
-> ⚠️ `PUBLIC_URL` is required: Lince uses it to build the OIDC redirect URL correctly.
+> ⚠️ `PUBLIC_URL` is required for SSO: Lince uses it to build the OIDC redirect URL correctly.
 
 ### Redirect URL to register with your provider
 ```
 https://lince.example.com/login/sso/callback
 ```
+
 ### Example client config (Authelia)
 ```yaml
       - client_id: 'lince'
@@ -222,7 +234,7 @@ https://lince.example.com/login/sso/callback
 
 ---
 
-### Nginx reverse proxy example
+## Nginx reverse proxy example
 ```nginx
 server {
     listen 443 ssl;
@@ -237,9 +249,22 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
     }
 }
 ```
+
+---
+
+## Troubleshooting
+
+**I log in successfully but I'm sent back to the login page.**
+You are most likely accessing Lince over plain HTTP (`http://<server-IP>:5555`). The session cookie is marked `Secure`, so the browser discards it and every request looks unauthenticated. Access Lince over HTTPS through a reverse proxy (see [First access](#first-access)).
+
+**The SSO redirect goes to the wrong URL or `localhost`.**
+Set `PUBLIC_URL` to the public HTTPS address of your instance and make sure your reverse proxy forwards the `X-Forwarded-Proto` and `X-Forwarded-Host` headers.
+
+---
 
 ## Access log
 
@@ -260,6 +285,6 @@ The access log is stored at:
 
 Lince is a hobby project, built in my free time out of a personal interest in networking, cybersecurity, and homelabs. It's developed with the help of AI tools, which speeds up the process and lets me experiment more, but every feature is tested and refined by hand before release.
 
-There's no commercial goal behind it just the fun of building something useful for my own home network, and sharing it in case it's useful for yours too.
+There's no commercial goal behind it, just the fun of building something useful for my own home network, and sharing it in case it's useful for yours too.
 
 ---
