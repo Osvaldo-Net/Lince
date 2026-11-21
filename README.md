@@ -29,19 +29,19 @@ No manual network interface configuration required: Lince **auto-detects** the n
 
 **Dashboard**
 
-![Dashboard](https://github.com/user-attachments/assets/f0f1f1b7-d4bc-4db7-bbdc-f561897b0b97)
+![Dashboard](https://github.com/user-attachments/assets/4388d251-2c0a-45cc-9ece-6279a19578ba)
 
 **Scanning**
 
-![Scanning](https://github.com/user-attachments/assets/9f428aaa-15d9-4dba-9be7-c3868939431d)
+![Scanning](https://github.com/user-attachments/assets/cbcbe910-30a1-4273-8280-1140c4f64914)
 
 **History**
 
-![History](https://github.com/user-attachments/assets/84a003c6-6fa1-4970-bf50-5c4d308f6a59)
+![History](https://github.com/user-attachments/assets/3fae366d-82a3-4815-800b-e6d9724ea5af)
 
 **Dark mode**
 
-![Dark mode](https://github.com/user-attachments/assets/2e23da99-06cb-4dbc-8093-8886b1e5d70f)
+![Dark mode](https://github.com/user-attachments/assets/9f894cf2-5b3d-42c3-b944-36d12d3ec783)
 
 ---
 
