@@ -131,5 +131,16 @@
 
   "loginSsoButton": "Se connecter avec le SSO",
   "loginOrDivider": "ou avec votre compte local",
-  "loginErrorSSO": "Impossible de se connecter avec le SSO. Veuillez réessayer."
+  "loginErrorSSO": "Impossible de se connecter avec le SSO. Veuillez réessayer.",
+
+  "credSubtitle": "Mettez à jour vos identifiants d'accès",
+  "credNewEmail": "Nouvel e-mail",
+  "credNewPass": "Nouveau mot de passe",
+  "credReq8": "8 caractères",
+  "credReqUpper": "Majuscule",
+  "credReqLower": "Minuscule",
+  "credReqDigit": "Chiffre",
+  "credReqSymbol": "Symbole spécial (!@#…)",
+  "credMatch": "Les mots de passe correspondent",
+  "credNoMatch": "Les mots de passe ne correspondent pas"
 }
