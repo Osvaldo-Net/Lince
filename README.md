@@ -91,7 +91,7 @@ services:
   Lince:
     container_name: Lince
     image: netosvaltools/lince:latest
-    # image: netosvaltools/lince:v4.0.5
+    #image: netosvaltools/lince:${LINCE_VERSION:-v4.0.5}
     environment:
       SECRET_KEY: ${SECRET_KEY}
       PUBLIC_URL: ${PUBLIC_URL}
