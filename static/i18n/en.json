@@ -131,5 +131,16 @@
 
   "loginSsoButton": "Sign in with SSO",
   "loginOrDivider": "or with your local account",
-  "loginErrorSSO": "Unable to sign in with SSO. Please try again."
+  "loginErrorSSO": "Unable to sign in with SSO. Please try again.",
+
+  "credSubtitle": "Update your access credentials",
+  "credNewEmail": "New email",
+  "credNewPass": "New password",
+  "credReq8": "8 characters",
+  "credReqUpper": "Uppercase",
+  "credReqLower": "Lowercase",
+  "credReqDigit": "Number",
+  "credReqSymbol": "Special symbol (!@#…)",
+  "credMatch": "Passwords match",
+  "credNoMatch": "Passwords don't match"
 }
