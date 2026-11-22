@@ -78,6 +78,9 @@ Create a `.env` file in the same directory:
 ```env
 SECRET_KEY=your_secure_key_here
 PUBLIC_URL=https://lince.example.com
+
+# Optional: if you don't want to use the latest tag, set the version to use
+# LINCE_VERSION=v4.0.6
 ```
 
 Generate a secure key with:
