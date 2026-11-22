@@ -85,8 +85,11 @@ No requiere configuración manual de interfaz de red: Lince **detecta automátic
 
 Crea un archivo `.env` en el mismo directorio:
 ```env
-SECRET_KEY=your_secure_key_here
+SECRET_KEY=tu_clave_segura_aqui
 PUBLIC_URL=https://lince.example.com
+
+# Opcional: si no quieres usar la etiqueta latest, define la versión a usar
+# LINCE_VERSION=v4.0.6
 ```
 
 Genera una clave segura con:
