@@ -132,5 +132,16 @@
 
   "loginSsoButton":     "Iniciar sesión con SSO",
   "loginOrDivider":      "o con tu cuenta local",
-  "loginErrorSSO":       "No se pudo iniciar sesión con SSO. Intenta de nuevo."
+  "loginErrorSSO":       "No se pudo iniciar sesión con SSO. Intenta de nuevo.",
+
+  "credSubtitle": "Actualiza tus credenciales de acceso",
+  "credNewEmail": "Nuevo correo",
+  "credNewPass": "Nueva contraseña",
+  "credReq8": "8 caracteres",
+  "credReqUpper": "Mayúscula",
+  "credReqLower": "Minúscula",
+  "credReqDigit": "Número",
+  "credReqSymbol": "Símbolo especial (!@#…)",
+  "credMatch": "Las contraseñas coinciden",
+  "credNoMatch": "Las contraseñas no coinciden"
 }
